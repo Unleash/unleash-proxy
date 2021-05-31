@@ -4,16 +4,8 @@ export const countSchema = joi
     .object()
     .options({ stripUnknown: true })
     .keys({
-        yes: joi
-            .number()
-            .min(0)
-            .empty('')
-            .default(0),
-        no: joi
-            .number()
-            .min(0)
-            .empty('')
-            .default(0),
+        yes: joi.number().min(0).empty('').default(0),
+        no: joi.number().min(0).empty('').default(0),
         variants: joi.object().pattern(joi.string(), joi.number().min(0)),
     });
 
@@ -32,4 +24,3 @@ export const clientMetricsSchema = joi
                 toggles: joi.object().pattern(/.*/, countSchema),
             }),
     });
-

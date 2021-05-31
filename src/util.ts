@@ -1,15 +1,15 @@
 import { userInfo, hostname } from 'os';
 
-export function generateInstanceId() {
+export function generateInstanceId(): string {
     let info;
-      try {
+    try {
         info = userInfo();
-      } catch (e) {
+    } catch (e) {
         // unable to read info;
-      }
+    }
 
-      const prefix = info
+    const prefix = info
         ? info.username
         : `generated-${Math.round(Math.random() * 1000000)}-${process.pid}`;
-      return `${prefix}-${hostname()}`
+    return `${prefix}-${hostname()}`;
 }

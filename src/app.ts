@@ -7,10 +7,14 @@ import UnleashProxy from './unleash-proxy';
 
 const corsOptions = {
     exposedHeaders: 'ETag',
-    maxAge: 604800
-}
+    maxAge: 604800,
+};
 
-function createApp(options: IProxyOption, unleashClient?: Client, app: Application = express()) {
+function createApp(
+    options: IProxyOption,
+    unleashClient?: Client,
+    app: Application = express(),
+) {
     const config = createProxyConfig(options);
     const client = unleashClient || new Client(config);
 
@@ -18,8 +22,13 @@ function createApp(options: IProxyOption, unleashClient?: Client, app: Applicati
 
     app.disable('x-powered-by');
     app.use(cors(corsOptions));
-    app.use(`${config.proxyBasePath}/proxy`, cors(corsOptions), express.json(), proxy.middleware);
+    app.use(
+        `${config.proxyBasePath}/proxy`,
+        cors(corsOptions),
+        express.json(),
+        proxy.middleware,
+    );
     return app;
 }
 
-module.exports = { createApp } ;
+module.exports = { createApp };
