@@ -11,5 +11,5 @@ export function generateInstanceId() {
       const prefix = info
         ? info.username
         : `generated-${Math.round(Math.random() * 1000000)}-${process.pid}`;
-      return `${prefix}-${hostname()}`;
+      return `${prefix}-${hostname()}`
 }
