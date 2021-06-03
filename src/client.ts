@@ -14,11 +14,11 @@ import { IProxyConfig } from './config';
 import { Logger } from './logger';
 import { generateInstanceId } from './util';
 
-export interface IToggleStatus {
+export type FeatureToggleStatus = {
     name: string;
     enabled: boolean;
-    variant: Variant;
-}
+    variant?: Variant;
+};
 
 interface VariantBucket {
     [s: string]: number;
@@ -38,11 +38,11 @@ export interface IMetrics {
 
 export interface IClient extends EventEmitter {
     setUnleashApiToken: (unleashApiToken: string) => void;
-    getEnabledToggles: (context: Context) => IToggleStatus[];
+    getEnabledToggles: (context: Context) => FeatureToggleStatus[];
     getDefinedToggles: (
         toggleNames: string[],
         context: Context,
-    ) => IToggleStatus[];
+    ) => FeatureToggleStatus[];
     registerMetrics(metrics: any): void;
 }
 
@@ -97,7 +97,7 @@ class Client extends EventEmitter implements IClient {
         this.unleashApiToken = unleashApiToken;
     }
 
-    getEnabledToggles(context: Context): IToggleStatus[] {
+    getEnabledToggles(context: Context): FeatureToggleStatus[] {
         this.logger.info('Get enabled toggles');
         const definitions = getFeatureToggleDefinitions() || [];
         return definitions
@@ -112,7 +112,7 @@ class Client extends EventEmitter implements IClient {
     getDefinedToggles(
         toggleNames: string[],
         context: Context,
-    ): IToggleStatus[] {
+    ): FeatureToggleStatus[] {
         return toggleNames.map((name) => {
             const enabled = isEnabled(name, context);
             this.metrics.count(name, enabled);

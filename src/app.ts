@@ -1,6 +1,6 @@
 import express, { Application } from 'express';
 import cors from 'cors';
-import Client from './client';
+import Client, { IClient } from './client';
 import { createProxyConfig, IProxyOption } from './config';
 
 import UnleashProxy from './unleash-proxy';
@@ -10,11 +10,11 @@ const corsOptions = {
     maxAge: 604800,
 };
 
-function createApp(
+export function createApp(
     options: IProxyOption,
-    unleashClient?: Client,
+    unleashClient?: IClient,
     app: Application = express(),
-) {
+): Application {
     const config = createProxyConfig(options);
     const client = unleashClient || new Client(config);
 

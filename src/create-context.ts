@@ -1,8 +1,8 @@
 /* eslint-disable prefer-object-spread */
-import { Request } from 'express';
 import { Context } from 'unleash-client';
 
-export function createContext(req: Request<{}, {}, {}, Context>): Context {
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export function createContext(value: any): Context {
     const {
         appName,
         environment,
@@ -11,7 +11,7 @@ export function createContext(req: Request<{}, {}, {}, Context>): Context {
         remoteAddress,
         properties,
         ...rest
-    } = req.query;
+    } = value;
 
     // move non root context fields to properties
     const context: Context = {
@@ -19,7 +19,7 @@ export function createContext(req: Request<{}, {}, {}, Context>): Context {
         environment,
         userId,
         sessionId,
-        remoteAddress: remoteAddress || req.ip,
+        remoteAddress,
         properties: Object.assign({}, rest, properties),
     };
 

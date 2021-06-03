@@ -1,5 +1,4 @@
 import { Request, Response, Router } from 'express';
-import { Context } from 'unleash-client';
 import { createContext } from './create-context';
 import { clientMetricsSchema } from './metrics-schema';
 import { IProxyConfig } from './config';
@@ -43,7 +42,7 @@ export default class UnleashProxy {
         this.proxySecrets = proxySecrets;
     }
 
-    getEnabledToggles(req: Request<{}, {}, {}, Context>, res: Response): void {
+    getEnabledToggles(req: Request, res: Response): void {
         const apiToken = req.header('authorization');
 
         if (!this.ready) {
@@ -51,7 +50,9 @@ export default class UnleashProxy {
         } else if (!apiToken || !this.proxySecrets.includes(apiToken)) {
             res.sendStatus(401);
         } else {
-            const context = createContext(req);
+            const { query } = req;
+            query.remoteAddress = query.remoteAddress || req.ip;
+            const context = createContext(query);
             const toggles = this.client.getEnabledToggles(context);
             res.send({ toggles });
         }
@@ -65,8 +66,7 @@ export default class UnleashProxy {
         } else if (!apiToken || !this.proxySecrets.includes(apiToken)) {
             res.sendStatus(401);
         } else {
-            const toggleNames = req.body.toggles;
-            const { context } = req.body;
+            const { context, toggles: toggleNames } = req.body;
 
             const toggles = this.client.getDefinedToggles(toggleNames, context);
             res.send(toggles);
