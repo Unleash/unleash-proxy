@@ -1,2 +1,0 @@
-- force environment for context if set. 
-- don't use NODE_ENV for environment
