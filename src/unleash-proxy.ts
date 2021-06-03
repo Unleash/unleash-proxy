@@ -6,7 +6,7 @@ import { IClient } from './client';
 import { Logger } from './logger';
 
 const NOT_READY =
-    'Unleash Proxy has not connected to unleash-api and is not ready to accept requests yet.';
+    'Unleash Proxy has not connected to Unleash API and is not ready to accept requests yet.';
 
 export default class UnleashProxy {
     private logger: Logger;
