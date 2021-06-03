@@ -127,16 +127,15 @@ test('Should send in context to mock', async () => {
     client.emit('ready');
 
     await request(app)
-        .get('/proxy?userId=123&tentantId=me')
+        .get('/proxy?userId=123&tenantId=me')
         .set('Authorization', 'sdf')
         .expect(200)
         .expect('Content-Type', /json/);
 
     expect(client.queriedContexts[0].userId).toEqual('123');
-    expect(client.queriedContexts[0].properties?.tentantId).toEqual('me');
+    expect(client.queriedContexts[0].properties?.tenantId).toEqual('me');
 });
 
-/*
 test('Should remove "undefined" environment field from context', async () => {
     const toggles = [
         {
@@ -147,21 +146,24 @@ test('Should remove "undefined" environment field from context', async () => {
     const client = new MockClient(toggles);
 
     const proxySecrets = ['sdf'];
-    const app = createAppWithClient({
+    const app = createApp(
+        {
+            unleashUrl,
+            unleashApiToken,
+            proxySecrets,
+            environment: 'test',
+        },
         client,
-        logger,
-        proxySecrets,
-        environment: 'test',
-    });
+    );
     client.emit('ready');
 
     await request(app)
-        .get('/proxy?userId=123&tentantId=me')
+        .get('/proxy?userId=123&tenantId=me')
         .set('Authorization', 'sdf')
         .expect(200)
         .expect('Content-Type', /json/);
 
-    expect(client.contexts[0].hasOwnProperty('environment')).toEqual(false);
+    expect(client.queriedContexts[0]).not.toHaveProperty('environment');
 });
 
 test('Should register metrics', () => {
@@ -174,7 +176,10 @@ test('Should register metrics', () => {
     const client = new MockClient(toggles);
 
     const proxySecrets = ['sdf'];
-    const app = createApp({ proxySecrets }, client);
+    const app = createApp(
+        { unleashUrl, unleashApiToken, proxySecrets },
+        client,
+    );
     client.emit('ready');
 
     return request(app)
@@ -188,7 +193,10 @@ test('Should return not ready', () => {
     const client = new MockClient();
 
     const proxySecrets = ['sdf'];
-    const app = createApp({ proxySecrets }, client);
+    const app = createApp(
+        { unleashUrl, unleashApiToken, proxySecrets },
+        client,
+    );
 
     return request(app).get('/proxy/health').expect(503);
 });
@@ -197,7 +205,10 @@ test('Should return ready', () => {
     const client = new MockClient();
 
     const proxySecrets = ['sdf'];
-    const app = createApp({ proxySecrets }, client);
+    const app = createApp(
+        { unleashUrl, unleashApiToken, proxySecrets },
+        client,
+    );
     client.emit('ready');
 
     return request(app)
@@ -207,4 +218,3 @@ test('Should return ready', () => {
             expect(response.text).toEqual('ok');
         });
 });
-*/

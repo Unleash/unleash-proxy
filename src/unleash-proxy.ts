@@ -13,6 +13,8 @@ export default class UnleashProxy {
 
     private proxySecrets: string[];
 
+    private environment?: string;
+
     private client: IClient;
 
     private ready = false;

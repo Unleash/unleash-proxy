@@ -1,13 +1,5 @@
 import EventEmitter from 'events';
-import {
-    Context,
-    getFeatureToggleDefinitions,
-    getVariant,
-    initialize,
-    isEnabled,
-    Unleash,
-    Variant,
-} from 'unleash-client';
+import { Context, initialize, Unleash, Variant } from 'unleash-client';
 import Metrics from 'unleash-client/lib/metrics';
 import { defaultStrategies } from 'unleash-client/lib/strategy';
 import { IProxyConfig } from './config';
@@ -49,15 +41,18 @@ export interface IClient extends EventEmitter {
 class Client extends EventEmitter implements IClient {
     private unleashApiToken: string;
 
-    private unleashInstance: Unleash;
+    private unleash: Unleash;
+
+    private environment?: string;
 
     private metrics: Metrics;
 
     private logger: Logger;
 
-    constructor(config: IProxyConfig) {
+    constructor(config: IProxyConfig, init: Function = initialize) {
         super();
         this.unleashApiToken = config.unleashApiToken;
+        this.environment = config.environment;
         this.logger = config.logger;
 
         const instanceId = generateInstanceId();
@@ -66,11 +61,11 @@ class Client extends EventEmitter implements IClient {
         });
 
         // Unleash Client instance.
-        this.unleashInstance = initialize({
+        this.unleash = init({
             url: config.unleashUrl,
             appName: config.unleashAppName,
             instanceId,
-            environment: config.environment,
+            environment: this.environment,
             refreshInterval: config.refreshInterval,
             projectName: config.projectName,
             disableMetrics: true,
@@ -79,7 +74,7 @@ class Client extends EventEmitter implements IClient {
 
         // Custom metrics Instance
         this.metrics = new Metrics({
-            disableMetrics: false,
+            disableMetrics: config.disableMetrics,
             appName: config.unleashAppName,
             instanceId,
             strategies: defaultStrategies.map((s) => s.name),
@@ -89,37 +84,48 @@ class Client extends EventEmitter implements IClient {
         });
 
         this.metrics.on('error', (msg) => this.logger.error(`metrics: ${msg}`));
-        this.unleashInstance.on('error', (msg) => this.logger.error(msg));
-        this.unleashInstance.on('ready', () => this.emit('ready'));
+        this.unleash.on('error', (msg) => this.logger.error(msg));
+        this.unleash.on('ready', () => this.emit('ready'));
     }
 
     setUnleashApiToken(unleashApiToken: string): void {
         this.unleashApiToken = unleashApiToken;
     }
 
-    getEnabledToggles(context: Context): FeatureToggleStatus[] {
+    fixContext(context: Context): Context {
+        const { environment } = this;
+        if (environment) {
+            return { ...context, environment };
+        }
+        return context;
+    }
+
+    getEnabledToggles(inContext: Context): FeatureToggleStatus[] {
         this.logger.info('Get enabled toggles');
-        const definitions = getFeatureToggleDefinitions() || [];
+        const context = this.fixContext(inContext);
+
+        const definitions = this.unleash.getFeatureToggleDefinitions() || [];
         return definitions
-            .filter((d) => isEnabled(d.name, context))
+            .filter((d) => this.unleash.isEnabled(d.name, context))
             .map((d) => ({
                 name: d.name,
                 enabled: true,
-                variant: getVariant(d.name, context),
+                variant: this.unleash.getVariant(d.name, context),
             }));
     }
 
     getDefinedToggles(
         toggleNames: string[],
-        context: Context,
+        inContext: Context,
     ): FeatureToggleStatus[] {
+        const context = this.fixContext(inContext);
         return toggleNames.map((name) => {
-            const enabled = isEnabled(name, context);
+            const enabled = this.unleash.isEnabled(name, context);
             this.metrics.count(name, enabled);
             return {
                 name,
                 enabled,
-                variant: getVariant(name, context),
+                variant: this.unleash.getVariant(name, context),
             };
         });
     }

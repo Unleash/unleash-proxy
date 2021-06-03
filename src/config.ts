@@ -25,6 +25,7 @@ export interface IProxyConfig {
     environment?: string;
     projectName?: string;
     logger: Logger;
+    disableMetrics: boolean;
 }
 
 function resolveStringToArray(value?: string): string[] | undefined {
@@ -89,6 +90,7 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
             safeNumber(process.env.UNLEASH_METRICS_INTERVAL, 30_000),
         environment: option.environment || process.env.UNLEASH_ENVIRONMENT,
         projectName: option.projectName || process.env.UNLEASH_PROJECT_NAME,
+        disableMetrics: false,
         logger: option.logger || new SimpleLogger(),
     };
 }

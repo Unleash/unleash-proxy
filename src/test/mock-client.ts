@@ -38,7 +38,7 @@ class MockClient extends EventEmitter implements IClient {
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     registerMetrics(metrics: any): void {
-        metrics.push(metrics);
+        this.metrics.push(metrics);
     }
 }
 

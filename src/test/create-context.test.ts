@@ -53,7 +53,7 @@ test('will not blow up if properties is an array', () => {
         properties: ['some'],
     });
 
-    console.log(context);
+    // console.log(context);
 
     expect(context.userId).toBe('123');
     expect(context).not.toHaveProperty('tenantId');
@@ -68,7 +68,7 @@ test.skip('will not blow up if userId is an array', () => {
         properties: ['some'],
     });
 
-    console.log(context);
+    // console.log(context);
 
     expect(context.userId).toBe('123');
     expect(context).not.toHaveProperty('tenantId');
