@@ -36,6 +36,7 @@ export interface IClient extends EventEmitter {
         context: Context,
     ) => FeatureToggleStatus[];
     registerMetrics(metrics: any): void;
+    isReady(): boolean;
 }
 
 class Client extends EventEmitter implements IClient {
@@ -48,6 +49,8 @@ class Client extends EventEmitter implements IClient {
     private metrics: Metrics;
 
     private logger: Logger;
+
+    private ready: boolean = false;
 
     constructor(config: IProxyConfig, init: Function = initialize) {
         super();
@@ -85,7 +88,10 @@ class Client extends EventEmitter implements IClient {
 
         this.metrics.on('error', (msg) => this.logger.error(`metrics: ${msg}`));
         this.unleash.on('error', (msg) => this.logger.error(msg));
-        this.unleash.on('ready', () => this.emit('ready'));
+        this.unleash.on('ready', () => {
+            this.emit('ready');
+            this.ready = true;
+        });
     }
 
     setUnleashApiToken(unleashApiToken: string): void {
@@ -152,6 +158,10 @@ class Client extends EventEmitter implements IClient {
 
     destroy(): void {
         this.unleash.destroy();
+    }
+
+    isReady(): boolean {
+        return this.ready;
     }
 }
 

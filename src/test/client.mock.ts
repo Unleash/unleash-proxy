@@ -17,6 +17,10 @@ class MockClient extends EventEmitter implements IClient {
         this.apiToken = 'default';
     }
 
+    isReady(): boolean {
+        return false;
+    }
+
     setUnleashApiToken(apiToken: string): void {
         this.apiToken = apiToken;
     }

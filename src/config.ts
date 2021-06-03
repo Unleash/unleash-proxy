@@ -1,4 +1,4 @@
-import { Logger, SimpleLogger } from './logger';
+import { Logger, LogLevel, SimpleLogger } from './logger';
 
 export interface IProxyOption {
     unleashUrl?: string;
@@ -12,6 +12,7 @@ export interface IProxyOption {
     environment?: string;
     projectName?: string;
     logger?: Logger;
+    logLevel?: LogLevel;
 }
 
 export interface IProxyConfig {
@@ -72,6 +73,8 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         );
     }
 
+    const logLevel = option.logLevel || (process.env.LOG_LEVEL as LogLevel);
+
     return {
         unleashUrl,
         unleashApiToken,
@@ -91,6 +94,6 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         environment: option.environment || process.env.UNLEASH_ENVIRONMENT,
         projectName: option.projectName || process.env.UNLEASH_PROJECT_NAME,
         disableMetrics: false,
-        logger: option.logger || new SimpleLogger(),
+        logger: option.logger || new SimpleLogger(logLevel),
     };
 }

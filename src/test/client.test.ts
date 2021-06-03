@@ -1,6 +1,7 @@
 import { UnleashConfig } from 'unleash-client/lib/unleash';
 import Client from '../client';
 import { createProxyConfig } from '../config';
+import { LogLevel } from '../logger';
 import FakeUnleash from './unleash.mock';
 
 test('should add environment to isEnabled calls', () => {
@@ -15,6 +16,7 @@ test('should add environment to isEnabled calls', () => {
         unleashUrl: 'http://localhost:4242/api',
         proxySecrets: ['s1'],
         environment: 'test',
+        logLevel: LogLevel.error,
     });
 
     config.disableMetrics = true;
@@ -49,6 +51,7 @@ test('should override environment to isEnabled calls', () => {
         unleashUrl: 'http://localhost:4242/api',
         proxySecrets: ['s1'],
         environment: 'never-change-me',
+        logLevel: LogLevel.error,
     });
 
     config.disableMetrics = true;

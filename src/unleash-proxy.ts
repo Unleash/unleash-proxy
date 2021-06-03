@@ -13,8 +13,6 @@ export default class UnleashProxy {
 
     private proxySecrets: string[];
 
-    private environment?: string;
-
     private client: IClient;
 
     private ready = false;
@@ -26,8 +24,12 @@ export default class UnleashProxy {
         this.proxySecrets = config.proxySecrets;
         this.client = client;
 
+        if (client.isReady()) {
+            this.setReady();
+        }
+
         this.client.on('ready', () => {
-            this.ready = true;
+            this.setReady();
         });
 
         const router = Router();
@@ -38,6 +40,13 @@ export default class UnleashProxy {
         router.get('/', this.getEnabledToggles.bind(this));
         router.post('/', this.lookupToggles.bind(this));
         router.post('/client/metrics', this.registerMetrics.bind(this));
+    }
+
+    private setReady() {
+        this.ready = true;
+        this.logger.info(
+            'Successfully synchronized with Unleash API. Proxy is now ready to receive traffic.',
+        );
     }
 
     setProxySecrets(proxySecrets: string[]): void {
