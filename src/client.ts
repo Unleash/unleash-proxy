@@ -39,9 +39,9 @@ export interface IClient extends EventEmitter {
 }
 
 class Client extends EventEmitter implements IClient {
-    private unleashApiToken: string;
+    unleash: Unleash;
 
-    private unleash: Unleash;
+    private unleashApiToken: string;
 
     private environment?: string;
 
@@ -148,6 +148,10 @@ class Client extends EventEmitter implements IClient {
                 this.metrics.count(toggleName, false),
             );
         });
+    }
+
+    destroy(): void {
+        this.unleash.destroy();
     }
 }
 

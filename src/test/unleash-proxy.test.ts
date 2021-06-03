@@ -1,6 +1,6 @@
 import request, { Response } from 'supertest';
 import { createApp } from '../app';
-import MockClient from './mock-client';
+import MockClient from './client.mock';
 import metrics from '../examples/metrics.json';
 
 const unleashUrl = 'http://localhost:4242/test';
@@ -189,6 +189,23 @@ test('Should register metrics', () => {
         .expect(200);
 });
 
+test('Should require metrics to have correct format', () => {
+    const client = new MockClient();
+
+    const proxySecrets = ['sdf'];
+    const app = createApp(
+        { unleashUrl, unleashApiToken, proxySecrets },
+        client,
+    );
+    client.emit('ready');
+
+    return request(app)
+        .post('/proxy/client/metrics')
+        .send({ some: 'blob' })
+        .set('Authorization', 'sdf')
+        .expect(400);
+});
+
 test('Should return not ready', () => {
     const client = new MockClient();
 
@@ -217,4 +234,27 @@ test('Should return ready', () => {
         .then((response) => {
             expect(response.text).toEqual('ok');
         });
+});
+
+test('Should return 503 for /health', () => {
+    const client = new MockClient();
+
+    const proxySecrets = ['sdf'];
+    const app = createApp(
+        { unleashUrl, unleashApiToken, proxySecrets },
+        client,
+    );
+
+    return request(app).get('/proxy/health').expect(503);
+});
+
+test('Should return 504 for proxy', () => {
+    const client = new MockClient();
+
+    const app = createApp({ unleashUrl, unleashApiToken }, client);
+
+    return request(app)
+        .get('/proxy')
+        .set('Authorization', 'secret2')
+        .expect(503);
 });

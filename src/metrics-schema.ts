@@ -15,6 +15,7 @@ export const clientMetricsSchema = joi
     .keys({
         appName: joi.string().required(),
         instanceId: joi.string().required(),
+        environment: joi.string().optional(),
         bucket: joi
             .object()
             .required()
