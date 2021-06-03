@@ -77,7 +77,7 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         unleashApiToken,
         unleashAppName:
             option.proxyBasePath ||
-            process.env.UNLEASH_APP_NANE ||
+            process.env.UNLEASH_APP_NAME ||
             'unleash-proxy',
         proxySecrets,
         proxyBasePath:
