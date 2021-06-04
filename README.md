@@ -1,7 +1,6 @@
 # The Unleash Proxy
 
-The Unleash Proxy simplifies integration with frontend applications running in the 
-context of a specific user. The Unleash proxy sits between the proxy SDK and the 
+The Unleash Proxy simplifies integration with frontend & native applications running in the context of a specific user. The Unleash proxy sits between the proxy SDK and the 
 Unleash API and ensures that you internal feature toggle configuration is not 
 exposed to the world. It provide :
 
@@ -110,3 +109,47 @@ Keep-Alive: timeout=5
 | projectName     | `UNLEASH_PROJECT_NAME`    | `undefined`   | no       | The projectName (id) to fetch feature toggles for. The proxy will only return know about feature toggles that belongs to the project, if specified.  | | 
 | logger          | n/a                       | SimpleLogger  | no       | Register a custom logger. | 
 | logLevel        | `LOG_LEVEL `              | "warn"        | no       | Used to set logLevel. Supported options: "debug", "info", "warn", "error" and "fatal | 
+
+
+### Run with Node.js:
+
+**STEP 1: Install dependency**
+
+```
+ npm install @unleash/proxy
+```
+
+
+**STEP 2: use in your code**
+
+```
+const port = 3000;
+
+const { createApp } = require('@unleash/proxy');
+
+
+const app = createApp({
+    unleashUrl: 'https://app.unleash-hosted.com/demo/api/',
+    unleashApiToken: '56907a2fa53c1d16101d509a10b78e36190b0f918d9f122d',
+    proxySecrets: ['proxy-secret', 'another-proxy-secret', 's1'],
+    refreshInterval: 1000,
+    // logLevel: 'info',
+    // projectName: 'order-team',
+    // environment: 'development',
+});
+
+app.listen(port, () =>
+    // eslint-disable-next-line no-console
+    console.log(`Unleash Proxy listening on http://localhost:${port}/proxy`),
+);
+
+```
+
+
+## Proxy clients
+To make the integration simple we have developed proxy client SDKs. You can find them all in our [documentation](https://docs.getunleash.io/sdks/unleash-proxy#how-to-connect-to-the-proxy):
+
+
+- [JavaScript Proxy SDK (browser)](https://github.com/unleash-hosted/unleash-proxy-client-js)
+- [Android Proxy SDK](https://github.com/Unleash/unleash-android-proxy-sdk)
+- [iOS Proxy SDK](https://github.com/Unleash/unleash-proxy-client-swift)
