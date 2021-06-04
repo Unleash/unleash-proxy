@@ -8,6 +8,8 @@ RUN npm ci
 
 RUN npm run build
 
+RUN npm prune --production
+
 FROM node:14-alpine
 
 ENV NODE_ENV production
