@@ -2,7 +2,7 @@
   "name": "@unleash/proxy",
   "version": "0.0.4",
   "description": "The Open-Soruce Unleash Proxy",
-  "main": "dist/index.js",
+  "main": "dist/server.js",
   "scripts": {
     "build": "tsc --pretty",
     "example": "npm run build && node example",
