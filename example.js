@@ -1,6 +1,6 @@
 const port = 3000;
 
-const { createApp } = require('./dist/app');
+const { createApp } = require('./dist/index');
 
 const app = createApp({
     unleashUrl: 'https://app.unleash-hosted.com/demo/api/',
