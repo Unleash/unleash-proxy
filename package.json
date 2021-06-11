@@ -1,6 +1,6 @@
 {
   "name": "@unleash/proxy",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "The Open-Soruce Unleash Proxy",
   "main": "dist/index.js",
   "scripts": {
