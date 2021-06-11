@@ -22,4 +22,4 @@ EXPOSE 4242
 
 USER node
 
-CMD node dist/server
+CMD node dist/index
