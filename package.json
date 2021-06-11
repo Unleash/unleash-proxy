@@ -1,7 +1,7 @@
 {
   "name": "@unleash/proxy",
   "version": "0.0.7",
-  "description": "The Open-Soruce Unleash Proxy",
+  "description": "The Unleash Proxy (Open-Source)",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc --pretty",
