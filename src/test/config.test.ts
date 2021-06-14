@@ -70,7 +70,7 @@ test('should load custom activation strategy', () => {
 });
 
 test('should load custom activation strategy from file', () => {
-    process.env.UNLEASH_CUSTOM_STRATEGIES_FILE = `${__dirname}../../examples/custom-strategies.js`;
+    process.env.UNLEASH_CUSTOM_STRATEGIES_FILE = `${__dirname}/../examples/custom-strategies.js`;
 
     const config = createProxyConfig({
         unleashUrl: 'some',
