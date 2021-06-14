@@ -1,9 +1,11 @@
+import { Strategy } from 'unleash-client';
 import { Logger, LogLevel, SimpleLogger } from './logger';
 
 export interface IProxyOption {
     unleashUrl?: string;
     unleashApiToken?: string;
     unleashAppName?: string;
+    customStrategies?: Strategy[];
     proxySecrets?: string[];
     proxyPort?: number;
     proxyBasePath?: string;
@@ -19,6 +21,7 @@ export interface IProxyConfig {
     unleashUrl: string;
     unleashApiToken: string;
     unleashAppName: string;
+    customStrategies?: Strategy[];
     proxySecrets: string[];
     proxyBasePath: string;
     refreshInterval: number;
@@ -48,6 +51,15 @@ function safeNumber(envVar: string | undefined, defaultVal: number): number {
     }
 }
 
+function loadCustomStrategies(path?: string): Strategy[] | undefined {
+    if (path) {
+        // eslint-disable-next-line
+        const strategies = require(path) as Strategy[];
+        return strategies;
+    }
+    return undefined;
+}
+
 export function createProxyConfig(option: IProxyOption): IProxyConfig {
     const unleashUrl = option.unleashUrl || process.env.UNLEASH_URL;
     if (!unleashUrl) {
@@ -63,6 +75,10 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
             'You must specify the unleashApiToken option (UNLEASH_API_TOKEN)',
         );
     }
+
+    const customStrategies =
+        option.customStrategies ||
+        loadCustomStrategies(process.env.UNLEASH_CUSTOM_STRATEGIES_FILE);
 
     const proxySecrets =
         option.proxySecrets ||
@@ -82,6 +98,7 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
             option.proxyBasePath ||
             process.env.UNLEASH_APP_NAME ||
             'unleash-proxy',
+        customStrategies,
         proxySecrets,
         proxyBasePath:
             option.proxyBasePath || process.env.PROXY_BASE_PATH || '',

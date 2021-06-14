@@ -111,7 +111,7 @@ Keep-Alive: timeout=5
 | projectName     | `UNLEASH_PROJECT_NAME`    | `undefined`   | no       | The projectName (id) to fetch feature toggles for. The proxy will only return know about feature toggles that belongs to the project, if specified.  | | 
 | logger          | n/a                       | SimpleLogger  | no       | Register a custom logger. | 
 | logLevel        | `LOG_LEVEL `              | "warn"        | no       | Used to set logLevel. Supported options: "debug", "info", "warn", "error" and "fatal | 
-
+| customStrategies| `UNLEASH_CUSTOM_STRATEGIES_FILE` | []	  | no		 | Use this option to inject implementation of custom activation strategies. If you are using `UNLEASH_CUSTOM_STRATEGIES_FILE` you need to provide a valid path to a javascript files which exports an array of custom activation strategies and the SDK will automatically load these | 
 
 ### Run with Node.js:
 

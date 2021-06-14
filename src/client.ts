@@ -71,6 +71,7 @@ class Client extends EventEmitter implements IClient {
             environment: this.environment,
             refreshInterval: config.refreshInterval,
             projectName: config.projectName,
+            strategies: config.customStrategies,
             disableMetrics: true,
             customHeadersFunction,
         });

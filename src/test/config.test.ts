@@ -1,3 +1,5 @@
+import * as path from 'path';
+import { Strategy } from 'unleash-client';
 import { createProxyConfig } from '../config';
 
 test('should require "unleashUrl', () => {
@@ -39,4 +41,51 @@ test('should allow options via env', () => {
     delete process.env.UNLEASH_URL;
     delete process.env.UNLEASH_API_TOKEN;
     delete process.env.UNLEASH_PROXY_SECRETS;
+});
+
+test('should load custom activation strategy', () => {
+    class TestStrat extends Strategy {
+        constructor() {
+            super('TestStrat');
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        isEnabled(parameters: any, context: any) {
+            return true;
+        }
+    }
+
+    const config = createProxyConfig({
+        unleashUrl: 'some',
+        unleashApiToken: 'some',
+        proxySecrets: ['s1'],
+        customStrategies: [new TestStrat()],
+    });
+
+    expect(config.customStrategies?.length).toBe(1);
+    if (config.customStrategies) {
+        expect(config.customStrategies[0].name).toBe('TestStrat');
+    } else {
+        throw new Error('Expected custom strategy to be set!');
+    }
+});
+
+test('should load custom activation strategy from file', () => {
+    const base = path.resolve('');
+    process.env.UNLEASH_CUSTOM_STRATEGIES_FILE = `${base}/src/examples/custom-strategies.js`;
+
+    const config = createProxyConfig({
+        unleashUrl: 'some',
+        unleashApiToken: 'some',
+        proxySecrets: ['s1'],
+    });
+
+    expect(config.customStrategies?.length).toBe(1);
+    if (config.customStrategies) {
+        expect(config.customStrategies[0].name).toBe('FromFile');
+    } else {
+        throw new Error('Expected custom strategy to be set!');
+    }
+
+    delete process.env.UNLEASH_CUSTOM_STRATEGIES_FILE;
 });
