@@ -1,3 +1,4 @@
+import * as path from 'path';
 import { Strategy } from 'unleash-client';
 import { createProxyConfig } from '../config';
 
@@ -70,7 +71,8 @@ test('should load custom activation strategy', () => {
 });
 
 test('should load custom activation strategy from file', () => {
-    process.env.UNLEASH_CUSTOM_STRATEGIES_FILE = `${__dirname}/../examples/custom-strategies.js`;
+    const base = path.resolve('');
+    process.env.UNLEASH_CUSTOM_STRATEGIES_FILE = `${base}/src/examples/custom-strategies.js`;
 
     const config = createProxyConfig({
         unleashUrl: 'some',

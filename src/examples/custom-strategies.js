@@ -7,7 +7,7 @@ class TestStrat extends Strategy {
     }
 
     isEnabled(parameters, context) {
-        // do something cool with params and context. 
+        // do something cool with params and context.
         return true;
     }
 }
