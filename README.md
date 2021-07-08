@@ -6,7 +6,7 @@ exposed to the world.
 
 The proxy offers:
 
-- **High performance** - a single proxy instance can handle up towards +7000 req/s, and can be horizontally scaled. 
+- **High performance** - a single proxy instance can handle thousands req/s, and can be horizontally scaled. 
 - **Privacy for end-users** - Your end users are not exposed to the unleash API and can be hosted by you This ensures no user data (userId, IPs, etc) is shared. 
 - **Secure** - It is controlled by you, and can hosted on your domain. In addition no feature toggle configuration is shared with the user, only evaluated toggles. 
 
