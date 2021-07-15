@@ -1,6 +1,6 @@
-const port = 3000;
+const port = process.env.PORT || 3000;
 
-const { createApp } = require('./dist/index');
+const { createApp } = require('./dist/app');
 
 const app = createApp({
     unleashUrl: 'https://app.unleash-hosted.com/demo/api/',
@@ -13,6 +13,5 @@ const app = createApp({
 });
 
 app.listen(port, () =>
-    // eslint-disable-next-line no-console
-    console.log(`Unleash Proxy listening on http://localhost:${port}/proxy`),
+  console.log(`Unleash-proxy is listening on port ${port}!`),
 );
