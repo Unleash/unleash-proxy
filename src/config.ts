@@ -4,6 +4,7 @@ import { Logger, LogLevel, SimpleLogger } from './logger';
 export interface IProxyOption {
     unleashUrl?: string;
     unleashApiToken?: string;
+    unleashInstanceId?: string;
     unleashAppName?: string;
     customStrategies?: Strategy[];
     proxySecrets?: string[];
@@ -19,7 +20,8 @@ export interface IProxyOption {
 
 export interface IProxyConfig {
     unleashUrl: string;
-    unleashApiToken: string;
+    unleashApiToken?: string;
+    unleashInstanceId?: string;
     unleashAppName: string;
     customStrategies?: Strategy[];
     proxySecrets: string[];
@@ -70,9 +72,13 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
 
     const unleashApiToken =
         option.unleashApiToken || process.env.UNLEASH_API_TOKEN;
-    if (!unleashApiToken) {
+
+    const unleashInstanceId =
+        option.unleashInstanceId || process.env.UNLEASH_INSTANCE_ID;
+
+    if (!unleashApiToken && !unleashInstanceId) {
         throw new TypeError(
-            'You must specify the unleashApiToken option (UNLEASH_API_TOKEN)',
+            'You must specify the unleashApiToken option (UNLEASH_API_TOKEN) or unleashInstanceId option (UNLEASH_INSTANCE_ID)',
         );
     }
 
@@ -94,6 +100,7 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
     return {
         unleashUrl,
         unleashApiToken,
+        unleashInstanceId,
         unleashAppName:
             option.proxyBasePath ||
             process.env.UNLEASH_APP_NAME ||

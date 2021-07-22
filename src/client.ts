@@ -42,7 +42,9 @@ export interface IClient extends EventEmitter {
 class Client extends EventEmitter implements IClient {
     unleash: Unleash;
 
-    private unleashApiToken: string;
+    private unleashApiToken?: string;
+
+    private unleashInstanceId?: string;
 
     private environment?: string;
 
@@ -55,12 +57,21 @@ class Client extends EventEmitter implements IClient {
     constructor(config: IProxyConfig, init: Function = initialize) {
         super();
         this.unleashApiToken = config.unleashApiToken;
+        this.unleashInstanceId = config.unleashInstanceId;
         this.environment = config.environment;
         this.logger = config.logger;
 
-        const instanceId = generateInstanceId();
+        let instanceId = '';
+
+        if (this.unleashApiToken || !this.unleashInstanceId) {
+            instanceId = generateInstanceId();
+        } else {
+            instanceId = this.unleashInstanceId!;
+        }
+
         const customHeadersFunction = async () => ({
-            Authorization: this.unleashApiToken,
+            'UNLEASH-APPNAME': config.unleashAppName,
+            'UNLEASH-INSTANCEID': this.unleashInstanceId!,
         });
 
         // Unleash Client instance.
