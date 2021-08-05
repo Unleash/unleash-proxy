@@ -26,6 +26,40 @@ test('should be valid options', () => {
     expect(config.unleashUrl).toBe('some');
 });
 
+test('should set trust proxy', () => {
+    const config = createProxyConfig({
+        unleashUrl: 'some',
+        unleashApiToken: 'some',
+        proxySecrets: ['s1'],
+        trustProxy: true,
+    });
+
+    expect(config.trustProxy).toBe(true);
+});
+
+test('should set trust proxy to "loopback"', () => {
+    const config = createProxyConfig({
+        unleashUrl: 'some',
+        unleashApiToken: 'some',
+        proxySecrets: ['s1'],
+        trustProxy: 'loopback',
+    });
+
+    expect(config.trustProxy).toBe('loopback');
+});
+
+test('should set trust proxy via env var', () => {
+    process.env.TRUST_PROXY = 'true';
+    const config = createProxyConfig({
+        unleashUrl: 'some',
+        unleashApiToken: 'some',
+        proxySecrets: ['s1'],
+    });
+
+    expect(config.trustProxy).toBe(true);
+    delete process.env.TRUST_PROXY;
+});
+
 test('should allow options via env', () => {
     process.env.UNLEASH_URL = 'some';
     process.env.UNLEASH_API_TOKEN = 'token';
