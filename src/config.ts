@@ -13,6 +13,7 @@ export interface IProxyOption {
     metricsInterval?: number;
     environment?: string;
     projectName?: string;
+    apiPrefix?: string;
     logger?: Logger;
     logLevel?: LogLevel;
 }
@@ -28,6 +29,7 @@ export interface IProxyConfig {
     metricsInterval: number;
     environment?: string;
     projectName?: string;
+    apiPrefix?: string;
     logger: Logger;
     disableMetrics: boolean;
 }
@@ -110,6 +112,7 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
             safeNumber(process.env.UNLEASH_METRICS_INTERVAL, 30_000),
         environment: option.environment || process.env.UNLEASH_ENVIRONMENT,
         projectName: option.projectName || process.env.UNLEASH_PROJECT_NAME,
+        apiPrefix: option.apiPrefix || process.env.UNLEASH_API_PREFIX,
         disableMetrics: false,
         logger: option.logger || new SimpleLogger(logLevel),
     };

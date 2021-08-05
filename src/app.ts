@@ -22,6 +22,7 @@ export function createApp(
 
     app.disable('x-powered-by');
     app.use(cors(corsOptions));
+    app.set('trust proxy', true);
     app.use(
         `${config.proxyBasePath}/proxy`,
         cors(corsOptions),

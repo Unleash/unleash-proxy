@@ -46,6 +46,8 @@ class Client extends EventEmitter implements IClient {
 
     private environment?: string;
 
+    private apiPrefix?: string;
+
     private metrics: Metrics;
 
     private logger: Logger;
@@ -56,6 +58,7 @@ class Client extends EventEmitter implements IClient {
         super();
         this.unleashApiToken = config.unleashApiToken;
         this.environment = config.environment;
+        this.apiPrefix = config.apiPrefix;
         this.logger = config.logger;
 
         const instanceId = generateInstanceId();
