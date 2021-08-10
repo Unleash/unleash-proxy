@@ -37,6 +37,28 @@ test('should set trust proxy', () => {
     expect(config.trustProxy).toBe(true);
 });
 
+test('should set instanceId', () => {
+    const config = createProxyConfig({
+        unleashUrl: 'some',
+        unleashApiToken: 'some',
+        unleashInstanceId: 'someId1',
+        proxySecrets: ['s1'],
+    });
+
+    expect(config.unleashInstanceId).toBe('someId1');
+});
+
+test('should generate instanceId', () => {
+    const config = createProxyConfig({
+        unleashUrl: 'some',
+        unleashApiToken: 'some',
+        proxySecrets: ['s1'],
+    });
+
+    expect(config.unleashInstanceId).toBeDefined();
+    expect(config.unleashInstanceId.length).toBeGreaterThan(3);
+});
+
 test('should set trust proxy to "loopback"', () => {
     const config = createProxyConfig({
         unleashUrl: 'some',
@@ -64,12 +86,14 @@ test('should allow options via env', () => {
     process.env.UNLEASH_URL = 'some';
     process.env.UNLEASH_API_TOKEN = 'token';
     process.env.UNLEASH_PROXY_SECRETS = 's1';
+    process.env.UNLEASH_INSTANCE_ID = 'i1';
     const config = createProxyConfig({});
 
     expect(config.unleashUrl).toBe('some');
     expect(config.unleashApiToken).toBe('token');
     expect(config.proxySecrets.length).toBe(1);
     expect(config.proxySecrets[0]).toBe('s1');
+    expect(config.unleashInstanceId).toBe('i1');
 
     // cleanup
     delete process.env.UNLEASH_URL;
