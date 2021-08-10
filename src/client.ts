@@ -4,7 +4,6 @@ import Metrics from 'unleash-client/lib/metrics';
 import { defaultStrategies } from 'unleash-client/lib/strategy';
 import { IProxyConfig } from './config';
 import { Logger } from './logger';
-import { generateInstanceId } from './util';
 
 export type FeatureToggleStatus = {
     name: string;
@@ -58,7 +57,6 @@ class Client extends EventEmitter implements IClient {
         this.environment = config.environment;
         this.logger = config.logger;
 
-        const instanceId = generateInstanceId();
         const customHeadersFunction = async () => ({
             Authorization: this.unleashApiToken,
         });
@@ -67,7 +65,7 @@ class Client extends EventEmitter implements IClient {
         this.unleash = init({
             url: config.unleashUrl,
             appName: config.unleashAppName,
-            instanceId,
+            instanceId: config.unleashInstanceId,
             environment: this.environment,
             refreshInterval: config.refreshInterval,
             projectName: config.projectName,
@@ -80,7 +78,7 @@ class Client extends EventEmitter implements IClient {
         this.metrics = new Metrics({
             disableMetrics: config.disableMetrics,
             appName: config.unleashAppName,
-            instanceId,
+            instanceId: config.unleashInstanceId,
             strategies: defaultStrategies.map((s) => s.name),
             metricsInterval: config.metricsInterval,
             url: config.unleashUrl,

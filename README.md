@@ -105,6 +105,7 @@ Keep-Alive: timeout=5
 | proxySecrets    | `UNLEASH_PROXY_SECRETS`   | n/a           | yes      | List of proxy secrets the proxy accept. Proxy SDKs needs to set the Proxy secret as the `Authorization` heder when querying the proxy | 
 | proxyBasePath   | `PROXY_BASE_PATH`         |"/proxy"       | no       | The base path to run the proxy from. Defaults to "/proxy" |
 | unleashAppName  | `UNLEASH_APP_NAME`        |"unleash-proxy"| no       | App name to used when registering with Unleash |
+| unleashInstanceId | `UNLEASH_INSTANCE_ID`        | `generated` | no       | Unleash instance id to used when registering with Unleash |
 | refreshInterval | `UNLEASH_FETCH_INTERVAL`  | 5000          | no       | How often the proxy should query Unleash for updates, defined in ms. | 
 | metricsInterval | `UNLEASH_METRICS_INTERVAL`| 30000         | no       | How often the proxy should send usage metrics back to Unleash, defined in ms. | 
 | environment     | `UNLEASH_ENVIRONMENT`     | `undefined`   | no       | If set this will be the `environment` used by the proxy in the Unleash Context. It will not be possible for proxy SDKs to override the environment if set. | 

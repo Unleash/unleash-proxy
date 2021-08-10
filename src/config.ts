@@ -1,10 +1,12 @@
 import { Strategy } from 'unleash-client';
 import { Logger, LogLevel, SimpleLogger } from './logger';
+import { generateInstanceId } from './util';
 
 export interface IProxyOption {
     unleashUrl?: string;
     unleashApiToken?: string;
     unleashAppName?: string;
+    unleashInstanceId?: string;
     customStrategies?: Strategy[];
     proxySecrets?: string[];
     proxyPort?: number;
@@ -22,6 +24,7 @@ export interface IProxyConfig {
     unleashUrl: string;
     unleashApiToken: string;
     unleashAppName: string;
+    unleashInstanceId: string;
     customStrategies?: Strategy[];
     proxySecrets: string[];
     proxyBasePath: string;
@@ -107,6 +110,11 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
     const trustProxy =
         option.trustProxy || loadTrustProxy(process.env.TRUST_PROXY);
 
+    const unleashInstanceId =
+        option.unleashInstanceId ||
+        process.env.UNLEASH_INSTANCE_ID ||
+        generateInstanceId();
+
     return {
         unleashUrl,
         unleashApiToken,
@@ -114,6 +122,7 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
             option.proxyBasePath ||
             process.env.UNLEASH_APP_NAME ||
             'unleash-proxy',
+        unleashInstanceId,
         customStrategies,
         proxySecrets,
         proxyBasePath:
