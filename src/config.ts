@@ -15,6 +15,7 @@ export interface IProxyOption {
     projectName?: string;
     logger?: Logger;
     logLevel?: LogLevel;
+    trustProxy?: boolean | string | number;
 }
 
 export interface IProxyConfig {
@@ -30,6 +31,7 @@ export interface IProxyConfig {
     projectName?: string;
     logger: Logger;
     disableMetrics: boolean;
+    trustProxy: boolean | string | number;
 }
 
 function resolveStringToArray(value?: string): string[] | undefined {
@@ -58,6 +60,17 @@ function loadCustomStrategies(path?: string): Strategy[] | undefined {
         return strategies;
     }
     return undefined;
+}
+
+function loadTrustProxy(value: string = 'FALSE') {
+    const upperValue = value.toUpperCase();
+    if (upperValue === 'FALSE') {
+        return false;
+    }
+    if (upperValue === 'TRUE') {
+        return true;
+    }
+    return value;
 }
 
 export function createProxyConfig(option: IProxyOption): IProxyConfig {
@@ -91,6 +104,9 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
 
     const logLevel = option.logLevel || (process.env.LOG_LEVEL as LogLevel);
 
+    const trustProxy =
+        option.trustProxy || loadTrustProxy(process.env.TRUST_PROXY);
+
     return {
         unleashUrl,
         unleashApiToken,
@@ -112,5 +128,6 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         projectName: option.projectName || process.env.UNLEASH_PROJECT_NAME,
         disableMetrics: false,
         logger: option.logger || new SimpleLogger(logLevel),
+        trustProxy,
     };
 }
