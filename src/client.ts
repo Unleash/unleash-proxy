@@ -106,7 +106,10 @@ class Client extends EventEmitter implements IClient {
     }
 
     getEnabledToggles(inContext: Context): FeatureToggleStatus[] {
-        this.logger.info('Get enabled toggles');
+        this.logger.info(
+            'Get enabled feature toggles for provided context',
+            inContext,
+        );
         const context = this.fixContext(inContext);
 
         const definitions = this.unleash.getFeatureToggleDefinitions() || [];
