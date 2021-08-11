@@ -65,6 +65,7 @@ export default class UnleashProxy {
             query.remoteAddress = query.remoteAddress || req.ip;
             const context = createContext(query);
             const toggles = this.client.getEnabledToggles(context);
+            res.set('Cache-control', 'public, max-age=2');
             res.send({ toggles });
         }
     }
