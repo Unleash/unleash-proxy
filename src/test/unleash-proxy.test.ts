@@ -136,6 +136,34 @@ test('Should send in context to mock', async () => {
     expect(client.queriedContexts[0].properties?.tenantId).toEqual('me');
 });
 
+test('Should send in context with ip as remoteAddress', async () => {
+    const userIp = '123.13.13.42';
+
+    const toggles = [
+        {
+            name: 'test',
+            enabled: true,
+        },
+    ];
+    const client = new MockClient(toggles);
+
+    const proxySecrets = ['sdf'];
+    const app = createApp(
+        { proxySecrets, unleashUrl, unleashApiToken, trustProxy: true },
+        client,
+    );
+    client.emit('ready');
+
+    await request(app)
+        .get('/proxy?userId=123&tenantId=me')
+        .set('Authorization', 'sdf')
+        .set('X-Forwarded-For', userIp)
+        .expect(200)
+        .expect('Content-Type', /json/);
+
+    expect(client.queriedContexts[0].remoteAddress).toEqual(userIp);
+});
+
 test('Should remove "undefined" environment field from context', async () => {
     const toggles = [
         {

@@ -21,6 +21,7 @@ export function createApp(
     const proxy = new UnleashProxy(client, config);
 
     app.disable('x-powered-by');
+    app.set('trust proxy', config.trustProxy);
     app.use(cors(corsOptions));
     app.set('trust proxy', true);
     app.use(

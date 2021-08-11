@@ -2,9 +2,9 @@ import EventEmitter from 'events';
 import { Context, initialize, Unleash, Variant } from 'unleash-client';
 import Metrics from 'unleash-client/lib/metrics';
 import { defaultStrategies } from 'unleash-client/lib/strategy';
+import { TagFilter } from 'unleash-client/lib/tags';
 import { IProxyConfig } from './config';
 import { Logger } from './logger';
-import { generateInstanceId } from './util';
 
 export type FeatureToggleStatus = {
     name: string;
@@ -46,7 +46,9 @@ class Client extends EventEmitter implements IClient {
 
     private environment?: string;
 
-    private apiPrefix?: string;
+    private readonly namePrefix?: string;
+
+    private readonly tags?: Array<TagFilter>;
 
     private metrics: Metrics;
 
@@ -58,10 +60,10 @@ class Client extends EventEmitter implements IClient {
         super();
         this.unleashApiToken = config.unleashApiToken;
         this.environment = config.environment;
-        this.apiPrefix = config.apiPrefix;
+        this.namePrefix = config.namePrefix;
+        this.tags = config.tags;
         this.logger = config.logger;
 
-        const instanceId = generateInstanceId();
         const customHeadersFunction = async () => ({
             Authorization: this.unleashApiToken,
         });
@@ -70,12 +72,14 @@ class Client extends EventEmitter implements IClient {
         this.unleash = init({
             url: config.unleashUrl,
             appName: config.unleashAppName,
-            instanceId,
+            instanceId: config.unleashInstanceId,
             environment: this.environment,
             refreshInterval: config.refreshInterval,
             projectName: config.projectName,
             strategies: config.customStrategies,
             disableMetrics: true,
+            namePrefix: this.namePrefix,
+            tags: this.tags,
             customHeadersFunction,
         });
 
@@ -83,7 +87,7 @@ class Client extends EventEmitter implements IClient {
         this.metrics = new Metrics({
             disableMetrics: config.disableMetrics,
             appName: config.unleashAppName,
-            instanceId,
+            instanceId: config.unleashInstanceId,
             strategies: defaultStrategies.map((s) => s.name),
             metricsInterval: config.metricsInterval,
             url: config.unleashUrl,
@@ -111,7 +115,10 @@ class Client extends EventEmitter implements IClient {
     }
 
     getEnabledToggles(inContext: Context): FeatureToggleStatus[] {
-        this.logger.info('Get enabled toggles');
+        this.logger.info(
+            'Get enabled feature toggles for provided context',
+            inContext,
+        );
         const context = this.fixContext(inContext);
 
         const definitions = this.unleash.getFeatureToggleDefinitions() || [];
