@@ -1,5 +1,4 @@
-import { Strategy } from 'unleash-client';
-import { TagFilter } from 'unleash-client/lib/tags';
+import { Strategy, TagFilter } from 'unleash-client';
 import { Logger, LogLevel, SimpleLogger } from './logger';
 import { generateInstanceId } from './util';
 
@@ -20,7 +19,7 @@ export interface IProxyOption {
     logLevel?: LogLevel;
     trustProxy?: boolean | string | number;
     namePrefix?: string;
-    tags?: string;
+    tags?: Array<TagFilter>;
 }
 
 export interface IProxyConfig {
@@ -81,17 +80,11 @@ function loadTrustProxy(value: string = 'FALSE') {
     return value;
 }
 
-function mapTagsToFilters(tags: string | undefined): Array<TagFilter> {
-    if (tags) {
-        return tags.split(',').map((tag) => {
-            const t = tag.split(':');
-            return {
-                name: t[0],
-                value: t[1],
-            } as TagFilter;
-        });
-    }
-    return [];
+function mapTagsToFilters(tags?: string): Array<TagFilter> | undefined {
+    return resolveStringToArray(tags)?.map((tag) => {
+        const [name, value] = tag.split(':');
+        return { name, value };
+    });
 }
 
 export function createProxyConfig(option: IProxyOption): IProxyConfig {
@@ -128,8 +121,7 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
     const trustProxy =
         option.trustProxy || loadTrustProxy(process.env.TRUST_PROXY);
 
-    const parsedTags = option.tags || process.env.UNLEASH_TAGS;
-    const tagFilters = mapTagsToFilters(parsedTags);
+    const tags = option.tags || mapTagsToFilters(process.env.UNLEASH_TAGS);
 
     const unleashInstanceId =
         option.unleashInstanceId ||
@@ -160,6 +152,6 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         disableMetrics: false,
         logger: option.logger || new SimpleLogger(logLevel),
         trustProxy,
-        tags: tagFilters,
+        tags,
     };
 }
