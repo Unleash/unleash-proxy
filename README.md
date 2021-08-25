@@ -1,3 +1,8 @@
+![Build & Tests](https://github.com/Unleash/unleash-proxy/workflows/Node.js%20CI/badge.svg?branch=main)
+[![npm](https://img.shields.io/npm/v/@unleash/proxy)](https://www.npmjs.com/package/@unleash/proxy)
+[![Docker Pulls](https://img.shields.io/docker/pulls/unleashorg/unleash-proxy)](https://hub.docker.com/r/unleashorg/unleash-proxy)
+
+
 # The Unleash Proxy
 
 The Unleash Proxy simplifies integration with frontend & native applications running in the context of a specific user. The Unleash proxy sits between the proxy SDK and the 
