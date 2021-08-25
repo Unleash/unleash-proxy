@@ -1,8 +1,13 @@
 import EventEmitter from 'events';
-import { Context, initialize, Unleash, Variant } from 'unleash-client';
+import {
+    Context,
+    initialize,
+    Unleash,
+    Variant,
+    TagFilter,
+} from 'unleash-client';
 import Metrics from 'unleash-client/lib/metrics';
 import { defaultStrategies } from 'unleash-client/lib/strategy';
-import { TagFilter } from 'unleash-client/lib/tags';
 import { IProxyConfig } from './config';
 import { Logger } from './logger';
 
