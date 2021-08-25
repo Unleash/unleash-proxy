@@ -1,11 +1,5 @@
 import EventEmitter from 'events';
-import {
-    Context,
-    initialize,
-    Unleash,
-    Variant,
-    TagFilter,
-} from 'unleash-client';
+import { Context, initialize, Unleash, Variant } from 'unleash-client';
 import Metrics from 'unleash-client/lib/metrics';
 import { defaultStrategies } from 'unleash-client/lib/strategy';
 import { IProxyConfig } from './config';
@@ -51,10 +45,6 @@ class Client extends EventEmitter implements IClient {
 
     private environment?: string;
 
-    private readonly namePrefix?: string;
-
-    private readonly tags?: Array<TagFilter>;
-
     private metrics: Metrics;
 
     private logger: Logger;
@@ -65,8 +55,6 @@ class Client extends EventEmitter implements IClient {
         super();
         this.unleashApiToken = config.unleashApiToken;
         this.environment = config.environment;
-        this.namePrefix = config.namePrefix;
-        this.tags = config.tags;
         this.logger = config.logger;
 
         const customHeadersFunction = async () => ({
@@ -83,8 +71,8 @@ class Client extends EventEmitter implements IClient {
             projectName: config.projectName,
             strategies: config.customStrategies,
             disableMetrics: true,
-            namePrefix: this.namePrefix,
-            tags: this.tags,
+            namePrefix: config.namePrefix,
+            tags: config.tags,
             customHeadersFunction,
         });
 
