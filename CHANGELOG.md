@@ -1,5 +1,10 @@
 # Changelog
 
+### 0.3.0
+
+- feat: Add support for namePrefix and tag filtering (#21)
+- fix: add maxAge to /proxy endpoint
+
 ### 0.2.0
 
 - feat: improve info logger
