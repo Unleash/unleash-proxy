@@ -71,6 +71,8 @@ class Client extends EventEmitter implements IClient {
             projectName: config.projectName,
             strategies: config.customStrategies,
             disableMetrics: true,
+            namePrefix: config.namePrefix,
+            tags: config.tags,
             customHeadersFunction,
         });
 

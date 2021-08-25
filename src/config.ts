@@ -1,4 +1,4 @@
-import { Strategy } from 'unleash-client';
+import { Strategy, TagFilter } from 'unleash-client';
 import { Logger, LogLevel, SimpleLogger } from './logger';
 import { generateInstanceId } from './util';
 
@@ -18,6 +18,8 @@ export interface IProxyOption {
     logger?: Logger;
     logLevel?: LogLevel;
     trustProxy?: boolean | string | number;
+    namePrefix?: string;
+    tags?: Array<TagFilter>;
 }
 
 export interface IProxyConfig {
@@ -35,6 +37,8 @@ export interface IProxyConfig {
     logger: Logger;
     disableMetrics: boolean;
     trustProxy: boolean | string | number;
+    namePrefix?: string;
+    tags?: Array<TagFilter>;
 }
 
 function resolveStringToArray(value?: string): string[] | undefined {
@@ -76,6 +80,13 @@ function loadTrustProxy(value: string = 'FALSE') {
     return value;
 }
 
+function mapTagsToFilters(tags?: string): Array<TagFilter> | undefined {
+    return resolveStringToArray(tags)?.map((tag) => {
+        const [name, value] = tag.split(':');
+        return { name, value };
+    });
+}
+
 export function createProxyConfig(option: IProxyOption): IProxyConfig {
     const unleashUrl = option.unleashUrl || process.env.UNLEASH_URL;
     if (!unleashUrl) {
@@ -110,6 +121,8 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
     const trustProxy =
         option.trustProxy || loadTrustProxy(process.env.TRUST_PROXY);
 
+    const tags = option.tags || mapTagsToFilters(process.env.UNLEASH_TAGS);
+
     const unleashInstanceId =
         option.unleashInstanceId ||
         process.env.UNLEASH_INSTANCE_ID ||
@@ -135,8 +148,10 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
             safeNumber(process.env.UNLEASH_METRICS_INTERVAL, 30_000),
         environment: option.environment || process.env.UNLEASH_ENVIRONMENT,
         projectName: option.projectName || process.env.UNLEASH_PROJECT_NAME,
+        namePrefix: option.namePrefix || process.env.UNLEASH_NAME_PREFIX,
         disableMetrics: false,
         logger: option.logger || new SimpleLogger(logLevel),
         trustProxy,
+        tags,
     };
 }

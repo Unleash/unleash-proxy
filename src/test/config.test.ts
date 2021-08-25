@@ -147,3 +147,75 @@ test('should load custom activation strategy from file', () => {
 
     delete process.env.UNLEASH_CUSTOM_STRATEGIES_FILE;
 });
+
+test('should set namePrefix via options', () => {
+    const config = createProxyConfig({
+        unleashUrl: 'some',
+        unleashApiToken: 'some',
+        namePrefix: 'somePrefix',
+        proxySecrets: ['s1'],
+    });
+
+    expect(config.namePrefix).toBe('somePrefix');
+});
+
+test('should set namePrefix via env', () => {
+    process.env.UNLEASH_NAME_PREFIX = 'prefixViaEnv';
+    const config = createProxyConfig({
+        unleashUrl: 'some',
+        unleashApiToken: 'some',
+        proxySecrets: ['s1'],
+    });
+
+    expect(config.namePrefix).toBe('prefixViaEnv');
+
+    delete process.env.UNLEASH_CUSTOM_STRATEGIES_FILE;
+});
+
+test('should not set tags', () => {
+    const config = createProxyConfig({
+        unleashUrl: 'some',
+        unleashApiToken: 'some',
+        proxySecrets: ['s1'],
+    });
+
+    expect(config.tags).toBeUndefined();
+});
+
+test('should set tags via opts', () => {
+    const config = createProxyConfig({
+        unleashUrl: 'some',
+        unleashApiToken: 'some',
+        proxySecrets: ['s1'],
+        tags: [{ name: 'simple', value: 'proxy' }],
+    });
+
+    expect(config.tags).toStrictEqual([{ name: 'simple', value: 'proxy' }]);
+});
+
+test('should not set tags with empty env var', () => {
+    process.env.UNLEASH_TAGS = '';
+    const config = createProxyConfig({
+        unleashUrl: 'some',
+        unleashApiToken: 'some',
+        proxySecrets: ['s1'],
+    });
+
+    expect(config.tags).toBeUndefined();
+    delete process.env.UNLEASH_CUSTOM_STRATEGIES_FILE;
+});
+
+test('should set tags with env var', () => {
+    process.env.UNLEASH_TAGS = 'simple:proxy, demo:test';
+    const config = createProxyConfig({
+        unleashUrl: 'some',
+        unleashApiToken: 'some',
+        proxySecrets: ['s1'],
+    });
+
+    expect(config.tags).toStrictEqual([
+        { name: 'simple', value: 'proxy' },
+        { name: 'demo', value: 'test' },
+    ]);
+    delete process.env.UNLEASH_CUSTOM_STRATEGIES_FILE;
+});

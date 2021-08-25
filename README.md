@@ -111,9 +111,11 @@ Keep-Alive: timeout=5
 | environment     | `UNLEASH_ENVIRONMENT`     | `undefined`   | no       | If set this will be the `environment` used by the proxy in the Unleash Context. It will not be possible for proxy SDKs to override the environment if set. | 
 | projectName     | `UNLEASH_PROJECT_NAME`    | `undefined`   | no       | The projectName (id) to fetch feature toggles for. The proxy will only return know about feature toggles that belongs to the project, if specified.  | | 
 | logger          | n/a                       | SimpleLogger  | no       | Register a custom logger. | 
-| logLevel        | `LOG_LEVEL `              | "warn"        | no       | Used to set logLevel. Supported options: "debug", "info", "warn", "error" and "fatal | 
+| logLevel        | `LOG_LEVEL `              | "warn"        | no       | Used to set logLevel. Supported options: "debug", "info", "warn", "error" and "fatal" | 
 | customStrategies| `UNLEASH_CUSTOM_STRATEGIES_FILE` | []	  | no		 | Use this option to inject implementation of custom activation strategies. If you are using `UNLEASH_CUSTOM_STRATEGIES_FILE` you need to provide a valid path to a javascript files which exports an array of custom activation strategies and the SDK will automatically load these | 
 | trustProxy      | `TRUST_PROXY `            | `false`       | no       | By enabling the trustProxy option, Unleash Proxy will have knowledge that it's sitting behind a proxy and that the X-Forwarded-* header fields may be trusted, which otherwise may be easily spoofed. The proxy will automatically enrich the ip address in the Unleash Context. Can either be `true/false` (Trust all proxies), trust only given IP/CIDR (e.g. `'127.0.0.1'`) as a `string`. May be a list of comma separated values (e.g. `'127.0.0.1,192.168.1.1/24'` | 
+| namePrefix        | `UNLEASH_NAME_PREFIX`              | undefined        | no       | Used to filter features by using prefix when requesting backend values. | 
+| tags        | `UNLEASH_TAGS`              | undefined        | no       | Used to filter features by using tags set for features. Format should be `tagName:tagValue,tagName2:tagValue2` | 
 
 ### Run with Node.js:
 
