@@ -132,7 +132,7 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         unleashUrl,
         unleashApiToken,
         unleashAppName:
-            option.proxyBasePath ||
+            option.unleashAppName ||
             process.env.UNLEASH_APP_NAME ||
             'unleash-proxy',
         unleashInstanceId,
