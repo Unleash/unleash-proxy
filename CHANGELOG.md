@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.3.1
+
+- fix: config.unleashAppName should default to unleashAppName
+
 ### 0.3.0
 
 - feat: Add support for namePrefix and tag filtering (#21)
