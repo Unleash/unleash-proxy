@@ -7,7 +7,8 @@
     "build": "tsc --pretty",
     "example": "npm run build && node example",
     "lint": "eslint ./src",
-    "test": "jest"
+    "test": "jest",
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",

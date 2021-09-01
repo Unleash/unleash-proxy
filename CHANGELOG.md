@@ -1,5 +1,8 @@
 # Changelog
 
+### 0.3.2
+- fix: perform build before publish!
+
 ### 0.3.1
 
 - fix: config.unleashAppName should default to unleashAppName
