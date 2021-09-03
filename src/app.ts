@@ -1,3 +1,4 @@
+import compression from 'compression';
 import express, { Application } from 'express';
 import cors from 'cors';
 import Client, { IClient } from './client';
@@ -7,7 +8,7 @@ import UnleashProxy from './unleash-proxy';
 
 const corsOptions = {
     exposedHeaders: 'ETag',
-    maxAge: 604800,
+    maxAge: 172800,
 };
 
 export function createApp(
@@ -23,6 +24,9 @@ export function createApp(
     app.disable('x-powered-by');
     app.set('trust proxy', config.trustProxy);
     app.use(cors(corsOptions));
+
+    app.use(compression());
+
     app.use(
         `${config.proxyBasePath}/proxy`,
         cors(corsOptions),
