@@ -1,6 +1,6 @@
 # Changelog
 
-### 0.4.2
+### 0.4.0
 - feat: add compression #23
 
 ### 0.3.2
