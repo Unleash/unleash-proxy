@@ -1,5 +1,8 @@
 # Changelog
 
+### 0.4.2
+- feat: add compression #23
+
 ### 0.3.2
 - fix: perform build before publish!
 
