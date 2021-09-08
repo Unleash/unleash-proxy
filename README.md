@@ -108,6 +108,7 @@ Keep-Alive: timeout=5
 | unleashUrl      |`UNLEASH_URL`              | n/a           | yes      | API Url to the Unleash instance to connect to |
 | unleashApiToken | `UNLEASH_API_TOKEN`       | n/a           | yes      | API token (client) needed to connect to Unleash API. |
 | proxySecrets    | `UNLEASH_PROXY_SECRETS`   | n/a           | yes      | List of proxy secrets the proxy accept. Proxy SDKs needs to set the Proxy secret as the `Authorization` heder when querying the proxy | 
+| proxyPort       | `PORT`                    | 3000          | no       | The port where the proxy should listen. | 
 | proxyBasePath   | `PROXY_BASE_PATH`         |"/proxy"       | no       | The base path to run the proxy from. Defaults to "/proxy" |
 | unleashAppName  | `UNLEASH_APP_NAME`        |"unleash-proxy"| no       | App name to used when registering with Unleash |
 | unleashInstanceId | `UNLEASH_INSTANCE_ID`        | `generated` | no       | Unleash instance id to used when registering with Unleash |
