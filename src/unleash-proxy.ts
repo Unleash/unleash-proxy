@@ -120,15 +120,15 @@ export default class UnleashProxy {
     }
 
     handleEvents(
-        req: Request<any, IUnleashEvent, any, any>,
+        req: Request<any, IUnleashEvent[], any, any>,
         res: Response,
     ): void {
-        const event = req.body;
+        const events = req.body;
 
-        this.logger.info('Event: ', event);
+        this.logger.info('Events: ', events);
 
         try {
-            const result = this.validator.validate(event, unleashEventSchema);
+            const result = this.validator.validate(events, unleashEventSchema);
             if (result.errors.length > 0) {
                 this.logger.error(result.errors);
                 // Probably include validation error.
@@ -136,7 +136,7 @@ export default class UnleashProxy {
                 return;
             }
 
-            this.eventService.queue(event);
+            this.eventService.queue(events);
             res.sendStatus(202);
         } catch (err) {
             res.sendStatus(500);

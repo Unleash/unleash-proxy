@@ -130,6 +130,8 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         process.env.UNLEASH_INSTANCE_ID ||
         generateInstanceId();
 
+    const logger = option.logger || new SimpleLogger(logLevel);
+
     return {
         unleashUrl,
         unleashApiToken,
@@ -152,9 +154,9 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         projectName: option.projectName || process.env.UNLEASH_PROJECT_NAME,
         namePrefix: option.namePrefix || process.env.UNLEASH_NAME_PREFIX,
         disableMetrics: false,
-        logger: option.logger || new SimpleLogger(logLevel),
+        logger,
         trustProxy,
         tags,
-        eventService: new EventService(),
+        eventService: new EventService(logger),
     };
 }
