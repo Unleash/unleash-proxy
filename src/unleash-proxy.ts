@@ -1,9 +1,13 @@
 import { Request, Response, Router } from 'express';
+import { Validator } from 'jsonschema';
 import { createContext } from './create-context';
 import { clientMetricsSchema } from './metrics-schema';
 import { IProxyConfig } from './config';
 import { IClient } from './client';
 import { Logger } from './logger';
+import { IUnleashEvent } from './iunleash-event';
+import EventService from './event-service';
+import * as unleashEventSchema from './unleash-event.json';
 
 const NOT_READY =
     'Unleash Proxy has not connected to Unleash API and is not ready to accept requests yet.';
@@ -15,6 +19,10 @@ export default class UnleashProxy {
 
     private client: IClient;
 
+    private eventService: EventService;
+
+    private validator: Validator;
+
     private ready = false;
 
     public middleware: Router;
@@ -23,6 +31,8 @@ export default class UnleashProxy {
         this.logger = config.logger;
         this.proxySecrets = config.proxySecrets;
         this.client = client;
+        this.eventService = config.eventService;
+        this.validator = new Validator();
 
         if (client.isReady()) {
             this.setReady();
@@ -40,6 +50,7 @@ export default class UnleashProxy {
         router.get('/', this.getEnabledToggles.bind(this));
         router.post('/', this.lookupToggles.bind(this));
         router.post('/client/metrics', this.registerMetrics.bind(this));
+        router.post('/events', this.handleEvents.bind(this));
     }
 
     private setReady() {
@@ -106,5 +117,29 @@ export default class UnleashProxy {
 
         this.client.registerMetrics(value);
         res.sendStatus(200);
+    }
+
+    handleEvents(
+        req: Request<any, IUnleashEvent, any, any>,
+        res: Response,
+    ): void {
+        const event = req.body;
+
+        this.logger.info('Event: ', event);
+
+        try {
+            const result = this.validator.validate(event, unleashEventSchema);
+            if (result.errors.length > 0) {
+                this.logger.error(result.errors);
+                // Probably include validation error.
+                res.sendStatus(400);
+                return;
+            }
+
+            this.eventService.queue(event);
+            res.sendStatus(202);
+        } catch (err) {
+            res.sendStatus(500);
+        }
     }
 }

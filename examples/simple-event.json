@@ -1,0 +1,8 @@
+{
+    "eventId": "121123123",
+    "eventType": "isEnabled",
+    "featureName": "demo",
+    "context": {
+        "userId": "123"
+    }
+}

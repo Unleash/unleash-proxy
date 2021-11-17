@@ -1,0 +1,105 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Unleash Event",
+    "description": "...",
+    "required": [
+        "eventId",
+        "eventType",
+        "featureName",
+        "context"
+      ]
+    ,
+    "properties": {
+      "eventId": {
+        "type": "string",
+        "format": "uuid",
+        "description": "The unique identifier for an event"
+      },
+      "createdTimestamp": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "receivedTimestamp": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "eventType": {
+        "description": "Type of the event",
+        "oneOf": [
+          {
+            "enum": [
+              "isEnabled"
+            ],
+            "description": "Event enabled"
+          },
+          {
+            "enum": [
+              "getVariant"
+            ],
+            "description": "Get variant"
+          },
+          {
+            "enum": [
+              "customGoal"
+            ],
+            "description": "Custom goal"
+          }
+        ]
+      },
+      "featureName": {
+        "type": "string",
+        "description": "The name of the feature the event happened to"
+      },
+      "environment": {
+        "type": "string",
+        "description": "Which environment did this event happen in"
+      },
+      "variant": {
+        "type": "string",
+        "description": "If this is a getVariant event, which variant did the user receive"
+      },
+      "enabled": {
+        "type": "boolean",
+        "description": "Was the toggle enabled?"
+      },
+      "context": {
+        "type": "object",
+        "description": "The unleash context at evaluation time",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "description": "The id of the active user"
+          },
+          "sessionId": {
+            "type": "string",
+            "description": ""
+          },
+          "environment": {
+            "type": "string",
+            "description": "The environment set at client initialization time. *DEPRECATED*"
+          },
+          "instanceId": {
+            "type": "string",
+            "description": "The instance id of the process running the client"
+          },
+          "appName": {
+            "type": "string",
+            "description": "The name of the process running the client"
+          },
+          "ipAddr": {
+            "type": "string",
+            "format": "ipv4"
+          },
+          "properties": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+  }
+}

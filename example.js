@@ -8,7 +8,7 @@ const app = createApp({
     proxySecrets: ['proxy-secret', 'another-proxy-secret', 's1'],
     refreshInterval: 1000,
     // unleashInstanceId: '1337',
-    // logLevel: 'info',
+    logLevel: 'info',
     // projectName: 'order-team', // optional
     // environment: 'development',
 });

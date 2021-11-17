@@ -1,4 +1,5 @@
 import { Strategy, TagFilter } from 'unleash-client';
+import EventService from './event-service';
 import { Logger, LogLevel, SimpleLogger } from './logger';
 import { generateInstanceId } from './util';
 
@@ -39,6 +40,7 @@ export interface IProxyConfig {
     trustProxy: boolean | string | number;
     namePrefix?: string;
     tags?: Array<TagFilter>;
+    eventService: EventService;
 }
 
 function resolveStringToArray(value?: string): string[] | undefined {
@@ -153,5 +155,6 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         logger: option.logger || new SimpleLogger(logLevel),
         trustProxy,
         tags,
+        eventService: new EventService(),
     };
 }
