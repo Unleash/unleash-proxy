@@ -2,6 +2,14 @@ import got from 'got';
 import { IUnleashEvent } from './iunleash-event';
 import { Logger } from './logger';
 
+const rudderTransform = (e: IUnleashEvent) => ({
+    userId: e.context?.userId,
+    type: 'track',
+    event: e.eventType,
+    context: e.context,
+    timestamp: e.receivedTimestamp,
+});
+
 export default class EventService {
     private logger: Logger;
 
@@ -9,7 +17,10 @@ export default class EventService {
 
     private pushUrl: string;
 
-    constructor(logger: Logger, url = 'http://localhost:3001') {
+    constructor(
+        logger: Logger,
+        url = 'https://getunleasharyw.dataplane.rudderstack.com//v1/batch',
+    ) {
         this.pushUrl = url;
         this.logger = logger;
 
@@ -31,13 +42,23 @@ export default class EventService {
         if (this.events.length > 0) {
             const eventsToSend = this.events.splice(0, this.events.length);
 
+            const content = {
+                batch: eventsToSend.map((e) => rudderTransform(e)),
+            };
+
+            console.log(content);
+
             try {
-                // Single destination
+                // Single destination: Rudder stack
                 await got.post(this.pushUrl, {
-                    json: eventsToSend.map((e) => e),
+                    json: content,
+                    headers: {
+                        Authorization:
+                            'Basic MjEyc3pmVHdvWkh5aXZzQjQxRVNCTHJoSmFUOg==',
+                    },
                 });
             } catch (e) {
-                console.error('Could not send events');
+                console.error(e);
             }
         }
     }

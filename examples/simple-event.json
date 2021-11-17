@@ -6,5 +6,17 @@
         "context": {
             "userId": "123"
         }
+    },
+    {
+        "eventId": "12112312355",
+        "eventType": "isEnabled",
+        "featureName": "demo",
+        "context": {
+            "userId": "123",
+            "properties": {
+                "customerType": "gold",
+                "tenantId": "customer-a"
+            } 
+        }
     }
 ]
