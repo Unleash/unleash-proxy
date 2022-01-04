@@ -20,6 +20,7 @@ export interface IProxyOption {
     trustProxy?: boolean | string | number;
     namePrefix?: string;
     tags?: Array<TagFilter>;
+    proxyHeaderName?: string;
 }
 
 export interface IProxyConfig {
@@ -39,6 +40,7 @@ export interface IProxyConfig {
     trustProxy: boolean | string | number;
     namePrefix?: string;
     tags?: Array<TagFilter>;
+    proxyHeaderName: string;
 }
 
 function resolveStringToArray(value?: string): string[] | undefined {
@@ -153,5 +155,9 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         logger: option.logger || new SimpleLogger(logLevel),
         trustProxy,
         tags,
+        proxyHeaderName:
+            option.proxyHeaderName ||
+            process.env.PROXY_HEADER_NAME ||
+            'authorization'
     };
 }

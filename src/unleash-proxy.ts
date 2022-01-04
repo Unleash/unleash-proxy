@@ -13,6 +13,8 @@ export default class UnleashProxy {
 
     private proxySecrets: string[];
 
+    private proxyHeaderName: string;
+
     private client: IClient;
 
     private ready = false;
@@ -22,6 +24,7 @@ export default class UnleashProxy {
     constructor(client: IClient, config: IProxyConfig) {
         this.logger = config.logger;
         this.proxySecrets = config.proxySecrets;
+        this.proxyHeaderName = config.proxyHeaderName;
         this.client = client;
 
         if (client.isReady()) {
@@ -54,7 +57,7 @@ export default class UnleashProxy {
     }
 
     getEnabledToggles(req: Request, res: Response): void {
-        const apiToken = req.header('authorization');
+        const apiToken = req.header(this.proxyHeaderName);
 
         if (!this.ready) {
             res.status(503).send(NOT_READY);
@@ -71,7 +74,7 @@ export default class UnleashProxy {
     }
 
     lookupToggles(req: Request, res: Response): void {
-        const apiToken = req.header('authorization');
+        const apiToken = req.header(this.proxyHeaderName);
 
         if (!this.ready) {
             res.status(503).send(NOT_READY);
