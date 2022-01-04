@@ -107,7 +107,7 @@ Keep-Alive: timeout=5
 | -------------   |----------------------     |----------     |:--------:|---------------|
 | unleashUrl      |`UNLEASH_URL`              | n/a           | yes      | API Url to the Unleash instance to connect to |
 | unleashApiToken | `UNLEASH_API_TOKEN`       | n/a           | yes      | API token (client) needed to connect to Unleash API. |
-| proxySecrets    | `UNLEASH_PROXY_SECRETS`   | n/a           | yes      | List of proxy secrets the proxy accept. Proxy SDKs needs to set the Proxy secret as the `Authorization` header (or another specified under `proxyHeaderName` option) when querying the proxy | 
+| proxySecrets    | `UNLEASH_PROXY_SECRETS`   | n/a           | yes      | List of proxy secrets the proxy accept. Proxy SDKs needs to set the Proxy secret as the `Authorization` header (or another specified under `proxySecretHeaderName` option) when querying the proxy | 
 | proxyPort       | `PORT`                    | 3000          | no       | The port where the proxy should listen. | 
 | proxyBasePath   | `PROXY_BASE_PATH`         |"/proxy"       | no       | The base path to run the proxy from. Defaults to "/proxy" |
 | unleashAppName  | `UNLEASH_APP_NAME`        |"unleash-proxy"| no       | App name to used when registering with Unleash |
@@ -122,7 +122,7 @@ Keep-Alive: timeout=5
 | trustProxy      | `TRUST_PROXY `            | `false`       | no       | By enabling the trustProxy option, Unleash Proxy will have knowledge that it's sitting behind a proxy and that the X-Forwarded-* header fields may be trusted, which otherwise may be easily spoofed. The proxy will automatically enrich the ip address in the Unleash Context. Can either be `true/false` (Trust all proxies), trust only given IP/CIDR (e.g. `'127.0.0.1'`) as a `string`. May be a list of comma separated values (e.g. `'127.0.0.1,192.168.1.1/24'` | 
 | namePrefix        | `UNLEASH_NAME_PREFIX`              | undefined        | no       | Used to filter features by using prefix when requesting backend values. | 
 | tags        | `UNLEASH_TAGS`              | undefined        | no       | Used to filter features by using tags set for features. Format should be `tagName:tagValue,tagName2:tagValue2` | 
-| proxyHeaderName        | `PROXY_HEADER_NAME`              | "authorization"        | no       | Used to specify under which header will be passed proxy secret | 
+| proxySecretHeaderName        | `PROXY_SECRET_HEADER_NAME`              | "authorization"        | no       | Used to specify under which header will be passed proxy secret | 
 
 ### Run with Node.js:
 
