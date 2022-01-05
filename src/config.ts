@@ -9,6 +9,7 @@ export interface IProxyOption {
     unleashInstanceId?: string;
     customStrategies?: Strategy[];
     proxySecrets?: string[];
+    clientKeys?: string[];
     proxyPort?: number;
     proxyBasePath?: string;
     refreshInterval?: number;
@@ -20,7 +21,7 @@ export interface IProxyOption {
     trustProxy?: boolean | string | number;
     namePrefix?: string;
     tags?: Array<TagFilter>;
-    proxySecretHeaderName?: string;
+    clientKeysHeaderName?: string;
 }
 
 export interface IProxyConfig {
@@ -29,7 +30,7 @@ export interface IProxyConfig {
     unleashAppName: string;
     unleashInstanceId: string;
     customStrategies?: Strategy[];
-    proxySecrets: string[];
+    clientKeys: string[];
     proxyBasePath: string;
     refreshInterval: number;
     metricsInterval: number;
@@ -40,7 +41,7 @@ export interface IProxyConfig {
     trustProxy: boolean | string | number;
     namePrefix?: string;
     tags?: Array<TagFilter>;
-    proxySecretHeaderName: string;
+    clientKeysHeaderName: string;
 }
 
 function resolveStringToArray(value?: string): string[] | undefined {
@@ -89,6 +90,15 @@ function mapTagsToFilters(tags?: string): Array<TagFilter> | undefined {
     });
 }
 
+function loadClientKeys(option: IProxyOption): string[] | undefined {
+    return (
+        option.clientKeys ||
+        resolveStringToArray(process.env.UNLEASH_PROXY_CLIENT_KEYS) ||
+        option.proxySecrets ||
+        resolveStringToArray(process.env.UNLEASH_PROXY_SECRETS)
+    );
+}
+
 export function createProxyConfig(option: IProxyOption): IProxyConfig {
     const unleashUrl = option.unleashUrl || process.env.UNLEASH_URL;
     if (!unleashUrl) {
@@ -109,12 +119,10 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         option.customStrategies ||
         loadCustomStrategies(process.env.UNLEASH_CUSTOM_STRATEGIES_FILE);
 
-    const proxySecrets =
-        option.proxySecrets ||
-        resolveStringToArray(process.env.UNLEASH_PROXY_SECRETS);
-    if (!proxySecrets) {
+    const clientKeys = loadClientKeys(option);
+    if (!clientKeys) {
         throw new TypeError(
-            'You must specify the unleashProxySecrets option (UNLEASH_PROXY_SECRETS)',
+            'You must specify the clientKeys option (UNLEASH_PROXY_CLIENT_KEYS)',
         );
     }
 
@@ -139,7 +147,7 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
             'unleash-proxy',
         unleashInstanceId,
         customStrategies,
-        proxySecrets,
+        clientKeys,
         proxyBasePath:
             option.proxyBasePath || process.env.PROXY_BASE_PATH || '',
         refreshInterval:
@@ -155,9 +163,9 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         logger: option.logger || new SimpleLogger(logLevel),
         trustProxy,
         tags,
-        proxySecretHeaderName:
-            option.proxySecretHeaderName ||
-            process.env.PROXY_SECRET_HEADER_NAME ||
-            'authorization'
+        clientKeysHeaderName:
+            option.clientKeysHeaderName ||
+            process.env.CLIENT_KEY_HEADER_NAME ||
+            'authorization',
     };
 }

@@ -71,7 +71,12 @@ test('Should return list of toggles with custom proxy secret header', () => {
 
     const proxySecrets = ['sdf'];
     const app = createApp(
-        { proxySecrets, unleashUrl, unleashApiToken, proxySecretHeaderName: 'NotAuthorized' },
+        {
+            proxySecrets,
+            unleashUrl,
+            unleashApiToken,
+            clientKeysHeaderName: 'NotAuthorized',
+        },
         client,
     );
     client.emit('ready');
@@ -85,7 +90,6 @@ test('Should return list of toggles with custom proxy secret header', () => {
             expect(response.body.toggles.length).toEqual(2);
         });
 });
-
 
 test('Should return list of toggles using env with multiple secrets', () => {
     process.env.UNLEASH_PROXY_SECRETS = 'secret1,secret2';

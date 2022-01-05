@@ -85,15 +85,34 @@ test('should set trust proxy via env var', () => {
 test('should allow options via env', () => {
     process.env.UNLEASH_URL = 'some';
     process.env.UNLEASH_API_TOKEN = 'token';
-    process.env.UNLEASH_PROXY_SECRETS = 's1';
+    process.env.UNLEASH_PROXY_CLIENT_KEYS = 's1';
     process.env.UNLEASH_INSTANCE_ID = 'i1';
     const config = createProxyConfig({});
 
     expect(config.unleashUrl).toBe('some');
     expect(config.unleashApiToken).toBe('token');
-    expect(config.proxySecrets.length).toBe(1);
-    expect(config.proxySecrets[0]).toBe('s1');
+    expect(config.clientKeys.length).toBe(1);
+    expect(config.clientKeys[0]).toBe('s1');
     expect(config.unleashInstanceId).toBe('i1');
+
+    // cleanup
+    delete process.env.UNLEASH_URL;
+    delete process.env.UNLEASH_API_TOKEN;
+    delete process.env.UNLEASH_PROXY_CLIENT_KEYS;
+    delete process.env.UNLEASH_INSTANCE_ID;
+});
+
+test('should allow old "UNLEASH_PROXY_SECRETS" option via env', () => {
+    process.env.UNLEASH_URL = 'some';
+    process.env.UNLEASH_API_TOKEN = 'token';
+    process.env.UNLEASH_PROXY_SECRETS = 's1-token, s2-token';
+    const config = createProxyConfig({});
+
+    expect(config.unleashUrl).toBe('some');
+    expect(config.unleashApiToken).toBe('token');
+    expect(config.clientKeys.length).toBe(2);
+    expect(config.clientKeys[0]).toBe('s1-token');
+    expect(config.clientKeys[1]).toBe('s2-token');
 
     // cleanup
     delete process.env.UNLEASH_URL;
@@ -116,7 +135,7 @@ test('should load custom activation strategy', () => {
     const config = createProxyConfig({
         unleashUrl: 'some',
         unleashApiToken: 'some',
-        proxySecrets: ['s1'],
+        clientKeys: ['s1'],
         customStrategies: [new TestStrat()],
     });
 
@@ -135,7 +154,7 @@ test('should load custom activation strategy from file', () => {
     const config = createProxyConfig({
         unleashUrl: 'some',
         unleashApiToken: 'some',
-        proxySecrets: ['s1'],
+        clientKeys: ['s1'],
     });
 
     expect(config.customStrategies?.length).toBe(1);
@@ -153,7 +172,7 @@ test('should set namePrefix via options', () => {
         unleashUrl: 'some',
         unleashApiToken: 'some',
         namePrefix: 'somePrefix',
-        proxySecrets: ['s1'],
+        clientKeys: ['s1'],
     });
 
     expect(config.namePrefix).toBe('somePrefix');
@@ -164,7 +183,7 @@ test('should set namePrefix via env', () => {
     const config = createProxyConfig({
         unleashUrl: 'some',
         unleashApiToken: 'some',
-        proxySecrets: ['s1'],
+        clientKeys: ['s1'],
     });
 
     expect(config.namePrefix).toBe('prefixViaEnv');
@@ -198,7 +217,7 @@ test('should not set tags with empty env var', () => {
     const config = createProxyConfig({
         unleashUrl: 'some',
         unleashApiToken: 'some',
-        proxySecrets: ['s1'],
+        clientKeys: ['s1'],
     });
 
     expect(config.tags).toBeUndefined();
@@ -210,7 +229,7 @@ test('should set tags with env var', () => {
     const config = createProxyConfig({
         unleashUrl: 'some',
         unleashApiToken: 'some',
-        proxySecrets: ['s1'],
+        clientKeys: ['s1'],
     });
 
     expect(config.tags).toStrictEqual([
