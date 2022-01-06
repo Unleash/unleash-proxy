@@ -123,7 +123,7 @@ Keep-Alive: timeout=5
 | trustProxy      | `TRUST_PROXY `            | `false`       | no       | By enabling the trustProxy option, Unleash Proxy will have knowledge that it's sitting behind a proxy and that the X-Forwarded-* header fields may be trusted, which otherwise may be easily spoofed. The proxy will automatically enrich the ip address in the Unleash Context. Can either be `true/false` (Trust all proxies), trust only given IP/CIDR (e.g. `'127.0.0.1'`) as a `string`. May be a list of comma separated values (e.g. `'127.0.0.1,192.168.1.1/24'` | 
 | namePrefix        | `UNLEASH_NAME_PREFIX`              | undefined        | no       | Used to filter features by using prefix when requesting backend values. | 
 | tags        | `UNLEASH_TAGS`              | undefined        | no       | Used to filter features by using tags set for features. Format should be `tagName:tagValue,tagName2:tagValue2` | 
-| clientKeysHeaderName        | `CLIENT_KEYS_HEADER_NAME`              | "authorization"        | no       | Used to specify under which header will be passed proxy client keys | 
+| clientKeysHeaderName        | `CLIENT_KEYS_HEADER_NAME`              | "authorization"        | no       | The name of the HTTP header to use for client keys. Incoming requests must set the value of this header to one of the Proxy's `clientKeys` to be authorized successfully. | 
 
 ### Run with Node.js:
 
