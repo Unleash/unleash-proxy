@@ -107,7 +107,7 @@ Keep-Alive: timeout=5
 | -------------   |----------------------     |----------     |:--------:|---------------|
 | unleashUrl      |`UNLEASH_URL`              | n/a           | yes      | API Url to the Unleash instance to connect to |
 | unleashApiToken | `UNLEASH_API_TOKEN`       | n/a           | yes      | API token (client) needed to connect to Unleash API. |
-| clientKeys      | `UNLEASH_CLIENT_KEYS`     | n/a           | yes      | List of proxy secrets the proxy accept. Proxy SDKs needs to set the Proxy secret as the `Authorization` header (or another specified under `clientKeysHeaderName` option) when querying the proxy | 
+| clientKeys      | `UNLEASH_CLIENT_KEYS`     | n/a           | yes      | List of _client keys_ the Unleash proxy accepts. Proxy SDKs needs to set the _client key_ as the `Authorization` header (or another specified under `clientKeysHeaderName` option) when interacting with the Unleash proxy | 
 | proxySecrets    | `UNLEASH_PROXY_SECRETS`   | n/a           | no      | Alias for `clientKeys` in order to keep backward compatibility | 
 | proxyPort       | `PORT`                    | 3000          | no       | The port where the proxy should listen. | 
 | proxyBasePath   | `PROXY_BASE_PATH`         |"/proxy"       | no       | The base path to run the proxy from. Defaults to "/proxy" |
