@@ -11,7 +11,9 @@ const NOT_READY =
 export default class UnleashProxy {
     private logger: Logger;
 
-    private proxySecrets: string[];
+    private clientKeys: string[];
+
+    private clientKeysHeaderName: string;
 
     private client: IClient;
 
@@ -21,7 +23,8 @@ export default class UnleashProxy {
 
     constructor(client: IClient, config: IProxyConfig) {
         this.logger = config.logger;
-        this.proxySecrets = config.proxySecrets;
+        this.clientKeys = config.clientKeys;
+        this.clientKeysHeaderName = config.clientKeysHeaderName;
         this.client = client;
 
         if (client.isReady()) {
@@ -49,16 +52,21 @@ export default class UnleashProxy {
         );
     }
 
-    setProxySecrets(proxySecrets: string[]): void {
-        this.proxySecrets = proxySecrets;
+    // kept for backward compatibility
+    setProxySecrets(clientKeys: string[]): void {
+        this.setClientKeys(clientKeys);
+    }
+
+    setClientKeys(clientKeys: string[]): void {
+        this.clientKeys = clientKeys;
     }
 
     getEnabledToggles(req: Request, res: Response): void {
-        const apiToken = req.header('authorization');
+        const apiToken = req.header(this.clientKeysHeaderName);
 
         if (!this.ready) {
             res.status(503).send(NOT_READY);
-        } else if (!apiToken || !this.proxySecrets.includes(apiToken)) {
+        } else if (!apiToken || !this.clientKeys.includes(apiToken)) {
             res.sendStatus(401);
         } else {
             const { query } = req;
@@ -71,11 +79,11 @@ export default class UnleashProxy {
     }
 
     lookupToggles(req: Request, res: Response): void {
-        const apiToken = req.header('authorization');
+        const apiToken = req.header(this.clientKeysHeaderName);
 
         if (!this.ready) {
             res.status(503).send(NOT_READY);
-        } else if (!apiToken || !this.proxySecrets.includes(apiToken)) {
+        } else if (!apiToken || !this.clientKeys.includes(apiToken)) {
             res.sendStatus(401);
         } else {
             const { context, toggles: toggleNames } = req.body;

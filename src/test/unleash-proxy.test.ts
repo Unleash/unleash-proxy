@@ -56,6 +56,41 @@ test('Should return list of toggles', () => {
         });
 });
 
+test('Should return list of toggles with custom proxy secret header', () => {
+    const toggles = [
+        {
+            name: 'test',
+            enabled: true,
+        },
+        {
+            name: 'test2',
+            enabled: true,
+        },
+    ];
+    const client = new MockClient(toggles);
+
+    const proxySecrets = ['sdf'];
+    const app = createApp(
+        {
+            proxySecrets,
+            unleashUrl,
+            unleashApiToken,
+            clientKeysHeaderName: 'NotAuthorized',
+        },
+        client,
+    );
+    client.emit('ready');
+
+    return request(app)
+        .get('/proxy')
+        .set('NotAuthorized', 'sdf')
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .then((response) => {
+            expect(response.body.toggles.length).toEqual(2);
+        });
+});
+
 test('Should return list of toggles using env with multiple secrets', () => {
     process.env.UNLEASH_PROXY_SECRETS = 'secret1,secret2';
     const toggles = [
