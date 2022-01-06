@@ -56,7 +56,72 @@ test('Should return list of toggles', () => {
         });
 });
 
-test('Should return list of toggles with custom proxy secret header', () => {
+test('Should handle POST with empty body', () => {
+    const toggles = [
+        {
+            name: 'test',
+            enabled: true,
+        },
+        {
+            name: 'test2',
+            enabled: true,
+        },
+    ];
+    const client = new MockClient(toggles);
+
+    const proxySecrets = ['sdf'];
+    const app = createApp(
+        { proxySecrets, unleashUrl, unleashApiToken },
+        client,
+    );
+    client.emit('ready');
+
+    return request(app)
+        .post('/proxy')
+        .send({ blah: 'hello' })
+        .set('Accept', 'application/json')
+        .set('Authorization', 'sdf')
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .then((response) => {
+            expect(response.body.toggles).toHaveLength(0);
+        });
+});
+
+test('Should handle POST with toggle names', () => {
+    const toggles = [
+        {
+            name: 'test',
+            enabled: true,
+        },
+        {
+            name: 'test2',
+            enabled: true,
+        },
+    ];
+    const client = new MockClient(toggles);
+
+    const proxySecrets = ['sdf'];
+    const app = createApp(
+        { proxySecrets, unleashUrl, unleashApiToken },
+        client,
+    );
+    client.emit('ready');
+
+    return request(app)
+        .post('/proxy')
+        .send({ toggles: ['test'] })
+        .set('Accept', 'application/json')
+        .set('Authorization', 'sdf')
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .then((response) => {
+            expect(response.body.toggles).toHaveLength(1);
+            expect(response.body.toggles[0].name).toBe('test');
+        });
+});
+
+test('Should return list of toggles with custom proxy client key header', () => {
     const toggles = [
         {
             name: 'test',
