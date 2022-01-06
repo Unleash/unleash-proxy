@@ -1,5 +1,13 @@
 # Changelog
 
+### 0.5.0
+- feat: additional possibility to customize header for proxy secrets (#39)
+- fix: POST should handle empty toggle names
+- fix: pin dependencies
+- fix: Build multi-arch Docker container to support arm64 and amd64 (#30)
+- docs: fix typo in `docker pull` command (#26)
+- docs: Add proxyPort/PORT to the list of options/env vars (#28)
+
 ### 0.4.0
 - feat: add compression #23
 
