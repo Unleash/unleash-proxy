@@ -13,6 +13,8 @@ export default class UnleashProxy {
 
     private clientKeys: string[];
 
+    private bootstrapTokens: string[];
+
     private clientKeysHeaderName: string;
 
     private client: IClient;
@@ -24,6 +26,7 @@ export default class UnleashProxy {
     constructor(client: IClient, config: IProxyConfig) {
         this.logger = config.logger;
         this.clientKeys = config.clientKeys;
+        this.bootstrapTokens = config.bootstrapTokens;
         this.clientKeysHeaderName = config.clientKeysHeaderName;
         this.client = client;
 
@@ -43,6 +46,7 @@ export default class UnleashProxy {
         router.get('/', this.getEnabledToggles.bind(this));
         router.post('/', this.lookupToggles.bind(this));
         router.post('/client/metrics', this.registerMetrics.bind(this));
+        router.get('/client/features', this.bootstrap.bind(this));
     }
 
     private setReady() {
@@ -114,5 +118,18 @@ export default class UnleashProxy {
 
         this.client.registerMetrics(value);
         res.sendStatus(200);
+    }
+
+    bootstrap(req: Request, res: Response): void {
+        const apiToken = req.header(this.clientKeysHeaderName);
+        if (!this.ready) {
+            res.status(503).send(NOT_READY);
+        } else if (apiToken && this.bootstrapTokens.includes(apiToken)) {
+            const features = this.client.getFeatureToggleDefinitions();
+            res.set('Cache-control', 'public, max-age=2');
+            res.send({ version: 2, features });
+        } else {
+            res.sendStatus(401);
+        }
     }
 }

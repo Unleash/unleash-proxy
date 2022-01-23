@@ -1,5 +1,6 @@
 import EventEmitter from 'events';
 import { Context } from 'unleash-client';
+import { FeatureInterface } from 'unleash-client/lib/feature';
 import { FeatureToggleStatus, IClient } from '../client';
 
 class MockClient extends EventEmitter implements IClient {
@@ -15,6 +16,10 @@ class MockClient extends EventEmitter implements IClient {
         super();
         this.toggles = toggles;
         this.apiToken = 'default';
+    }
+
+    getFeatureToggleDefinitions(): FeatureInterface[] {
+        throw new Error('Method not implemented.');
     }
 
     isReady(): boolean {

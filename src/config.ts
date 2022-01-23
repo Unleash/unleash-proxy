@@ -1,4 +1,5 @@
 import { Strategy, TagFilter } from 'unleash-client';
+import { BootstrapOptions } from 'unleash-client/lib/repository/bootstrap-provider';
 import { Logger, LogLevel, SimpleLogger } from './logger';
 import { generateInstanceId } from './util';
 
@@ -22,6 +23,8 @@ export interface IProxyOption {
     namePrefix?: string;
     tags?: Array<TagFilter>;
     clientKeysHeaderName?: string;
+    bootstrapTokens?: string[]; // experimental
+    bootstrap?: BootstrapOptions; // experimental
 }
 
 export interface IProxyConfig {
@@ -42,6 +45,8 @@ export interface IProxyConfig {
     namePrefix?: string;
     tags?: Array<TagFilter>;
     clientKeysHeaderName: string;
+    bootstrapTokens: string[];
+    bootstrap?: BootstrapOptions;
 }
 
 function resolveStringToArray(value?: string): string[] | undefined {
@@ -167,5 +172,7 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
             option.clientKeysHeaderName ||
             process.env.CLIENT_KEY_HEADER_NAME ||
             'authorization',
+        bootstrapTokens: option.bootstrapTokens || [],
+        bootstrap: option.bootstrap,
     };
 }
