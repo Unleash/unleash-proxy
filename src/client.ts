@@ -8,6 +8,7 @@ import { Logger } from './logger';
 export type FeatureToggleStatus = {
     name: string;
     enabled: boolean;
+    impressionData: boolean;
     variant?: Variant;
 };
 
@@ -121,6 +122,7 @@ class Client extends EventEmitter implements IClient {
                 name: d.name,
                 enabled: true,
                 variant: this.unleash.getVariant(d.name, context),
+                impressionData: d.impressionData,
             }));
     }
 
@@ -130,12 +132,14 @@ class Client extends EventEmitter implements IClient {
     ): FeatureToggleStatus[] {
         const context = this.fixContext(inContext);
         return toggleNames.map((name) => {
+            const definition = this.unleash.getFeatureToggleDefinition(name);
             const enabled = this.unleash.isEnabled(name, context);
             this.metrics.count(name, enabled);
             return {
                 name,
                 enabled,
                 variant: this.unleash.getVariant(name, context),
+                impressionData: definition.impressionData,
             };
         });
     }

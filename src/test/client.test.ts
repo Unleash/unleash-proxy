@@ -31,6 +31,7 @@ test('should add environment to isEnabled calls', () => {
         stale: false,
         strategies: [],
         variants: [],
+        impressionData: true,
     });
 
     client.getEnabledToggles({});
@@ -66,6 +67,7 @@ test('should override environment to isEnabled calls', () => {
         stale: false,
         strategies: [],
         variants: [],
+        impressionData: true,
     });
 
     client.getEnabledToggles({ environment: 'some' });

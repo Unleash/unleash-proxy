@@ -31,10 +31,12 @@ test('Should return list of toggles', () => {
         {
             name: 'test',
             enabled: true,
+            impressionData: true,
         },
         {
             name: 'test2',
             enabled: true,
+            impressionData: true,
         },
     ];
     const client = new MockClient(toggles);
@@ -61,10 +63,12 @@ test('Should handle POST with empty body', () => {
         {
             name: 'test',
             enabled: true,
+            impressionData: true,
         },
         {
             name: 'test2',
             enabled: true,
+            impressionData: true,
         },
     ];
     const client = new MockClient(toggles);
@@ -93,10 +97,12 @@ test('Should handle POST with toggle names', () => {
         {
             name: 'test',
             enabled: true,
+            impressionData: true,
         },
         {
             name: 'test2',
             enabled: true,
+            impressionData: true,
         },
     ];
     const client = new MockClient(toggles);
@@ -126,10 +132,12 @@ test('Should return list of toggles with custom proxy client key header', () => 
         {
             name: 'test',
             enabled: true,
+            impressionData: true,
         },
         {
             name: 'test2',
             enabled: true,
+            impressionData: true,
         },
     ];
     const client = new MockClient(toggles);
@@ -162,10 +170,12 @@ test('Should return list of toggles using env with multiple secrets', () => {
         {
             name: 'test',
             enabled: true,
+            impressionData: true,
         },
         {
             name: 'test2',
             enabled: true,
+            impressionData: true,
         },
     ];
     const client = new MockClient(toggles);
@@ -189,10 +199,12 @@ test('Should return list of toggles using env with multiple secrets with space',
         {
             name: 'test',
             enabled: true,
+            impressionData: true,
         },
         {
             name: 'test2',
             enabled: true,
+            impressionData: true,
         },
     ];
     const client = new MockClient(toggles);
@@ -215,6 +227,7 @@ test('Should send in context to mock', async () => {
         {
             name: 'test',
             enabled: true,
+            impressionData: true,
         },
     ];
     const client = new MockClient(toggles);
@@ -243,6 +256,7 @@ test('Should send in context with ip as remoteAddress', async () => {
         {
             name: 'test',
             enabled: true,
+            impressionData: true,
         },
     ];
     const client = new MockClient(toggles);
@@ -269,6 +283,7 @@ test('Should remove "undefined" environment field from context', async () => {
         {
             name: 'test',
             enabled: true,
+            impressionData: true,
         },
     ];
     const client = new MockClient(toggles);
@@ -299,6 +314,7 @@ test('Should register metrics', () => {
         {
             name: 'test',
             enabled: true,
+            impressionData: true,
         },
     ];
     const client = new MockClient(toggles);
