@@ -149,7 +149,7 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         customStrategies,
         clientKeys,
         proxyBasePath:
-            option.proxyBasePath || process.env.PROXY_BASE_PATH || '',
+            option.proxyBasePath || process.env.PROXY_BASE_PATH || '/proxy',
         refreshInterval:
             option.refreshInterval ||
             safeNumber(process.env.UNLEASH_FETCH_INTERVAL, 5_000),

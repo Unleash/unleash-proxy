@@ -28,7 +28,7 @@ export function createApp(
     app.use(compression());
 
     app.use(
-        `${config.proxyBasePath}/proxy`,
+        config.proxyBasePath,
         cors(corsOptions),
         express.json(),
         proxy.middleware,
