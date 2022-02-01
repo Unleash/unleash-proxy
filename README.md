@@ -110,7 +110,7 @@ Keep-Alive: timeout=5
 | clientKeys      | `UNLEASH_PROXY_CLIENT_KEYS`     | n/a           | yes      | List of client keys that the proxy should accept. When querying the proxy, Proxy SDKs must set the request's _client keys header_ to one of these values. The default client keys header is `Authorization`. |
 | proxySecrets    | `UNLEASH_PROXY_SECRETS`   | n/a           | no      | Deprecated alias for `clientKeys`. Please use `clientKeys` instead. |
 | proxyPort       | `PORT`                    | 3000          | no       | The port where the proxy should listen. |
-| proxyBasePath   | `PROXY_BASE_PATH`         |"/proxy"       | no       | The base path to run the proxy from. Defaults to "/proxy" |
+| proxyBasePath   | `PROXY_BASE_PATH`         |""       | no       | The base path to run the proxy from. "/proxy" will be added at the end. For instance, if `proxyBasePath` is `"base/path"`, the proxy will run at `/base/path/proxy`. |
 | unleashAppName  | `UNLEASH_APP_NAME`        |"unleash-proxy"| no       | App name to used when registering with Unleash |
 | unleashInstanceId | `UNLEASH_INSTANCE_ID`        | `generated` | no       | Unleash instance id to used when registering with Unleash |
 | refreshInterval | `UNLEASH_FETCH_INTERVAL`  | 5000          | no       | How often the proxy should query Unleash for updates, defined in ms. |
