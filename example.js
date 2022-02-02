@@ -9,14 +9,12 @@ const app = createApp({
     refreshInterval: 1000,
     logLevel: 'trace',
     expBootstrapTokens: ['bootstrap-token'],
-    /*
     expBootstrap: {
-        url: 'https://localhost:4001',
+        url: 'https://localhost:4000',
         urlHeaders: {
             Authorization: 'bootstrap-token',
         },
     },
-    */
     // unleashInstanceId: '1337',
     // logLevel: 'info',
     // projectName: 'order-team', // optional
