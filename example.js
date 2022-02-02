@@ -3,17 +3,20 @@ const port = process.env.PORT || 3000;
 const { createApp } = require('./dist/app');
 
 const app = createApp({
-    unleashUrl: 'https://app.unleash-hosted.com/demo/api/',
+    unleashUrl: 'https://app2.unleash-hosted.com/demo/api/',
     unleashApiToken: '56907a2fa53c1d16101d509a10b78e36190b0f918d9f122d',
     clientKeys: ['proxy-secret', 'another-proxy-secret', 's1'],
     refreshInterval: 1000,
-    bootstrapTokens: ['bootstrap-token'],
-    bootstrap: {
-        url: 'https://localhost:4000',
+    logLevel: 'trace',
+    expBootstrapTokens: ['bootstrap-token'],
+    /*
+    expBootstrap: {
+        url: 'https://localhost:4001',
         urlHeaders: {
-            Authorization: 'some-token',
+            Authorization: 'bootstrap-token',
         },
     },
+    */
     // unleashInstanceId: '1337',
     // logLevel: 'info',
     // projectName: 'order-team', // optional

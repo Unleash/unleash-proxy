@@ -23,8 +23,11 @@ export interface IProxyOption {
     namePrefix?: string;
     tags?: Array<TagFilter>;
     clientKeysHeaderName?: string;
-    bootstrapTokens?: string[]; // experimental
-    bootstrap?: BootstrapOptions; // experimental
+    // experimental options
+    expBootstrapTokens?: string[];
+    expBootstrap?: BootstrapOptions;
+    expBootstrapUrl?: string;
+    expBootstrapAuthorization?: string;
 }
 
 export interface IProxyConfig {
@@ -104,6 +107,39 @@ function loadClientKeys(option: IProxyOption): string[] | undefined {
     );
 }
 
+function loadBootstrapTokens(option: IProxyOption): string[] {
+    return (
+        option.expBootstrapTokens ||
+        resolveStringToArray(process.env.EXP_BOOTSTRAP_TOKENS) ||
+        []
+    );
+}
+
+function loadBootstrapOptions(
+    option: IProxyOption,
+): BootstrapOptions | undefined {
+    if (option.expBootstrap) {
+        return option.expBootstrap;
+    }
+    const bootstrapUrl =
+        option.expBootstrapUrl || process.env.EXP_BOOTSTRAP_URL;
+    const expBootstrapAuthorization =
+        option.expBootstrapAuthorization ||
+        process.env.EXP_BOOTSTRAP_AUTHORIZATION;
+
+    const headers = expBootstrapAuthorization
+        ? { Authorization: expBootstrapAuthorization }
+        : undefined;
+
+    if (bootstrapUrl) {
+        return {
+            url: bootstrapUrl,
+            urlHeaders: headers,
+        };
+    }
+    return undefined;
+}
+
 export function createProxyConfig(option: IProxyOption): IProxyConfig {
     const unleashUrl = option.unleashUrl || process.env.UNLEASH_URL;
     if (!unleashUrl) {
@@ -172,7 +208,7 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
             option.clientKeysHeaderName ||
             process.env.CLIENT_KEY_HEADER_NAME ||
             'authorization',
-        bootstrapTokens: option.bootstrapTokens || [],
-        bootstrap: option.bootstrap,
+        bootstrapTokens: loadBootstrapTokens(option),
+        bootstrap: loadBootstrapOptions(option),
     };
 }
