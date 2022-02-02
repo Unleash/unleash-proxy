@@ -1,5 +1,13 @@
 # Changelog
 
+### 0.6.0
+- feat: propagate impression data field (#48)
+- fix: remove npm folder in docker image after build
+- fix: export Client and createProxyConfig (#52)
+- fix: Create codeql-analysis.yml
+- docs: Fix description of `proxy_base_path` to match implementation (#51)
+- docs: fix env variable names so the docs match the implementation. (#43)
+
 ### 0.5.0
 - feat: additional possibility to customize header for proxy secrets (#39)
 - fix: POST should handle empty toggle names
