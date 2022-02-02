@@ -18,6 +18,8 @@ WORKDIR /unleash-proxy
 
 COPY --from=builder /unleash-proxy /unleash-proxy
 
+RUN rm -rf /usr/local/lib/node_modules/npm/
+
 EXPOSE 4242
 
 USER node
