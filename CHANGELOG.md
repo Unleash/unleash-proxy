@@ -1,5 +1,7 @@
 # Changelog
 
+### 0.6.1
+- fix: upgrade unleash-client to v3.11.2
 ### 0.6.0
 - feat: propagate impression data field (#48)
 - fix: remove npm folder in docker image after build
