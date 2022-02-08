@@ -108,18 +108,22 @@ export default class UnleashProxy {
     }
 
     registerMetrics(req: Request, res: Response): void {
-        const data = req.body;
+        const token = req.header(this.clientKeysHeaderName);
+        const validTokens = [...this.clientKeys, ...this.serverSideTokens];
 
-        const { error, value } = clientMetricsSchema.validate(data);
-
-        if (error) {
-            this.logger.warn('Invalid metrics posted', error);
-            res.status(400).json(error);
-            return;
+        if (token && validTokens.includes(token)) {
+            const data = req.body;
+            const { error, value } = clientMetricsSchema.validate(data);
+            if (error) {
+                this.logger.warn('Invalid metrics posted', error);
+                res.status(400).json(error);
+                return;
+            }
+            this.client.registerMetrics(value);
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(401);
         }
-
-        this.client.registerMetrics(value);
-        res.sendStatus(200);
     }
 
     unleashApi(req: Request, res: Response): void {
