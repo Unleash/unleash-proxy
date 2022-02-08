@@ -22,7 +22,15 @@ export function createApp(
     const proxy = new UnleashProxy(client, config);
 
     app.disable('x-powered-by');
-    app.set('trust proxy', config.trustProxy);
+    try {
+        app.set('trust proxy', config.trustProxy);
+    } catch (err) {
+        config.logger.error(
+            `The provided "trustProxy" option was not valid ("${config.trustProxy}")`,
+            err,
+        );
+    }
+
     app.use(cors(corsOptions));
 
     app.use(compression());
