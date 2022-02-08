@@ -8,7 +8,9 @@ const app = createApp({
     clientKeys: ['proxy-secret', 'another-proxy-secret', 's1'],
     refreshInterval: 1000,
     logLevel: 'trace',
-    expBootstrapTokens: ['bootstrap-token'],
+    expServerSideSdkConfig: {
+        tokens: ['server-sdk-token-1'],
+    },
     expBootstrap: {
         url: 'https://localhost:4000',
         urlHeaders: {

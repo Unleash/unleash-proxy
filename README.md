@@ -125,6 +125,17 @@ Keep-Alive: timeout=5
 | tags        | `UNLEASH_TAGS`              | undefined        | no       | Used to filter features by using tags set for features. Format should be `tagName:tagValue,tagName2:tagValue2` |
 | clientKeysHeaderName        | `CLIENT_KEY_HEADER_NAME`              | "authorization"        | no       | The name of the HTTP header to use for client keys. Incoming requests must set the value of this header to one of the Proxy's `clientKeys` to be authorized successfully. |
 
+
+### Experimental options
+
+Some functionality is under validation and introduced as experimental, to allow us to test new functionality early. You should expect these to change in any future feature release. 
+
+| Option          | Environment Variable      | Default value | Required |  Description  |
+| -------------   |----------------------     |----------     |:--------:|---------------|
+| expBootstrap    | n/a                       | n/a           | no      | Where the Proxy can bootstrap configuration from. See [Node.js SDK](https://github.com/Unleash/unleash-client-node#bootstrap) for details. |
+| expBootstrap.url    | `EXP_BOOTSTRAP_URL`   | n/a           | no      | Url where the Proxy can bootstrap configuration from. See [Node.js SDK](https://github.com/Unleash/unleash-client-node#bootstrap) for details. |
+| expBootstrap.urlHeaders.Authorization    | `EXP_BOOTSTRAP_AUTHORIZATION`   | n/a           | no      | Authorization header value to be used when bootstrapping |
+| expServerSideSdkConfig.tokens    | `EXP_SERVER_SIDE_SDK_CONFIG_TOKENS`                       | n/a           | no      | API tokens that can be used by Server SDKs (and proxies) to read feature toggle configuration from this Proxy instance. |
 ### Run with Node.js:
 
 **STEP 1: Install dependency**

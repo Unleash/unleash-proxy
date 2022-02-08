@@ -3,6 +3,9 @@ import { BootstrapOptions } from 'unleash-client/lib/repository/bootstrap-provid
 import { Logger, LogLevel, SimpleLogger } from './logger';
 import { generateInstanceId } from './util';
 
+export interface ServerSideSdkConfig {
+    tokens: string[];
+}
 export interface IProxyOption {
     unleashUrl?: string;
     unleashApiToken?: string;
@@ -24,10 +27,8 @@ export interface IProxyOption {
     tags?: Array<TagFilter>;
     clientKeysHeaderName?: string;
     // experimental options
-    expBootstrapTokens?: string[];
     expBootstrap?: BootstrapOptions;
-    expBootstrapUrl?: string;
-    expBootstrapAuthorization?: string;
+    expServerSideSdkConfig?: ServerSideSdkConfig;
 }
 
 export interface IProxyConfig {
@@ -48,7 +49,7 @@ export interface IProxyConfig {
     namePrefix?: string;
     tags?: Array<TagFilter>;
     clientKeysHeaderName: string;
-    bootstrapTokens: string[];
+    serverSideSdkConfig?: ServerSideSdkConfig;
     bootstrap?: BootstrapOptions;
 }
 
@@ -107,12 +108,16 @@ function loadClientKeys(option: IProxyOption): string[] | undefined {
     );
 }
 
-function loadBootstrapTokens(option: IProxyOption): string[] {
-    return (
-        option.expBootstrapTokens ||
-        resolveStringToArray(process.env.EXP_BOOTSTRAP_TOKENS) ||
-        []
+function loadServerSideSdkConfig(
+    option: IProxyOption,
+): ServerSideSdkConfig | undefined {
+    if (option.expServerSideSdkConfig) {
+        return option.expServerSideSdkConfig;
+    }
+    const tokens = resolveStringToArray(
+        process.env.EXP_SERVER_SIDE_SDK_CONFIG_TOKENS,
     );
+    return tokens ? { tokens } : undefined;
 }
 
 function loadBootstrapOptions(
@@ -121,11 +126,8 @@ function loadBootstrapOptions(
     if (option.expBootstrap) {
         return option.expBootstrap;
     }
-    const bootstrapUrl =
-        option.expBootstrapUrl || process.env.EXP_BOOTSTRAP_URL;
-    const expBootstrapAuthorization =
-        option.expBootstrapAuthorization ||
-        process.env.EXP_BOOTSTRAP_AUTHORIZATION;
+    const bootstrapUrl = process.env.EXP_BOOTSTRAP_URL;
+    const expBootstrapAuthorization = process.env.EXP_BOOTSTRAP_AUTHORIZATION;
 
     const headers = expBootstrapAuthorization
         ? { Authorization: expBootstrapAuthorization }
@@ -208,7 +210,7 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
             option.clientKeysHeaderName ||
             process.env.CLIENT_KEY_HEADER_NAME ||
             'authorization',
-        bootstrapTokens: loadBootstrapTokens(option),
+        serverSideSdkConfig: loadServerSideSdkConfig(option),
         bootstrap: loadBootstrapOptions(option),
     };
 }
