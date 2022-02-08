@@ -1,5 +1,8 @@
 # Changelog
 
+### 0.7.1
+- fix: add start on metrics
+
 ### 0.7.0
 
 - feat: generate type output to publish them to npm (#54)
