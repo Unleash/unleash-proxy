@@ -9,7 +9,7 @@ const app = createApp({
     refreshInterval: 1000,
     logLevel: 'trace',
     expServerSideSdkConfig: {
-        tokens: ['server-sdk-token-1'],
+        tokens: ['server'],
     },
     expBootstrap: {
         url: 'https://localhost:4000',
