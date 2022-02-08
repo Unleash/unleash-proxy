@@ -1,5 +1,13 @@
 # Changelog
 
+### 0.7.0
+
+- feat: generate type output to publish them to npm (#54)
+- feat: experimental support for bootstrap (#44)
+- fix: upgrade unleash-client to v3.11.3
+- fix: require authorization header for /client/metrics (#55)
+- fix: do not crash for invalid trustProxy option (#50)
+
 ### 0.6.1
 - fix: upgrade unleash-client to v3.11.2
 ### 0.6.0
