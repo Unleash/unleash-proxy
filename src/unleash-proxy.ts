@@ -13,6 +13,8 @@ export default class UnleashProxy {
 
     private clientKeys: string[];
 
+    private serverSideTokens: string[];
+
     private clientKeysHeaderName: string;
 
     private client: IClient;
@@ -24,6 +26,9 @@ export default class UnleashProxy {
     constructor(client: IClient, config: IProxyConfig) {
         this.logger = config.logger;
         this.clientKeys = config.clientKeys;
+        this.serverSideTokens = config.serverSideSdkConfig
+            ? config.serverSideSdkConfig.tokens
+            : [];
         this.clientKeysHeaderName = config.clientKeysHeaderName;
         this.client = client;
 
@@ -43,6 +48,7 @@ export default class UnleashProxy {
         router.get('/', this.getEnabledToggles.bind(this));
         router.post('/', this.lookupToggles.bind(this));
         router.post('/client/metrics', this.registerMetrics.bind(this));
+        router.get('/client/features', this.unleashApi.bind(this));
     }
 
     private setReady() {
@@ -79,11 +85,11 @@ export default class UnleashProxy {
     }
 
     lookupToggles(req: Request, res: Response): void {
-        const apiToken = req.header(this.clientKeysHeaderName);
+        const clientToken = req.header(this.clientKeysHeaderName);
 
         if (!this.ready) {
             res.status(503).send(NOT_READY);
-        } else if (!apiToken || !this.clientKeys.includes(apiToken)) {
+        } else if (!clientToken || !this.clientKeys.includes(clientToken)) {
             res.sendStatus(401);
         } else {
             const { context, toggles: toggleNames = [] } = req.body;
@@ -114,5 +120,18 @@ export default class UnleashProxy {
 
         this.client.registerMetrics(value);
         res.sendStatus(200);
+    }
+
+    unleashApi(req: Request, res: Response): void {
+        const apiToken = req.header(this.clientKeysHeaderName);
+        if (!this.ready) {
+            res.status(503).send(NOT_READY);
+        } else if (apiToken && this.serverSideTokens.includes(apiToken)) {
+            const features = this.client.getFeatureToggleDefinitions();
+            res.set('Cache-control', 'public, max-age=2');
+            res.send({ version: 2, features });
+        } else {
+            res.sendStatus(401);
+        }
     }
 }

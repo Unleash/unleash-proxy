@@ -238,3 +238,35 @@ test('should set tags with env var', () => {
     ]);
     delete process.env.UNLEASH_CUSTOM_STRATEGIES_FILE;
 });
+
+test('should read serverSideSdkConfig from env vars', () => {
+    process.env.EXP_SERVER_SIDE_SDK_CONFIG_TOKENS = 'super1, super2';
+    const config = createProxyConfig({
+        unleashUrl: 'some',
+        unleashApiToken: 'some',
+        clientKeys: ['s1'],
+    });
+
+    expect(config.serverSideSdkConfig?.tokens).toStrictEqual([
+        'super1',
+        'super2',
+    ]);
+    delete process.env.EXP_SERVER_SIDE_SDK_CONFIG_TOKENS;
+});
+
+test('should read bootstrap from env vars', () => {
+    process.env.EXP_BOOTSTRAP_URL = 'https://boostrap.unleash.run';
+    process.env.EXP_BOOTSTRAP_AUTHORIZATION = 'AUTH-BOOTSTRAP';
+    const config = createProxyConfig({
+        unleashUrl: 'some',
+        unleashApiToken: 'some',
+        clientKeys: ['s1'],
+    });
+
+    expect(config.bootstrap).toStrictEqual({
+        url: 'https://boostrap.unleash.run',
+        urlHeaders: { Authorization: 'AUTH-BOOTSTRAP' },
+    });
+    delete process.env.EXP_BOOTSTRAP_URL;
+    delete process.env.EXP_BOOTSTRAP_AUTHORIZATION;
+});

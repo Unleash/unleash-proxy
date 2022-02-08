@@ -1,7 +1,11 @@
 import { Strategy, TagFilter } from 'unleash-client';
+import { BootstrapOptions } from 'unleash-client/lib/repository/bootstrap-provider';
 import { Logger, LogLevel, SimpleLogger } from './logger';
 import { generateInstanceId } from './util';
 
+export interface ServerSideSdkConfig {
+    tokens: string[];
+}
 export interface IProxyOption {
     unleashUrl?: string;
     unleashApiToken?: string;
@@ -22,6 +26,9 @@ export interface IProxyOption {
     namePrefix?: string;
     tags?: Array<TagFilter>;
     clientKeysHeaderName?: string;
+    // experimental options
+    expBootstrap?: BootstrapOptions;
+    expServerSideSdkConfig?: ServerSideSdkConfig;
 }
 
 export interface IProxyConfig {
@@ -42,6 +49,8 @@ export interface IProxyConfig {
     namePrefix?: string;
     tags?: Array<TagFilter>;
     clientKeysHeaderName: string;
+    serverSideSdkConfig?: ServerSideSdkConfig;
+    bootstrap?: BootstrapOptions;
 }
 
 function resolveStringToArray(value?: string): string[] | undefined {
@@ -97,6 +106,40 @@ function loadClientKeys(option: IProxyOption): string[] | undefined {
         option.proxySecrets ||
         resolveStringToArray(process.env.UNLEASH_PROXY_SECRETS)
     );
+}
+
+function loadServerSideSdkConfig(
+    option: IProxyOption,
+): ServerSideSdkConfig | undefined {
+    if (option.expServerSideSdkConfig) {
+        return option.expServerSideSdkConfig;
+    }
+    const tokens = resolveStringToArray(
+        process.env.EXP_SERVER_SIDE_SDK_CONFIG_TOKENS,
+    );
+    return tokens ? { tokens } : undefined;
+}
+
+function loadBootstrapOptions(
+    option: IProxyOption,
+): BootstrapOptions | undefined {
+    if (option.expBootstrap) {
+        return option.expBootstrap;
+    }
+    const bootstrapUrl = process.env.EXP_BOOTSTRAP_URL;
+    const expBootstrapAuthorization = process.env.EXP_BOOTSTRAP_AUTHORIZATION;
+
+    const headers = expBootstrapAuthorization
+        ? { Authorization: expBootstrapAuthorization }
+        : undefined;
+
+    if (bootstrapUrl) {
+        return {
+            url: bootstrapUrl,
+            urlHeaders: headers,
+        };
+    }
+    return undefined;
 }
 
 export function createProxyConfig(option: IProxyOption): IProxyConfig {
@@ -167,5 +210,7 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
             option.clientKeysHeaderName ||
             process.env.CLIENT_KEY_HEADER_NAME ||
             'authorization',
+        serverSideSdkConfig: loadServerSideSdkConfig(option),
+        bootstrap: loadBootstrapOptions(option),
     };
 }
