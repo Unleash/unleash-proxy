@@ -35,7 +35,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "joi": "^17.4.0",
-    "unleash-client": "^3.11.2"
+    "unleash-client": "^3.11.3"
   },
   "devDependencies": {
     "@types/compression": "^1.7.1",
