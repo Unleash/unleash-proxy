@@ -93,6 +93,7 @@ class Client extends EventEmitter implements IClient {
         this.unleash.on('ready', () => {
             this.emit('ready');
             this.ready = true;
+            this.metrics.start();
         });
     }
 
