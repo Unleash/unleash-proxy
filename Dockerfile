@@ -20,8 +20,10 @@ COPY --from=builder /unleash-proxy /unleash-proxy
 
 RUN rm -rf /usr/local/lib/node_modules/npm/
 
+RUN chown -R node:node /unleash-proxy
+
 EXPOSE 4242
 
 USER node
 
-CMD node dist/start
+CMD ./server.sh
