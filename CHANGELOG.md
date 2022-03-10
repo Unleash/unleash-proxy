@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.8.0
+- feat: loading of custom strategies when using Docker (#56)
+- feat: upgrade node-sdk to v3.12.0 (#57)
+- chore: Create LICENSE (#58)
 ### 0.7.1
 - fix: add start on metrics
 
