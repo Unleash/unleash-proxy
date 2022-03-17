@@ -125,7 +125,7 @@ class Client extends EventEmitter implements IClient {
             .map((d) => ({
                 name: d.name,
                 enabled: true,
-                variant: this.unleash.getVariant(d.name, context),
+                variant: this.unleash.forceGetVariant(d.name, context),
                 impressionData: d.impressionData,
             }));
     }
