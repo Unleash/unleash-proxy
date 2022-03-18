@@ -43,6 +43,15 @@ class FakeUnleash extends Unleash {
         return { name: 'disabled', enabled: false };
     }
 
+    forceGetVariant(
+        name: string,
+        context?: Context,
+        fallbackVariant?: Variant,
+    ): Variant {
+        // console.log(name, context, fallbackVariant);
+        return { name: 'disabled', enabled: false };
+    }
+
     getFeatureToggleDefinition(toggleName: string): FeatureInterface {
         const toggle = this.toggleDefinitions.find(
             (t: FeatureInterface) => t.name === toggleName,
