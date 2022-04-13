@@ -31,10 +31,13 @@
   },
   "homepage": "https://github.com/Unleash/unleash-proxy#readme",
   "dependencies": {
+    "@wesleytodd/openapi": "^0.1.0",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "joi": "^17.4.0",
+    "json-schema-to-ts": "^2.1.1",
+    "openapi-types": "^10.0.0",
     "unleash-client": "^3.13.0"
   },
   "devDependencies": {
@@ -56,6 +59,12 @@
     "supertest": "^6.1.3",
     "ts-jest": "^27.0.2",
     "typescript": "^4.3.2"
+  },
+  "resolutions": {
+    "@wesleytodd/openapi/mocha": "^9.2.2",
+    "@wesleytodd/openapi/redoc": "^2.0.0-rc.66",
+    "@wesleytodd/openapi/swagger-parser": "^10.0.3",
+    "@wesleytodd/openapi/swagger-ui-dist": "^4.10.3"
   },
   "prettier": {
     "proseWrap": "never",

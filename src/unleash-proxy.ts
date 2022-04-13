@@ -4,6 +4,8 @@ import { clientMetricsSchema } from './metrics-schema';
 import { IProxyConfig } from './config';
 import { IClient } from './client';
 import { Logger } from './logger';
+import { OpenApiService } from './openapi/openapi-service';
+import { featuresResponse } from './openapi/spec/features-response';
 
 const NOT_READY =
     'Unleash Proxy has not connected to Unleash API and is not ready to accept requests yet.';
@@ -23,7 +25,11 @@ export default class UnleashProxy {
 
     public middleware: Router;
 
-    constructor(client: IClient, config: IProxyConfig) {
+    constructor(
+        client: IClient,
+        config: IProxyConfig,
+        openApiService: OpenApiService,
+    ) {
         this.logger = config.logger;
         this.clientKeys = config.clientKeys;
         this.serverSideTokens = config.serverSideSdkConfig
@@ -45,7 +51,13 @@ export default class UnleashProxy {
 
         // Routes
         router.get('/health', this.health.bind(this));
-        router.get('/', this.getEnabledToggles.bind(this));
+        router.get(
+            '/',
+            openApiService.validPath({
+                responses: { 200: featuresResponse },
+            }),
+            this.getEnabledToggles.bind(this),
+        );
         router.post('/', this.lookupToggles.bind(this));
         router.post('/client/metrics', this.registerMetrics.bind(this));
         router.get('/client/features', this.unleashApi.bind(this));
