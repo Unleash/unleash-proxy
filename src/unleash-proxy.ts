@@ -5,7 +5,10 @@ import { IProxyConfig } from './config';
 import { IClient } from './client';
 import { Logger } from './logger';
 import { OpenApiService } from './openapi/openapi-service';
-import { featuresResponse } from './openapi/spec/features-response';
+import {
+    featuresResponse,
+    FeaturesResponseSchema,
+} from './openapi/spec/features-response';
 
 const NOT_READY =
     'Unleash Proxy has not connected to Unleash API and is not ready to accept requests yet.';
@@ -79,7 +82,10 @@ export default class UnleashProxy {
         this.clientKeys = clientKeys;
     }
 
-    getEnabledToggles(req: Request, res: Response): void {
+    getEnabledToggles(
+        req: Request,
+        res: Response<FeaturesResponseSchema>,
+    ): void {
         const apiToken = req.header(this.clientKeysHeaderName);
 
         if (!this.ready) {
