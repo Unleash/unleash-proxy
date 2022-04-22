@@ -1,8 +1,5 @@
-import {
-    Request as ExpressRequest,
-    Response as ExpressResponse,
-} from 'express';
-import { Controller, Get, Request, Response, Route } from 'tsoa';
+import { Request as ExpressRequest } from 'express';
+import { Controller, Get, Request, Response, Route, Security } from 'tsoa';
 
 type Variant = {
     payload?: string;
@@ -10,7 +7,7 @@ type Variant = {
     enabled: boolean;
 };
 
-type FeatureResponse = {
+type Feature = {
     name: string;
     enabled: boolean;
     variant: Variant;
@@ -24,7 +21,7 @@ type FeaturesResponse = {
     /**
    The list of features that are enabled with the given context.
   */
-    toggles: FeatureResponse[];
+    toggles: Feature[];
 };
 
 type CustomValidationError = {
@@ -57,8 +54,36 @@ export class MainController extends Controller {
         if (false) {
             this.setStatus(503);
             return 'Not ready';
-            // } else if (!apiToken || !['mykey'].includes(apiToken)) {
-            //     this.setStatus(401);
+        } else if (!apiToken || !['mykey'].includes(apiToken)) {
+            this.setStatus(401);
+        } else {
+            const { query } = req;
+            query.remoteAddress = query.remoteAddress || req.ip;
+            // const context = createContext(query);
+            // const toggles = this.client.getEnabledToggles(context);
+            this.setHeader('Cache-control', 'public, max-age=2');
+            return { toggles: [] };
+        }
+    }
+    @Get('some/path')
+    @Response<CustomValidationError>(
+        503,
+        'The Unleash Proxy  is not ready to accept requests yet.',
+    )
+    @Response(
+        401,
+        'Unauthorized; the client key you provided is not valid for this instance.',
+    )
+    public async getToggles2(
+        @Request() req: ExpressRequest,
+    ): Promise<FeaturesResponse | string | void> {
+        const apiToken = req.header('authorization');
+
+        if (false) {
+            this.setStatus(503);
+            return 'Not ready';
+        } else if (!apiToken || !['mykey'].includes(apiToken)) {
+            this.setStatus(401);
         } else {
             const { query } = req;
             query.remoteAddress = query.remoteAddress || req.ip;
