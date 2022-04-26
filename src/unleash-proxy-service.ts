@@ -1,28 +1,19 @@
-import { Request as ExpressRequest } from 'express';
-import { Controller, Get, Request, Response, Route, Security } from 'tsoa';
-import { FeatureToggleStatus, IClient } from './client';
-import { IProxyConfig } from './config';
+import { Request, Response, Router } from 'express';
 import { createContext } from './create-context';
+import { clientMetricsSchema } from './metrics-schema';
+import { IProxyConfig } from './config';
+import { IClient } from './client';
 import { Logger } from './logger';
+import { OpenApiService } from './openapi/openapi-service';
+import {
+    featuresResponse,
+    FeaturesResponseSchema,
+} from './openapi/spec/features-response';
 
-/**
- This is a model description.
- It describes the features response model.
-*/
-type FeaturesResponse = {
-    /**
-   The list of features that are enabled with the given context.
-  */
-    toggles: FeatureToggleStatus[];
-};
+const NOT_READY =
+    'Unleash Proxy has not connected to Unleash API and is not ready to accept requests yet.';
 
-type CustomValidationError = {
-    message: string;
-    context: any;
-};
-
-@Route('/proxy2')
-export class MainController extends Controller {
+export default class UnleashProxyService {
     private logger: Logger;
 
     private clientKeys: string[];
@@ -35,8 +26,12 @@ export class MainController extends Controller {
 
     private ready = false;
 
-    constructor(client: IClient, config: IProxyConfig) {
-        super();
+    public middleware: Router;
+
+    constructor(
+        client: IClient,
+        config: IProxyConfig,
+    ) {
         this.logger = config.logger;
         this.clientKeys = config.clientKeys;
         this.serverSideTokens = config.serverSideSdkConfig
@@ -52,54 +47,6 @@ export class MainController extends Controller {
         this.client.on('ready', () => {
             this.setReady();
         });
-
-        const router = Router();
-        this.middleware = router;
-
-        // Routes
-        router.get('/health', this.health.bind(this));
-        router.get(
-            '/',
-            openApiService.validPath({
-                responses: { 200: featuresResponse },
-            }),
-            this.getEnabledToggles.bind(this),
-        );
-        router.post('/', this.lookupToggles.bind(this));
-        router.post('/client/metrics', this.registerMetrics.bind(this));
-        router.get('/client/features', this.unleashApi.bind(this));
-    }
-
-    /**
-     * A very long, verbose, wordy, long-winded, tedious, verbacious, tautological,
-     * profuse, expansive, enthusiastic, redundant, flowery, eloquent, articulate,
-     * loquacious, garrulous, chatty, extended, babbling description.
-     * @summary A concise summary.
-     */
-    @Get('')
-    @Response<CustomValidationError>(
-        503,
-        'The Unleash Proxy  is not ready to accept requests yet.',
-    )
-    @Response(
-        401,
-        'Unauthorized; the client key you provided is not valid for this instance.',
-    )
-    @Security('clientKey', [this.clientKeysHeaderName, ...this.clientKeys])
-    public async getToggles(
-        @Request() req: ExpressRequest,
-    ): Promise<FeaturesResponse | string | void> {
-        if (!this.ready) {
-            this.setStatus(503);
-            return 'Not ready';
-        } else {
-            const { query } = req;
-            query.remoteAddress = query.remoteAddress || req.ip;
-            const context = createContext(query);
-            const toggles = this.client.getEnabledToggles(context);
-            this.setHeader('Cache-control', 'public, max-age=2');
-            return { toggles };
-        }
     }
 
     private setReady() {
