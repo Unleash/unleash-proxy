@@ -2,10 +2,10 @@ import { IProxyConfig } from '../config';
 import { RequestHandler, Application } from 'express';
 import { OpenAPIV3 } from 'openapi-types';
 // @ts-expect-error
-import openapi from '@wesleytodd/openapi';
+import openapi from '@unleash/express-openapi';
 import { createOpenApiSchema } from './.';
 
-// Partial types for "@wesleytodd/openapi".
+// Partial types for "@unleash/express-openapi".
 interface IExpressOpenApi extends RequestHandler {
     validPath: (operation: OpenAPIV3.OperationObject) => RequestHandler;
     schema: (name: string, schema: OpenAPIV3.SchemaObject) => void;
