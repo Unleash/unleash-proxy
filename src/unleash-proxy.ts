@@ -192,7 +192,3 @@ export default class UnleashProxy {
         }
     }
 }
-
-function NOT_READY_MSG(NOT_READY_MSG: any) {
-    throw new Error('Function not implemented.');
-}
