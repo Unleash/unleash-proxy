@@ -2,8 +2,7 @@ import { OpenAPIV3 } from 'openapi-types';
 import { featuresSchema } from './spec/features-schema';
 import { featureSchema } from './spec/feature-schema';
 import { variantSchema } from './spec/variant-schema';
-
-
+import { errorSchema } from './spec/error-schema';
 
 // Create the base OpenAPI schema, with everything except paths.
 export const createOpenApiSchema = (
@@ -14,7 +13,7 @@ export const createOpenApiSchema = (
         servers: serverUrl ? [{ url: serverUrl }] : [],
         info: {
             title: 'Unleash API',
-            version: process.env.npm_package_version || "",
+            version: process.env.npm_package_version || '',
         },
         security: [
             {
@@ -33,6 +32,7 @@ export const createOpenApiSchema = (
                 featuresSchema,
                 featureSchema,
                 variantSchema,
+                errorSchema,
             },
         },
     };

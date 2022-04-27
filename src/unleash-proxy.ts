@@ -9,11 +9,7 @@ import {
     featuresResponse,
     FeaturesResponseSchema,
 } from './openapi/spec/features-response';
-import {
-    emptySuccessResponse,
-    notReadyResponse,
-    withCommonResponses,
-} from './openapi/common-responses';
+import { withStandardResponses } from './openapi/common-responses';
 
 export default class UnleashProxy {
     private logger: Logger;
@@ -58,28 +54,51 @@ export default class UnleashProxy {
         router.get(
             '/health',
             openApiService.validPath({
-                responses: { 200: emptySuccessResponse, 503: notReadyResponse },
+                responses: withStandardResponses(200, 503)(),
             }),
             this.health.bind(this),
         );
+
         router.get(
             '/',
             openApiService.validPath({
-                responses: withCommonResponses({ 200: featuresResponse }),
+                responses: withStandardResponses(
+                    401,
+                    503,
+                )({ 200: featuresResponse }),
             }),
             this.getEnabledToggles.bind(this),
         );
+
         router.post(
             '/',
             openApiService.validPath({
-                responses: withCommonResponses({
-                    200: featuresResponse,
-                }),
+                responses: withStandardResponses(
+                    401,
+                    503,
+                )({ 200: featuresResponse }),
             }),
             this.lookupToggles.bind(this),
         );
-        router.post('/client/metrics', this.registerMetrics.bind(this));
-        router.get('/client/features', this.unleashApi.bind(this));
+
+        router.post(
+            '/client/metrics',
+            openApiService.validPath({
+                responses: withStandardResponses(200, 400, 401)(),
+            }),
+            this.registerMetrics.bind(this),
+        );
+
+        router.get(
+            '/client/features',
+            openApiService.validPath({
+                responses: withStandardResponses(
+                    401,
+                    503,
+                )({ 200: featuresResponse }),
+            }),
+            this.unleashApi.bind(this),
+        );
     }
 
     private setReady() {
