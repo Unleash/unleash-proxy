@@ -15,14 +15,17 @@ export const schema = {
                 stop: { type: 'string', format: 'date-time' },
                 toggles: {
                     type: 'object',
-                    properties: {
-                        yes: { type: 'integer', minimum: 0 },
-                        no: { type: 'integer', minimum: 0 },
-                        variants: {
-                            type: 'object',
-                            additionalProperties: {
-                                type: 'integer',
-                                minimum: 0,
+                    additionalProperties: {
+                        type: 'object',
+                        properties: {
+                            yes: { type: 'integer', minimum: 0 },
+                            no: { type: 'integer', minimum: 0 },
+                            variants: {
+                                type: 'object',
+                                additionalProperties: {
+                                    type: 'integer',
+                                    minimum: 0,
+                                },
                             },
                         },
                     },
