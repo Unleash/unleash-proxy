@@ -3,17 +3,18 @@ import { createSchemaObject, CreateSchemaType } from '../openapi-types';
 
 const schema = {
     type: 'object',
-    required: ['toggles', 'version'],
+    required: ['features', 'version'],
     properties: {
         version: {
             type: 'integer',
             enum: [2],
         },
-        toggles: {
+        features: {
             type: 'array',
             items: {
                 type: 'object',
                 required: ['name'],
+                additionalProperties: false,
                 properties: {
                     name: {
                         type: 'string',
@@ -34,16 +35,9 @@ const schema = {
                         type: 'array',
                         items: {
                             type: 'object',
-                            required: [
-                                'id',
-                                'name',
-                                'constraints',
-                                'parameters',
-                            ],
+                            required: ['name', 'constraints', 'parameters'],
+                            additionalProperties: false,
                             properties: {
-                                id: {
-                                    type: 'string',
-                                },
                                 name: {
                                     type: 'string',
                                 },
@@ -78,13 +72,8 @@ const schema = {
                     variants: {
                         items: {
                             type: 'object',
-                            required: [
-                                'name',
-                                'weight',
-                                'weightType',
-                                'stickiness',
-                                'overrides',
-                            ],
+                            required: ['name', 'weight', 'overrides'],
+                            additionalProperties: false,
                             properties: {
                                 name: {
                                     type: 'string',
@@ -92,14 +81,19 @@ const schema = {
                                 weight: {
                                     type: 'number',
                                 },
-                                weightType: {
-                                    type: 'string',
-                                },
                                 stickiness: {
                                     type: 'string',
                                 },
                                 payload: {
                                     type: 'object',
+                                    required: ['type', 'value'],
+                                    properties: {
+                                        type: {
+                                            type: 'string',
+                                            enum: ['string'],
+                                        },
+                                        value: 'string',
+                                    },
                                 },
                                 overrides: {
                                     type: 'array',

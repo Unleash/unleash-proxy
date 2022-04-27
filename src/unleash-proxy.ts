@@ -14,6 +14,8 @@ import {
     withStandardResponses,
 } from './openapi/common-responses';
 import { apiRequestResponse } from './openapi/spec/api-request-response';
+import { ErrorSchema } from './openapi/spec/error-schema';
+import { ApiRequestSchema } from './openapi/spec/api-request-schema';
 
 export default class UnleashProxy {
     private logger: Logger;
@@ -185,7 +187,7 @@ export default class UnleashProxy {
         }
     }
 
-    health(req: Request, res: Response): void {
+    health(req: Request, res: Response<string>): void {
         if (!this.ready) {
             res.status(503).send(NOT_READY_MSG);
         } else {
@@ -212,7 +214,7 @@ export default class UnleashProxy {
         }
     }
 
-    unleashApi(req: Request, res: Response): void {
+    unleashApi(req: Request, res: Response<string | ApiRequestSchema>): void {
         const apiToken = req.header(this.clientKeysHeaderName);
         if (!this.ready) {
             res.status(503).send(NOT_READY_MSG);

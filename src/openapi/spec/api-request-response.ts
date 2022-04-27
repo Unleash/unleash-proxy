@@ -12,4 +12,6 @@ export const apiRequestResponse: OpenAPIV3.ResponseObject = {
     },
 } as const;
 
-export type ApiRequestSchema = CreateSchemaType<typeof apiRequestResponse>;
+export type ApiRequestResponseSchema = CreateSchemaType<
+    typeof apiRequestResponse
+>;
