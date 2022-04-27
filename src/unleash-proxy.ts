@@ -195,7 +195,7 @@ export default class UnleashProxy {
         }
     }
 
-    registerMetrics(req: Request, res: Response): void {
+    registerMetrics(req: Request, res: Response<string | ErrorSchema>): void {
         const token = req.header(this.clientKeysHeaderName);
         const validTokens = [...this.clientKeys, ...this.serverSideTokens];
 
