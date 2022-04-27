@@ -9,7 +9,8 @@
     "example": "npm run build && node example",
     "lint": "eslint ./src",
     "test": "jest",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "dev": "ts-node-dev src/start.ts"
   },
   "repository": {
     "type": "git",
@@ -58,6 +59,7 @@
     "prettier": "^2.3.0",
     "supertest": "^6.1.3",
     "ts-jest": "^27.0.2",
+    "ts-node-dev": "^1.1.8",
     "typescript": "^4.3.2"
   },
   "prettier": {
