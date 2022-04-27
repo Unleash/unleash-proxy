@@ -5,6 +5,7 @@ import { variantSchema } from './spec/variant-schema';
 import { errorSchema } from './spec/error-schema';
 import { featurePayloadSchema } from './spec/features-request-schema';
 import { unleashContextSchema } from './spec/unleash-context-schema';
+import { metricsSchema } from './spec/metrics-schema';
 
 // Create the base OpenAPI schema, with everything except paths.
 export const createOpenApiSchema = (
@@ -37,6 +38,7 @@ export const createOpenApiSchema = (
                 errorSchema,
                 featurePayloadSchema,
                 unleashContextSchema,
+                metricsSchema,
             },
         },
     };

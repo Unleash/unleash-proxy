@@ -8,7 +8,10 @@ export const schema = {
         userId: { type: 'string' },
         sessionId: { type: 'string' },
         remoteAddress: { type: 'string' },
-        properties: { type: 'object', additionalProperties: 'string' },
+        properties: {
+            type: 'object',
+            additionalProperties: { type: 'string' },
+        },
     },
 } as const;
 

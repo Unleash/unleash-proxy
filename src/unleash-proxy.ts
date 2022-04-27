@@ -107,6 +107,15 @@ export default class UnleashProxy {
         router.post(
             '/client/metrics',
             openApiService.validPath({
+                requestBody: {
+                    content: {
+                        'application/json': {
+                            schema: {
+                                $ref: '#/components/schemas/metricsSchema',
+                            },
+                        },
+                    },
+                },
                 responses: withStandardResponses(200, 400, 401)(),
             }),
             this.registerMetrics.bind(this),
