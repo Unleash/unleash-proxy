@@ -70,6 +70,7 @@ const schema = {
                         },
                     },
                     variants: {
+                        type: 'array',
                         items: {
                             type: 'object',
                             required: ['name', 'weight', 'overrides'],
@@ -90,7 +91,6 @@ const schema = {
                                     properties: {
                                         type: {
                                             type: 'string',
-                                            enum: ['string'],
                                         },
                                         value: 'string',
                                     },
@@ -115,7 +115,6 @@ const schema = {
                                 },
                             },
                         },
-                        type: 'array',
                     },
                 },
             },
