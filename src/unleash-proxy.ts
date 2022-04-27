@@ -172,7 +172,7 @@ export default class UnleashProxy {
         }
     }
 
-    lookupToggles(req: Request, res: Response): void {
+    lookupToggles(req: Request, res: Response<FeaturesResponseSchema>): void {
         const clientToken = req.header(this.clientKeysHeaderName);
 
         if (!this.ready) {
