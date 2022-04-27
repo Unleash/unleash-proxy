@@ -9,9 +9,7 @@ import {
     featuresResponse,
     FeaturesResponseSchema,
 } from './openapi/spec/features-response';
-
-const NOT_READY =
-    'Unleash Proxy has not connected to Unleash API and is not ready to accept requests yet.';
+import { withCommonResponses } from './openapi/common-responses';
 
 export default class UnleashProxy {
     private logger: Logger;
@@ -57,7 +55,7 @@ export default class UnleashProxy {
         router.get(
             '/',
             openApiService.validPath({
-                responses: { 200: featuresResponse },
+                responses: withCommonResponses({ 200: featuresResponse }),
             }),
             this.getEnabledToggles.bind(this),
         );
@@ -89,7 +87,7 @@ export default class UnleashProxy {
         const apiToken = req.header(this.clientKeysHeaderName);
 
         if (!this.ready) {
-            res.status(503).send(NOT_READY);
+            res.status(503).send(NOT_READY_MSG);
         } else if (!apiToken || !this.clientKeys.includes(apiToken)) {
             res.sendStatus(401);
         } else {
@@ -98,7 +96,7 @@ export default class UnleashProxy {
             const context = createContext(query);
             const toggles = this.client.getEnabledToggles(context);
             res.set('Cache-control', 'public, max-age=2');
-            res.send({ toggles });
+            res.send({ toggs: toggles });
         }
     }
 
@@ -106,7 +104,7 @@ export default class UnleashProxy {
         const clientToken = req.header(this.clientKeysHeaderName);
 
         if (!this.ready) {
-            res.status(503).send(NOT_READY);
+            res.status(503).send(NOT_READY_MSG);
         } else if (!clientToken || !this.clientKeys.includes(clientToken)) {
             res.sendStatus(401);
         } else {
@@ -119,7 +117,7 @@ export default class UnleashProxy {
 
     health(req: Request, res: Response): void {
         if (!this.ready) {
-            res.status(503).send(NOT_READY);
+            res.status(503).send(NOT_READY_MSG);
         } else {
             res.send('ok');
         }
@@ -147,7 +145,7 @@ export default class UnleashProxy {
     unleashApi(req: Request, res: Response): void {
         const apiToken = req.header(this.clientKeysHeaderName);
         if (!this.ready) {
-            res.status(503).send(NOT_READY);
+            res.status(503).send(NOT_READY_MSG);
         } else if (apiToken && this.serverSideTokens.includes(apiToken)) {
             const features = this.client.getFeatureToggleDefinitions();
             res.set('Cache-control', 'public, max-age=2');
@@ -156,4 +154,7 @@ export default class UnleashProxy {
             res.sendStatus(401);
         }
     }
+}
+function NOT_READY_MSG(NOT_READY_MSG: any) {
+    throw new Error('Function not implemented.');
 }
