@@ -13,6 +13,7 @@ import {
     NOT_READY_MSG,
     withStandardResponses,
 } from './openapi/common-responses';
+import { apiRequestResponse } from './openapi/spec/api-request-response';
 
 export default class UnleashProxy {
     private logger: Logger;
@@ -127,7 +128,7 @@ export default class UnleashProxy {
                 responses: withStandardResponses(
                     401,
                     503,
-                )({ 200: featuresResponse }),
+                )({ 200: apiRequestResponse }),
             }),
             this.unleashApi.bind(this),
         );
