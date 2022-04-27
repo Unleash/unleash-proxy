@@ -69,7 +69,15 @@ export default class UnleashProxy {
             }),
             this.getEnabledToggles.bind(this),
         );
-        router.post('/', this.lookupToggles.bind(this));
+        router.post(
+            '/',
+            openApiService.validPath({
+                responses: withCommonResponses({
+                    200: featuresResponse,
+                }),
+            }),
+            this.lookupToggles.bind(this),
+        );
         router.post('/client/metrics', this.registerMetrics.bind(this));
         router.get('/client/features', this.unleashApi.bind(this));
     }
