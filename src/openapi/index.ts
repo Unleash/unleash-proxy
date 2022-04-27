@@ -16,7 +16,7 @@ export const createOpenApiSchema = (
         openapi: '3.0.3',
         servers: serverUrl ? [{ url: serverUrl }] : [],
         info: {
-            title: 'Unleash API',
+            title: 'Unleash Proxy API',
             version: process.env.npm_package_version || '',
         },
         security: [
