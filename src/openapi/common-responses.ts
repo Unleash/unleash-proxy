@@ -1,6 +1,6 @@
 import { OpenAPIV3 } from 'openapi-types';
 
-const NOT_READY_MSG =
+export const NOT_READY_MSG =
     'The Unleash Proxy has not connected to the Unleash API and is not ready to accept requests yet.';
 
 export const notReadyResponse: OpenAPIV3.ResponseObject = {

@@ -9,7 +9,10 @@ import {
     featuresResponse,
     FeaturesResponseSchema,
 } from './openapi/spec/features-response';
-import { withStandardResponses } from './openapi/common-responses';
+import {
+    NOT_READY_MSG,
+    withStandardResponses,
+} from './openapi/common-responses';
 
 export default class UnleashProxy {
     private logger: Logger;
@@ -62,6 +65,17 @@ export default class UnleashProxy {
         router.get(
             '/',
             openApiService.validPath({
+                parameters: [
+                    ['appName', "Your application's name"],
+                    ['userId', "The current user's ID"],
+                    ['sessionId', "The current session's ID"],
+                    ['remoteAddress', "Your application's IP address"],
+                    ['properties', 'Additional properties'],
+                ].map(([k, v]) => ({
+                    name: k,
+                    description: v,
+                    in: 'query',
+                })),
                 responses: withStandardResponses(
                     401,
                     503,
@@ -73,6 +87,15 @@ export default class UnleashProxy {
         router.post(
             '/',
             openApiService.validPath({
+                requestBody: {
+                    content: {
+                        'application/json': {
+                            schema: {
+                                $ref: '#/components/schemas/featurePayloadSchema',
+                            },
+                        },
+                    },
+                },
                 responses: withStandardResponses(
                     401,
                     503,
