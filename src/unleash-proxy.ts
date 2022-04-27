@@ -9,7 +9,11 @@ import {
     featuresResponse,
     FeaturesResponseSchema,
 } from './openapi/spec/features-response';
-import { withCommonResponses } from './openapi/common-responses';
+import {
+    emptySuccessResponse,
+    notReadyResponse,
+    withCommonResponses,
+} from './openapi/common-responses';
 
 export default class UnleashProxy {
     private logger: Logger;
@@ -51,7 +55,13 @@ export default class UnleashProxy {
         this.middleware = router;
 
         // Routes
-        router.get('/health', this.health.bind(this));
+        router.get(
+            '/health',
+            openApiService.validPath({
+                responses: { 200: emptySuccessResponse, 503: notReadyResponse },
+            }),
+            this.health.bind(this),
+        );
         router.get(
             '/',
             openApiService.validPath({
@@ -155,6 +165,7 @@ export default class UnleashProxy {
         }
     }
 }
+
 function NOT_READY_MSG(NOT_READY_MSG: any) {
     throw new Error('Function not implemented.');
 }

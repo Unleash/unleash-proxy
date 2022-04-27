@@ -19,6 +19,18 @@ export const unauthorizedResponse: OpenAPIV3.ResponseObject = {
     description: 'Authorization information is missing or invalid.',
 } as const;
 
+export const emptySuccessResponse: OpenAPIV3.ResponseObject = {
+    description: 'The request was successful.',
+    content: {
+        'text/plain': {
+            schema: {
+                type: 'string',
+                example: 'ok',
+            },
+        },
+    },
+} as const;
+
 /**
    Merge all response objects provided with the default responses that apply for
    all endpoints. Response collections later in the chain will override response
