@@ -46,13 +46,13 @@ const schema = {
                                     items: {
                                         type: 'object',
                                         required: ['contextName', 'operator'],
+                                        additionalProperties: false,
                                         properties: {
                                             contextName: {
                                                 type: 'string',
                                             },
                                             operator: {
                                                 type: 'string',
-                                                enum: Object.values(Operator),
                                             },
                                             values: {
                                                 type: 'array',
@@ -87,12 +87,11 @@ const schema = {
                                 },
                                 payload: {
                                     type: 'object',
+                                    additionalProperties: false,
                                     required: ['type', 'value'],
                                     properties: {
-                                        type: {
-                                            type: 'string',
-                                        },
-                                        value: 'string',
+                                        type: { type: 'string' },
+                                        value: { type: 'string' },
                                     },
                                 },
                                 overrides: {
@@ -100,6 +99,7 @@ const schema = {
                                     items: {
                                         type: 'object',
                                         required: ['contextName', 'values'],
+                                        additionalProperties: false,
                                         properties: {
                                             contextName: {
                                                 type: 'string',
