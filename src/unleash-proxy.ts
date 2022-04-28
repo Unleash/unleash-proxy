@@ -5,10 +5,7 @@ import { IProxyConfig } from './config';
 import { IClient } from './client';
 import { Logger } from './logger';
 import { OpenApiService } from './openapi/openapi-service';
-import {
-    featuresResponse,
-    FeaturesResponseSchema,
-} from './openapi/spec/features-response';
+import { featuresResponse } from './openapi/spec/features-response';
 import {
     NOT_READY_MSG,
     withStandardResponses,
@@ -16,6 +13,7 @@ import {
 import { apiRequestResponse } from './openapi/spec/api-request-response';
 import { ErrorSchema } from './openapi/spec/error-schema';
 import { ApiRequestSchema } from './openapi/spec/api-request-schema';
+import { FeaturesSchema } from './openapi/spec/features-schema';
 
 export default class UnleashProxy {
     private logger: Logger;
@@ -154,7 +152,7 @@ export default class UnleashProxy {
 
     getEnabledToggles(
         req: Request,
-        res: Response<FeaturesResponseSchema>,
+        res: Response<FeaturesSchema | string>,
     ): void {
         const apiToken = req.header(this.clientKeysHeaderName);
 
@@ -168,11 +166,11 @@ export default class UnleashProxy {
             const context = createContext(query);
             const toggles = this.client.getEnabledToggles(context);
             res.set('Cache-control', 'public, max-age=2');
-            res.send({ toggs: toggles });
+            res.send({ toggles });
         }
     }
 
-    lookupToggles(req: Request, res: Response<FeaturesResponseSchema>): void {
+    lookupToggles(req: Request, res: Response<FeaturesSchema | string>): void {
         const clientToken = req.header(this.clientKeysHeaderName);
 
         if (!this.ready) {
