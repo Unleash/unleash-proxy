@@ -53,6 +53,9 @@ const schema = {
                                             },
                                             operator: {
                                                 type: 'string',
+                                                description: `One of ${Object.values(
+                                                    Operator,
+                                                )}`,
                                             },
                                             values: {
                                                 type: 'array',
