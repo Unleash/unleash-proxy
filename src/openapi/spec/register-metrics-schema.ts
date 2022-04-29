@@ -35,6 +35,6 @@ export const schema = {
     },
 } as const;
 
-export type MetricsSchema = CreateSchemaType<typeof schema>;
+export type RegisterMetricsSchema = CreateSchemaType<typeof schema>;
 
-export const metricsSchema = createSchemaObject(schema);
+export const registerMetricsSchema = createSchemaObject(schema);

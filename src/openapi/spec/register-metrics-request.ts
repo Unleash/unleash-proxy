@@ -4,7 +4,7 @@ export const registerMetricsRequest: OpenAPIV3.RequestBodyObject = {
     content: {
         'application/json': {
             schema: {
-                $ref: '#/components/schemas/featurePayloadSchema',
+                $ref: '#/components/schemas/registerMetricsSchema',
             },
         },
     },
