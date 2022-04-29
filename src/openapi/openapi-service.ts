@@ -1,7 +1,6 @@
 import { IProxyConfig } from '../config';
 import { RequestHandler, Application } from 'express';
 import { OpenAPIV3 } from 'openapi-types';
-// @ts-expect-error
 import openapi, { IExpressOpenApi } from '@unleash/express-openapi';
 import { createOpenApiSchema } from './.';
 
