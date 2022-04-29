@@ -2,7 +2,7 @@ import { createSchemaObject, CreateSchemaType } from '../openapi-types';
 
 export const schema = {
     type: 'object',
-    required: ['appName', 'instanceId', 'environment', 'bucket'],
+    required: ['appName', 'instanceId', 'bucket'],
     properties: {
         appName: { type: 'string' },
         instanceId: { type: 'string' },
