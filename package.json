@@ -39,7 +39,7 @@
     "joi": "^17.4.0",
     "json-schema-to-ts": "^2.1.1",
     "openapi-types": "^11.0.0",
-    "unleash-client": "^3.13.0"
+    "unleash-client": "^3.13.4"
   },
   "devDependencies": {
     "@types/compression": "^1.7.1",
