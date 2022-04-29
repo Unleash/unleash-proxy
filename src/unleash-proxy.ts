@@ -172,7 +172,7 @@ export default class UnleashProxy {
         }
     }
 
-    health(req: Request, res: Response<string>): void {
+    health(_: Request, res: Response<string>): void {
         if (!this.ready) {
             res.status(503).send(NOT_READY_MSG);
         } else {
