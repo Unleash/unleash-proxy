@@ -33,4 +33,22 @@ export class OpenApiService {
     validPath(op: OpenAPIV3.OperationObject): RequestHandler {
         return this.api.validPath(op);
     }
+
+    // Catch and format Open API validation errors.
+    useErrorHandler(app: Application): void {
+        console.log('using error handler');
+
+        app.use((err: any, _: any, res: any, next: any) => {
+            console.log('in the error handler');
+
+            if (err && err.status && err.validationErrors) {
+                res.status(err.status).json({
+                    error: err.message,
+                    validation: err.validationErrors,
+                });
+            } else {
+                next();
+            }
+        });
+    }
 }
