@@ -75,6 +75,7 @@ export default class UnleashProxy {
                 ].map(([k, v]) => ({
                     name: k,
                     description: v,
+                    schema: { type: 'string' },
                     in: 'query',
                 })),
                 responses: withStandardResponses(
