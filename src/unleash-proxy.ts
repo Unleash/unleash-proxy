@@ -6,11 +6,7 @@ import { IClient } from './client';
 import { Logger } from './logger';
 import { OpenApiService } from './openapi/openapi-service';
 import { featuresResponse } from './openapi/spec/features-response';
-import {
-    NOT_READY_MSG,
-    standardResponses,
-    withStandardResponses,
-} from './openapi/common-responses';
+import { NOT_READY_MSG, standardResponses } from './openapi/common-responses';
 import { apiRequestResponse } from './openapi/spec/api-request-response';
 import { ErrorSchema } from './openapi/spec/error-schema';
 import { ApiRequestSchema } from './openapi/spec/api-request-schema';
