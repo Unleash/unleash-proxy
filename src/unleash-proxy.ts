@@ -1,6 +1,5 @@
 import { Request, Response, Router } from 'express';
 import { createContext } from './create-context';
-import { clientMetricsSchema } from './metrics-schema';
 import { IProxyConfig } from './config';
 import { IClient } from './client';
 import { Logger } from './logger';
@@ -180,14 +179,7 @@ export default class UnleashProxy {
         const validTokens = [...this.clientKeys, ...this.serverSideTokens];
 
         if (token && validTokens.includes(token)) {
-            const data = req.body;
-            const { error, value } = clientMetricsSchema.validate(data);
-            if (error) {
-                this.logger.warn('Invalid metrics posted', error);
-                res.status(400).json(error);
-                return;
-            }
-            this.client.registerMetrics(value);
+            this.client.registerMetrics(req.body);
             res.sendStatus(200);
         } else {
             res.sendStatus(401);
