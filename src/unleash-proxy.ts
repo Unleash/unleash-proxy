@@ -16,6 +16,7 @@ import { ApiRequestSchema } from './openapi/spec/api-request-schema';
 import { FeaturesSchema } from './openapi/spec/features-schema';
 import { lookupTogglesRequest } from './openapi/spec/lookup-toggles-request';
 import { registerMetricsRequest } from './openapi/spec/register-metrics-request';
+import { createRequestParameters } from './openapi/openapi-helpers';
 
 export default class UnleashProxy {
     private logger: Logger;
@@ -68,18 +69,13 @@ export default class UnleashProxy {
         router.get(
             '/',
             openApiService.validPath({
-                parameters: [
-                    ['appName', "Your application's name"],
-                    ['userId', "The current user's ID"],
-                    ['sessionId', "The current session's ID"],
-                    ['remoteAddress', "Your application's IP address"],
-                    ['properties', 'Additional properties'],
-                ].map(([k, v]) => ({
-                    name: k,
-                    description: v,
-                    schema: { type: 'string' },
-                    in: 'query',
-                })),
+                parameters: createRequestParameters({
+                    appName: "Your application's name",
+                    userId: "The current user's ID",
+                    sessionId: "The current session's ID",
+                    remoteAddress: "Your application's IP address",
+                    properties: 'Additional properties',
+                }),
                 responses: withStandardResponses(
                     401,
                     503,
