@@ -8,6 +8,7 @@ import { OpenApiService } from './openapi/openapi-service';
 import { featuresResponse } from './openapi/spec/features-response';
 import {
     NOT_READY_MSG,
+    standardResponses,
     withStandardResponses,
 } from './openapi/common-responses';
 import { apiRequestResponse } from './openapi/spec/api-request-response';
@@ -61,7 +62,9 @@ export default class UnleashProxy {
         router.get(
             '/health',
             openApiService.validPath({
-                responses: withStandardResponses(200, 503)(),
+                responses: {
+                    ...standardResponses(200, 503),
+                },
             }),
             this.health.bind(this),
         );
@@ -76,10 +79,10 @@ export default class UnleashProxy {
                     remoteAddress: "Your application's IP address",
                     properties: 'Additional properties',
                 }),
-                responses: withStandardResponses(
-                    401,
-                    503,
-                )({ 200: featuresResponse }),
+                responses: {
+                    ...standardResponses(401, 503),
+                    200: featuresResponse,
+                },
             }),
             this.getEnabledToggles.bind(this),
         );
@@ -88,10 +91,10 @@ export default class UnleashProxy {
             '/',
             openApiService.validPath({
                 requestBody: lookupTogglesRequest,
-                responses: withStandardResponses(
-                    401,
-                    503,
-                )({ 200: featuresResponse }),
+                responses: {
+                    ...standardResponses(401, 503),
+                    200: featuresResponse,
+                },
             }),
             this.lookupToggles.bind(this),
         );
@@ -100,7 +103,7 @@ export default class UnleashProxy {
             '/client/metrics',
             openApiService.validPath({
                 requestBody: registerMetricsRequest,
-                responses: withStandardResponses(200, 400, 401)(),
+                responses: standardResponses(200, 400, 401),
             }),
             this.registerMetrics.bind(this),
         );
@@ -108,10 +111,10 @@ export default class UnleashProxy {
         router.get(
             '/client/features',
             openApiService.validPath({
-                responses: withStandardResponses(
-                    401,
-                    503,
-                )({ 200: apiRequestResponse }),
+                responses: {
+                    ...standardResponses(401, 503),
+                    200: apiRequestResponse,
+                },
             }),
             this.unleashApi.bind(this),
         );

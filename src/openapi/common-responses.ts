@@ -49,26 +49,13 @@ const commonResponses: Record<string, OpenAPIV3.ResponseObject> = {
     503: notReadyResponse,
 } as const;
 
-/** Merge all response objects provided with the default/common responses
-   provided. Response collections later in the chain will override response
-   collections from earlier in the case of collisions. The common respones can
-   also be overridden.
- */
-export const withStandardResponses =
-    (...statusCodes: number[]) =>
-    (...responses: Record<number, OpenAPIV3.ResponseObject>[]) => {
-        const baseResponses = statusCodes
-            .filter((n) => n in commonResponses)
-            .reduce(
-                (acc, n) => ({
-                    ...acc,
-                    [n]: commonResponses[String(n)] as OpenAPIV3.ResponseObject,
-                }),
-                {},
-            );
-
-        return responses.reduce(
-            (current, next) => ({ ...current, ...next }),
-            baseResponses,
+export const standardResponses = (...statusCodes: number[]) =>
+    statusCodes
+        .filter((n) => n in commonResponses)
+        .reduce(
+            (acc, n) => ({
+                ...acc,
+                [n]: commonResponses[String(n)] as OpenAPIV3.ResponseObject,
+            }),
+            {},
         );
-    };
