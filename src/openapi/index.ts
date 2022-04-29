@@ -2,7 +2,6 @@ import { OpenAPIV3 } from 'openapi-types';
 import { featuresSchema } from './spec/features-schema';
 import { featureSchema } from './spec/feature-schema';
 import { variantSchema } from './spec/variant-schema';
-import { errorSchema } from './spec/error-schema';
 import { lookupTogglesSchema } from './spec/lookup-toggles-schema';
 import { unleashContextSchema } from './spec/unleash-context-schema';
 import { registerMetricsSchema } from './spec/register-metrics-schema';
@@ -36,7 +35,6 @@ export const createOpenApiSchema = (
                 featuresSchema,
                 featureSchema,
                 variantSchema,
-                errorSchema,
                 lookupTogglesSchema,
                 unleashContextSchema,
                 registerMetricsSchema,

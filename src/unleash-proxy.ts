@@ -7,7 +7,6 @@ import { OpenApiService } from './openapi/openapi-service';
 import { featuresResponse } from './openapi/spec/features-response';
 import { NOT_READY_MSG, standardResponses } from './openapi/common-responses';
 import { apiRequestResponse } from './openapi/spec/api-request-response';
-import { ErrorSchema } from './openapi/spec/error-schema';
 import { ApiRequestSchema } from './openapi/spec/api-request-schema';
 import { FeaturesSchema } from './openapi/spec/features-schema';
 import { lookupTogglesRequest } from './openapi/spec/lookup-toggles-request';
@@ -174,7 +173,7 @@ export default class UnleashProxy {
         }
     }
 
-    registerMetrics(req: Request, res: Response<string | ErrorSchema>): void {
+    registerMetrics(req: Request, res: Response<string>): void {
         const token = req.header(this.clientKeysHeaderName);
         const validTokens = [...this.clientKeys, ...this.serverSideTokens];
 
