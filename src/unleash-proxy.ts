@@ -14,6 +14,8 @@ import { apiRequestResponse } from './openapi/spec/api-request-response';
 import { ErrorSchema } from './openapi/spec/error-schema';
 import { ApiRequestSchema } from './openapi/spec/api-request-schema';
 import { FeaturesSchema } from './openapi/spec/features-schema';
+import { lookupTogglesRequest } from './openapi/spec/lookup-toggles-request';
+import { registerMetricsRequest } from './openapi/spec/register-metrics-request';
 
 export default class UnleashProxy {
     private logger: Logger;
@@ -89,15 +91,7 @@ export default class UnleashProxy {
         router.post(
             '/',
             openApiService.validPath({
-                requestBody: {
-                    content: {
-                        'application/json': {
-                            schema: {
-                                $ref: '#/components/schemas/featurePayloadSchema',
-                            },
-                        },
-                    },
-                },
+                requestBody: lookupTogglesRequest,
                 responses: withStandardResponses(
                     401,
                     503,
@@ -109,15 +103,7 @@ export default class UnleashProxy {
         router.post(
             '/client/metrics',
             openApiService.validPath({
-                requestBody: {
-                    content: {
-                        'application/json': {
-                            schema: {
-                                $ref: '#/components/schemas/metricsSchema',
-                            },
-                        },
-                    },
-                },
+                requestBody: registerMetricsRequest,
                 responses: withStandardResponses(200, 400, 401)(),
             }),
             this.registerMetrics.bind(this),
