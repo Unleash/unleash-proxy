@@ -18,15 +18,13 @@ export class OpenApiService {
         );
     }
 
-    // Serve the OpenAPI JSON at `${baseUriPath}/docs/openapi.json`,
-    // and the OpenAPI SwaggerUI at `${baseUriPath}/docs/openapi`.
     docsPath(): string {
         const proxyBasePath = this.config.proxyBasePath;
         return `${proxyBasePath}/docs/openapi`;
     }
 
-    // Serve the OpenAPI JSON at `${baseUriPath}/docs/openapi.json`,
-    // and the OpenAPI SwaggerUI at `${baseUriPath}/docs/openapi`.
+    // Serve the OpenAPI JSON at `${this.docsPath()}.json`,
+    // and the OpenAPI SwaggerUI at `${this.docsPathPath}`.
     useDocs(app: Application): void {
         app.use(this.api);
         app.use(this.docsPath(), this.api.swaggerui);
