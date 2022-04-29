@@ -9,5 +9,5 @@ declare module '@unleash/express-openapi' {
         swaggerui: RequestHandler;
     }
 
-    export default function openapi(docsPath: string, any): ExpressOpenApi;
+    export default function openapi(docsPath: string, any): IExpressOpenApi;
 }
