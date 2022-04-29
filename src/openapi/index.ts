@@ -3,7 +3,7 @@ import { featuresSchema } from './spec/features-schema';
 import { featureSchema } from './spec/feature-schema';
 import { variantSchema } from './spec/variant-schema';
 import { errorSchema } from './spec/error-schema';
-import { featurePayloadSchema } from './spec/features-request-schema';
+import { lookupTogglesSchema } from './spec/lookup-toggles-schema';
 import { unleashContextSchema } from './spec/unleash-context-schema';
 import { metricsSchema } from './spec/metrics-schema';
 import { apiRequestSchema } from './spec/api-request-schema';
@@ -37,7 +37,7 @@ export const createOpenApiSchema = (
                 featureSchema,
                 variantSchema,
                 errorSchema,
-                featurePayloadSchema,
+                lookupTogglesSchema,
                 unleashContextSchema,
                 metricsSchema,
                 apiRequestSchema,

@@ -15,6 +15,6 @@ export const schema = {
     },
 } as const;
 
-export type FeaturePayloadSchema = CreateSchemaType<typeof schema>;
+export type LookupTogglesSchema = CreateSchemaType<typeof schema>;
 
-export const featurePayloadSchema = createSchemaObject(schema);
+export const lookupTogglesSchema = createSchemaObject(schema);

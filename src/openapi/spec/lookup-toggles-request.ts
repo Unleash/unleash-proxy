@@ -4,7 +4,7 @@ export const lookupTogglesRequest: OpenAPIV3.RequestBodyObject = {
     content: {
         'application/json': {
             schema: {
-                $ref: '#/components/schemas/metricsSchema',
+                $ref: '#/components/schemas/lookupTogglesSchema',
             },
         },
     },
