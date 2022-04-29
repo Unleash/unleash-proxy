@@ -26,6 +26,7 @@ export interface IProxyOption {
     namePrefix?: string;
     tags?: Array<TagFilter>;
     clientKeysHeaderName?: string;
+    enableOAS?: boolean;
     // experimental options
     expBootstrap?: BootstrapOptions;
     expServerSideSdkConfig?: ServerSideSdkConfig;
@@ -48,6 +49,7 @@ export interface IProxyConfig {
     trustProxy: boolean | string | number;
     namePrefix?: string;
     tags?: Array<TagFilter>;
+    enableOAS: boolean;
     clientKeysHeaderName: string;
     serverSideSdkConfig?: ServerSideSdkConfig;
     bootstrap?: BootstrapOptions;
@@ -70,6 +72,13 @@ function safeNumber(envVar: string | undefined, defaultVal: number): number {
     } else {
         return defaultVal;
     }
+}
+
+function safeBoolean(envVar: string | undefined, defaultVal: boolean): boolean {
+    if (envVar) {
+        return envVar === 'true' || envVar === '1' || envVar === 't';
+    }
+    return defaultVal;
 }
 
 function loadCustomStrategies(path?: string): Strategy[] | undefined {
@@ -212,5 +221,7 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
             'authorization',
         serverSideSdkConfig: loadServerSideSdkConfig(option),
         bootstrap: loadBootstrapOptions(option),
+        enableOAS:
+            option.enableOAS || safeBoolean(process.env.ENABLE_OAS, false),
     };
 }

@@ -24,7 +24,9 @@ export function createApp(
 
     const proxy = new UnleashProxy(client, config, openApiService);
 
-    openApiService.useDocs(app);
+    if (config.enableOAS) {
+        openApiService.useDocs(app);
+    }
 
     app.disable('x-powered-by');
     try {
