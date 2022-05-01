@@ -31,6 +31,10 @@ export function createApp(
         );
     }
 
+    if (typeof options.preHook === 'function') {
+        options.preHook(app);
+    }
+
     app.use(cors(corsOptions));
 
     app.use(compression());

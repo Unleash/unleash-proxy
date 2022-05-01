@@ -1,3 +1,4 @@
+import { Application } from 'express';
 import { Strategy, TagFilter } from 'unleash-client';
 import { BootstrapOptions } from 'unleash-client/lib/repository/bootstrap-provider';
 import { Logger, LogLevel, SimpleLogger } from './logger';
@@ -14,6 +15,7 @@ export interface IProxyOption {
     customStrategies?: Strategy[];
     proxySecrets?: string[];
     clientKeys?: string[];
+    preHook?: (app: Application) => void;
     proxyPort?: number;
     proxyBasePath?: string;
     refreshInterval?: number;
