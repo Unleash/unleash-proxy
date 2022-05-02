@@ -21,8 +21,7 @@ export class OpenApiService {
     }
 
     docsPath(): string {
-        const proxyBasePath = this.config.proxyBasePath;
-        return `${proxyBasePath}/docs/openapi`;
+        return `${this.config.proxyBasePath}/docs/openapi`;
     }
 
     // Serve the OpenAPI JSON at `${this.docsPath()}.json`,
