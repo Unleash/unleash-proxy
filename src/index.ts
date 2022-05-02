@@ -1,3 +1,5 @@
+/// <reference path="./types/openapi.d.ts" />
+
 import { createApp } from './app';
 import { start } from './server';
 import Client from './client';
