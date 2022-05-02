@@ -104,7 +104,7 @@ export default class UnleashProxy {
             '/client/metrics',
             openApiService.validPath({
                 requestBody: registerMetricsRequest,
-                responses: standardResponses(200, 400, 401),
+                responses: standardResponses(200, 401),
             }),
             this.registerMetrics.bind(this),
         );

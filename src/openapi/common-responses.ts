@@ -31,20 +31,8 @@ export const emptySuccessResponse: OpenAPIV3.ResponseObject = {
     },
 } as const;
 
-export const badRequestResponse: OpenAPIV3.ResponseObject = {
-    description: 'Bad request. You provided data that is missing or invalid.',
-    content: {
-        'application/json': {
-            schema: {
-                $ref: '#/components/schemas/errorSchema',
-            },
-        },
-    },
-};
-
 const commonResponses: Record<string, OpenAPIV3.ResponseObject> = {
     200: emptySuccessResponse,
-    400: badRequestResponse,
     401: unauthorizedResponse,
     503: notReadyResponse,
 } as const;
