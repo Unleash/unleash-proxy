@@ -9,6 +9,7 @@
     "example": "npm run build && node example",
     "lint": "eslint ./src",
     "test": "jest",
+    "updateSnapshots": "jest -u",
     "prepare": "npm run build",
     "dev": "ts-node-dev src/start.ts"
   },
