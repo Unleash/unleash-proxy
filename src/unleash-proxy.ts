@@ -15,6 +15,7 @@ import {
     createDeepObjectRequestParameters,
     createRequestParameters,
 } from './openapi/openapi-helpers';
+import { RegisterMetricsSchema } from './openapi/spec/register-metrics-schema';
 
 export default class UnleashProxy {
     private logger: Logger;
@@ -180,7 +181,10 @@ export default class UnleashProxy {
         }
     }
 
-    registerMetrics(req: Request, res: Response<string>): void {
+    registerMetrics(
+        req: Request<{}, undefined, RegisterMetricsSchema>,
+        res: Response<string>,
+    ): void {
         const token = req.header(this.clientKeysHeaderName);
         const validTokens = [...this.clientKeys, ...this.serverSideTokens];
 
