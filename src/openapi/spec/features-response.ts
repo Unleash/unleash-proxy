@@ -1,13 +1,12 @@
 import { OpenAPIV3 } from 'openapi-types';
 import { CreateSchemaType } from '../openapi-types';
+import { featuresSchema } from './features-schema';
 
 export const featuresResponse: OpenAPIV3.ResponseObject = {
     description: 'The list of enabled toggles for the provided context.',
     content: {
         'application/json': {
-            schema: {
-                $ref: '#/components/schemas/featuresSchema',
-            },
+            schema: featuresSchema,
         },
     },
 } as const;

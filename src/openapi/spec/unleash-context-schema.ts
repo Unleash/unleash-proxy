@@ -2,6 +2,7 @@ import { createSchemaObject, CreateSchemaType } from '../openapi-types';
 
 export const schema = {
     type: 'object',
+    additionalProperties: false,
     properties: {
         appName: { type: 'string' },
         environment: { type: 'string' },

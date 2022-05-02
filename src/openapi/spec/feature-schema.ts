@@ -1,8 +1,10 @@
 import { createSchemaObject, CreateSchemaType } from '../openapi-types';
+import { variantSchema } from './variant-schema';
 
 export const schema = {
     type: 'object',
-    required: ['name', 'enabled', 'variant'],
+    required: ['name', 'enabled', 'impressionData'],
+    additionalProperties: false,
     properties: {
         name: {
             type: 'string',
@@ -10,9 +12,10 @@ export const schema = {
         enabled: {
             type: 'boolean',
         },
-        variant: {
-            $ref: '#/components/schemas/variantSchema',
+        impressionData: {
+            type: 'boolean',
         },
+        variant: variantSchema,
     },
 } as const;
 

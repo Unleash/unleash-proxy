@@ -1,14 +1,14 @@
 import { createSchemaObject, CreateSchemaType } from '../openapi-types';
+import { featureSchema } from './feature-schema';
 
 export const schema = {
     type: 'object',
     required: ['toggles'],
+    additionalProperties: false,
     properties: {
         toggles: {
             type: 'array',
-            items: {
-                $ref: '#/components/schemas/featureSchema',
-            },
+            items: featureSchema,
         },
     },
 } as const;

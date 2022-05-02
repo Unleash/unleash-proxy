@@ -1,11 +1,10 @@
 import { createSchemaObject, CreateSchemaType } from '../openapi-types';
+import { unleashContextSchema } from './unleash-context-schema';
 
 export const schema = {
     type: 'object',
     properties: {
-        context: {
-            $ref: '#/components/schemas/unleashContextSchema',
-        },
+        context: unleashContextSchema,
         toggleNames: {
             type: 'array',
             items: {

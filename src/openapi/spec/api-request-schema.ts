@@ -4,6 +4,7 @@ import { createSchemaObject, CreateSchemaType } from '../openapi-types';
 const schema = {
     type: 'object',
     required: ['features', 'version'],
+    additionalProperties: false,
     properties: {
         version: {
             type: 'integer',

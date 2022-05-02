@@ -3,6 +3,7 @@ import { createSchemaObject, CreateSchemaType } from '../openapi-types';
 export const schema = {
     type: 'object',
     required: ['name', 'enabled'],
+    additionalProperties: false,
     properties: {
         name: {
             type: 'string',
@@ -12,6 +13,12 @@ export const schema = {
         },
         payload: {
             type: 'object',
+            additionalProperties: false,
+            required: ['type', 'value'],
+            properties: {
+                type: { type: 'string', enum: ['string'] },
+                value: { type: 'string' },
+            },
         },
     },
 } as const;
