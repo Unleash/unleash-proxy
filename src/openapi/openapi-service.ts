@@ -17,6 +17,7 @@ export class OpenApiService {
                 config.proxyBasePath,
                 config.clientKeysHeaderName,
             ),
+            { coerce: true },
         );
     }
 
