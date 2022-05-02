@@ -1,0 +1,587 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should serve the OpenAPI UI 1`] = `
+"<!DOCTYPE html>
+<html>
+  <head>
+    <title>Swagger UI</title>
+    <meta charset=\\"utf-8\\"/>
+    <meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1\\">
+    <style>
+      html {
+          box-sizing: border-box;
+          overflow: -moz-scrollbars-vertical;
+          overflow-y: scroll;
+      }
+      *,
+      *:before,
+      *:after {
+          box-sizing: inherit;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        background: #fafafa;
+      }
+    </style>
+    
+      <link rel=\\"stylesheet\\" type=\\"text/css\\" href=\\"./swagger-ui.css\\" >
+    
+  </head>
+  <body>
+    
+      <div id=\\"swagger-ui\\"></div>
+      <script src=\\"./swagger-ui-bundle.js\\"></script>
+      <script src=\\"./swagger-ui-standalone-preset.js\\"></script>
+      <script>
+        window.onload = function () {
+          window.ui = SwaggerUIBundle({
+            url: \\"/docs/openapi.json\\",
+            dom_id: '#swagger-ui'
+          })
+        }
+      </script>
+    
+  </body>
+</html>
+  "
+`;
+
+exports[`should serve the OpenAPI spec 1`] = `
+Object {
+  "components": Object {
+    "schemas": Object {
+      "apiRequestSchema": Object {
+        "properties": Object {
+          "features": Object {
+            "items": Object {
+              "additionalProperties": false,
+              "properties": Object {
+                "description": Object {
+                  "type": "string",
+                },
+                "enabled": Object {
+                  "type": "boolean",
+                },
+                "impressionData": Object {
+                  "type": "boolean",
+                },
+                "name": Object {
+                  "type": "string",
+                },
+                "stale": Object {
+                  "type": "boolean",
+                },
+                "strategies": Object {
+                  "items": Object {
+                    "additionalProperties": false,
+                    "properties": Object {
+                      "constraints": Object {
+                        "items": Object {
+                          "additionalProperties": false,
+                          "properties": Object {
+                            "contextName": Object {
+                              "type": "string",
+                            },
+                            "operator": Object {
+                              "description": "One of IN,NOT_IN,STR_ENDS_WITH,STR_STARTS_WITH,STR_CONTAINS,NUM_EQ,NUM_GT,NUM_GTE,NUM_LT,NUM_LTE,DATE_AFTER,DATE_BEFORE,SEMVER_EQ,SEMVER_GT,SEMVER_LT",
+                              "type": "string",
+                            },
+                            "values": Object {
+                              "items": Object {
+                                "type": "string",
+                              },
+                              "type": "array",
+                            },
+                          },
+                          "required": Array [
+                            "contextName",
+                            "operator",
+                          ],
+                          "type": "object",
+                        },
+                        "type": "array",
+                      },
+                      "name": Object {
+                        "type": "string",
+                      },
+                      "parameters": Object {
+                        "type": "object",
+                      },
+                    },
+                    "required": Array [
+                      "name",
+                      "constraints",
+                      "parameters",
+                    ],
+                    "type": "object",
+                  },
+                  "type": "array",
+                },
+                "variants": Object {
+                  "items": Object {
+                    "additionalProperties": false,
+                    "properties": Object {
+                      "name": Object {
+                        "type": "string",
+                      },
+                      "overrides": Object {
+                        "items": Object {
+                          "additionalProperties": false,
+                          "properties": Object {
+                            "contextName": Object {
+                              "type": "string",
+                            },
+                            "values": Object {
+                              "items": Object {
+                                "type": "string",
+                              },
+                              "type": "array",
+                            },
+                          },
+                          "required": Array [
+                            "contextName",
+                            "values",
+                          ],
+                          "type": "object",
+                        },
+                        "type": "array",
+                      },
+                      "payload": Object {
+                        "additionalProperties": false,
+                        "properties": Object {
+                          "type": Object {
+                            "type": "string",
+                          },
+                          "value": Object {
+                            "type": "string",
+                          },
+                        },
+                        "required": Array [
+                          "type",
+                          "value",
+                        ],
+                        "type": "object",
+                      },
+                      "stickiness": Object {
+                        "type": "string",
+                      },
+                      "weight": Object {
+                        "type": "number",
+                      },
+                    },
+                    "required": Array [
+                      "name",
+                      "weight",
+                      "overrides",
+                    ],
+                    "type": "object",
+                  },
+                  "type": "array",
+                },
+              },
+              "required": Array [
+                "name",
+              ],
+              "type": "object",
+            },
+            "type": "array",
+          },
+          "version": Object {
+            "enum": Array [
+              2,
+            ],
+            "type": "integer",
+          },
+        },
+        "required": Array [
+          "features",
+          "version",
+        ],
+        "type": "object",
+      },
+      "featureSchema": Object {
+        "properties": Object {
+          "enabled": Object {
+            "type": "boolean",
+          },
+          "name": Object {
+            "type": "string",
+          },
+          "variant": Object {
+            "$ref": "#/components/schemas/variantSchema",
+          },
+        },
+        "required": Array [
+          "name",
+          "enabled",
+          "variant",
+        ],
+        "type": "object",
+      },
+      "featuresSchema": Object {
+        "properties": Object {
+          "toggles": Object {
+            "items": Object {
+              "$ref": "#/components/schemas/featureSchema",
+            },
+            "type": "array",
+          },
+        },
+        "required": Array [
+          "toggles",
+        ],
+        "type": "object",
+      },
+      "lookupTogglesSchema": Object {
+        "properties": Object {
+          "context": Object {
+            "$ref": "#/components/schemas/unleashContextSchema",
+          },
+          "toggleNames": Object {
+            "items": Object {
+              "type": "string",
+            },
+            "type": "array",
+          },
+        },
+        "type": "object",
+      },
+      "registerMetricsSchema": Object {
+        "properties": Object {
+          "appName": Object {
+            "type": "string",
+          },
+          "bucket": Object {
+            "properties": Object {
+              "start": Object {
+                "format": "date-time",
+                "type": "string",
+              },
+              "stop": Object {
+                "format": "date-time",
+                "type": "string",
+              },
+              "toggles": Object {
+                "additionalProperties": Object {
+                  "properties": Object {
+                    "no": Object {
+                      "minimum": 0,
+                      "type": "integer",
+                    },
+                    "variants": Object {
+                      "additionalProperties": Object {
+                        "minimum": 0,
+                        "type": "integer",
+                      },
+                      "type": "object",
+                    },
+                    "yes": Object {
+                      "minimum": 0,
+                      "type": "integer",
+                    },
+                  },
+                  "type": "object",
+                },
+                "type": "object",
+              },
+            },
+            "required": Array [
+              "start",
+              "stop",
+              "toggles",
+            ],
+            "type": "object",
+          },
+          "environment": Object {
+            "type": "string",
+          },
+          "instanceId": Object {
+            "type": "string",
+          },
+        },
+        "required": Array [
+          "appName",
+          "instanceId",
+          "bucket",
+        ],
+        "type": "object",
+      },
+      "unleashContextSchema": Object {
+        "properties": Object {
+          "appName": Object {
+            "type": "string",
+          },
+          "environment": Object {
+            "type": "string",
+          },
+          "properties": Object {
+            "additionalProperties": Object {
+              "type": "string",
+            },
+            "type": "object",
+          },
+          "remoteAddress": Object {
+            "type": "string",
+          },
+          "sessionId": Object {
+            "type": "string",
+          },
+          "userId": Object {
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+      "variantSchema": Object {
+        "properties": Object {
+          "enabled": Object {
+            "type": "boolean",
+          },
+          "name": Object {
+            "type": "string",
+          },
+          "payload": Object {
+            "type": "object",
+          },
+        },
+        "required": Array [
+          "name",
+          "enabled",
+        ],
+        "type": "object",
+      },
+    },
+    "securitySchemes": Object {
+      "apiKey": Object {
+        "in": "header",
+        "name": "authorization",
+        "type": "apiKey",
+      },
+    },
+  },
+  "info": Object {
+    "title": "Unleash Proxy API",
+  },
+  "openapi": "3.0.3",
+  "paths": Object {
+    "/proxy/": Object {
+      "get": Object {
+        "parameters": Array [
+          Object {
+            "description": "Your application's name",
+            "in": "query",
+            "name": "appName",
+            "schema": Object {
+              "type": "string",
+            },
+          },
+          Object {
+            "description": "The current user's ID",
+            "in": "query",
+            "name": "userId",
+            "schema": Object {
+              "type": "string",
+            },
+          },
+          Object {
+            "description": "The current session's ID",
+            "in": "query",
+            "name": "sessionId",
+            "schema": Object {
+              "type": "string",
+            },
+          },
+          Object {
+            "description": "Your application's IP address",
+            "in": "query",
+            "name": "remoteAddress",
+            "schema": Object {
+              "type": "string",
+            },
+          },
+          Object {
+            "description": "Additional (custom) context fields",
+            "explode": true,
+            "in": "query",
+            "name": "properties",
+            "schema": Object {
+              "additionalProperties": Object {
+                "type": "string",
+              },
+              "type": "object",
+            },
+            "style": "deepObject",
+          },
+        ],
+        "responses": Object {
+          "200": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "$ref": "#/components/schemas/featuresSchema",
+                },
+              },
+            },
+            "description": "The list of enabled toggles for the provided context.",
+          },
+          "401": Object {
+            "description": "Authorization information is missing or invalid.",
+          },
+          "503": Object {
+            "content": Object {
+              "text/plain": Object {
+                "schema": Object {
+                  "example": "The Unleash Proxy has not connected to the Unleash API and is not ready to accept requests yet.",
+                  "type": "string",
+                },
+              },
+            },
+            "description": "The proxy isn't ready to accept requests yet.",
+          },
+        },
+      },
+      "post": Object {
+        "requestBody": Object {
+          "content": Object {
+            "application/json": Object {
+              "schema": Object {
+                "$ref": "#/components/schemas/lookupTogglesSchema",
+              },
+            },
+          },
+        },
+        "responses": Object {
+          "200": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "$ref": "#/components/schemas/featuresSchema",
+                },
+              },
+            },
+            "description": "The list of enabled toggles for the provided context.",
+          },
+          "401": Object {
+            "description": "Authorization information is missing or invalid.",
+          },
+          "503": Object {
+            "content": Object {
+              "text/plain": Object {
+                "schema": Object {
+                  "example": "The Unleash Proxy has not connected to the Unleash API and is not ready to accept requests yet.",
+                  "type": "string",
+                },
+              },
+            },
+            "description": "The proxy isn't ready to accept requests yet.",
+          },
+        },
+      },
+    },
+    "/proxy/client/features": Object {
+      "get": Object {
+        "responses": Object {
+          "200": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "$ref": "#/components/schemas/apiRequestSchema",
+                },
+              },
+            },
+            "description": "The list of enabled toggles for the provided context.",
+          },
+          "401": Object {
+            "description": "Authorization information is missing or invalid.",
+          },
+          "503": Object {
+            "content": Object {
+              "text/plain": Object {
+                "schema": Object {
+                  "example": "The Unleash Proxy has not connected to the Unleash API and is not ready to accept requests yet.",
+                  "type": "string",
+                },
+              },
+            },
+            "description": "The proxy isn't ready to accept requests yet.",
+          },
+        },
+      },
+    },
+    "/proxy/client/metrics": Object {
+      "post": Object {
+        "requestBody": Object {
+          "content": Object {
+            "application/json": Object {
+              "schema": Object {
+                "$ref": "#/components/schemas/registerMetricsSchema",
+              },
+            },
+          },
+        },
+        "responses": Object {
+          "200": Object {
+            "content": Object {
+              "text/plain": Object {
+                "schema": Object {
+                  "example": "ok",
+                  "type": "string",
+                },
+              },
+            },
+            "description": "The request was successful.",
+          },
+          "400": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "$ref": "#/components/schemas/errorSchema",
+                },
+              },
+            },
+            "description": "Bad request. You provided data that is missing or invalid.",
+          },
+          "401": Object {
+            "description": "Authorization information is missing or invalid.",
+          },
+        },
+      },
+    },
+    "/proxy/health": Object {
+      "get": Object {
+        "responses": Object {
+          "200": Object {
+            "content": Object {
+              "text/plain": Object {
+                "schema": Object {
+                  "example": "ok",
+                  "type": "string",
+                },
+              },
+            },
+            "description": "The request was successful.",
+          },
+          "503": Object {
+            "content": Object {
+              "text/plain": Object {
+                "schema": Object {
+                  "example": "The Unleash Proxy has not connected to the Unleash API and is not ready to accept requests yet.",
+                  "type": "string",
+                },
+              },
+            },
+            "description": "The proxy isn't ready to accept requests yet.",
+          },
+        },
+      },
+    },
+  },
+  "security": Array [
+    Object {
+      "apiKey": Array [],
+    },
+  ],
+  "servers": Array [],
+}
+`;
