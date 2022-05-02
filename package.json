@@ -11,7 +11,9 @@
     "test": "jest",
     "updateSnapshots": "jest -u",
     "prepare": "npm run build",
-    "dev": "ts-node-dev src/start.ts"
+    "dev": "ts-node-dev src/start.ts",
+    "fmt": "prettier src --write --loglevel warn",
+    "fmt:check": "prettier src --check"
   },
   "repository": {
     "type": "git",
