@@ -15,15 +15,14 @@ beforeEach(() => {
     );
 });
 
-test('should serve the OpenAPI UI', async () => {
-    return request(app)
+test('should serve the OpenAPI UI', async () =>
+    request(app)
         .get('/docs/openapi/')
         .expect(200)
-        .then((response) => expect(response.text).toMatchSnapshot());
-});
+        .then((response) => expect(response.text).toMatchSnapshot()));
 
-test('should serve the OpenAPI spec', async () => {
-    return request(app)
+test('should serve the OpenAPI spec', async () =>
+    request(app)
         .get('/docs/openapi.json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -33,5 +32,4 @@ test('should serve the OpenAPI spec', async () => {
             // This test will fail whenever there's a change to the API spec.
             // If the change is intended, update the snapshot with `jest -u`.
             expect(res.body).toMatchSnapshot();
-        });
-});
+        }));

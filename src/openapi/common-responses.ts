@@ -37,7 +37,9 @@ const commonResponses: Record<string, OpenAPIV3.ResponseObject> = {
     503: notReadyResponse,
 } as const;
 
-export const standardResponses = (...statusCodes: number[]) =>
+export const standardResponses = (
+    ...statusCodes: number[]
+): OpenAPIV3.ResponsesObject =>
     statusCodes
         .filter((n) => n in commonResponses)
         .reduce(

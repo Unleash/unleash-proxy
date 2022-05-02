@@ -1,8 +1,8 @@
-import { IProxyConfig } from '../config';
 import { RequestHandler, Application } from 'express';
 import { OpenAPIV3 } from 'openapi-types';
 import openapi, { IExpressOpenApi } from '@unleash/express-openapi';
-import { createOpenApiSchema } from './.';
+import { IProxyConfig } from '../config';
+import { createOpenApiSchema } from '.';
 
 export class OpenApiService {
     private readonly config: IProxyConfig;
