@@ -1,21 +1,21 @@
-import {createSchemaObject, CreateSchemaType } from '../openapi-types'
+import { createSchemaObject, CreateSchemaType } from '../openapi-types';
 
 export const schema = {
-  type: 'object',
-  required: ['name', 'enabled'],
-  properties: {
-    name: {
-      type: 'string'
+    type: 'object',
+    required: ['name', 'enabled'],
+    properties: {
+        name: {
+            type: 'string',
+        },
+        enabled: {
+            type: 'boolean',
+        },
+        payload: {
+            type: 'object',
+        },
     },
-    enabled: {
-      type: 'boolean'
-    },
-    payload: {
-      type: 'object',
-    }
-  }
-} as const
+} as const;
 
-export type VariantSchema = CreateSchemaType<typeof schema>
+export type VariantSchema = CreateSchemaType<typeof schema>;
 
-export const variantSchema = createSchemaObject(schema)
+export const variantSchema = createSchemaObject(schema);
