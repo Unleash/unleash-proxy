@@ -12,3 +12,18 @@ export const createRequestParameters = (
         schema: { type: 'string' },
         in: 'query',
     }));
+
+export const createDeepObjectRequestParameters = (
+    params: Record<ParameterName, Description>,
+): OpenAPIV3.ParameterObject[] =>
+    Object.entries(params).map(([name, description]) => ({
+        in: 'query',
+        schema: {
+            type: 'object',
+            additionalProperties: { type: 'string' },
+        },
+        style: 'deepObject',
+        explode: true,
+        name,
+        description,
+    }));
