@@ -10,6 +10,7 @@ import { apiRequestSchema } from './spec/api-request-schema';
 // Create the base OpenAPI schema, with everything except paths.
 export const createOpenApiSchema = (
     serverUrl?: string,
+    clientKeysHeaderName: string = 'Authorization',
 ): Omit<OpenAPIV3.Document, 'paths'> => {
     return {
         openapi: '3.0.3',
@@ -28,7 +29,7 @@ export const createOpenApiSchema = (
                 apiKey: {
                     type: 'apiKey',
                     in: 'header',
-                    name: 'Authorization',
+                    name: clientKeysHeaderName,
                 },
             },
             schemas: {
