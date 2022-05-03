@@ -380,6 +380,7 @@ Object {
               },
               "toggles": Object {
                 "additionalProperties": Object {
+                  "additionalProperties": false,
                   "properties": Object {
                     "no": Object {
                       "minimum": 0,

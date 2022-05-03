@@ -19,6 +19,7 @@ export const schema = {
                     type: 'object',
                     additionalProperties: {
                         type: 'object',
+                        additionalProperties: false,
                         properties: {
                             yes: { type: 'integer', minimum: 0 },
                             no: { type: 'integer', minimum: 0 },

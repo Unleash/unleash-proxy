@@ -1,7 +1,7 @@
 import EventEmitter from 'events';
 import { Context } from 'unleash-client';
 import { FeatureInterface } from 'unleash-client/lib/feature';
-import { FeatureToggleStatus, IClient } from '../client';
+import { FeatureToggleStatus, IClient, IMetrics } from '../client';
 
 class MockClient extends EventEmitter implements IClient {
     public apiToken: String;
@@ -10,7 +10,7 @@ class MockClient extends EventEmitter implements IClient {
 
     public toggles: FeatureToggleStatus[];
 
-    public metrics: any[] = [];
+    public metrics: IMetrics[] = [];
 
     constructor(toggles: FeatureToggleStatus[] = []) {
         super();
@@ -45,8 +45,7 @@ class MockClient extends EventEmitter implements IClient {
         );
     }
 
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    registerMetrics(metrics: any): void {
+    registerMetrics(metrics: IMetrics): void {
         this.metrics.push(metrics);
     }
 }

@@ -18,10 +18,12 @@ interface VariantBucket {
 }
 
 interface Bucket {
-    start: Date;
-    stop: Date | null;
     toggles: {
-        [s: string]: { yes: number; no: number; variants?: VariantBucket };
+        [s: string]: {
+            yes?: number;
+            no?: number;
+            variants?: VariantBucket;
+        };
     };
 }
 
@@ -36,8 +38,11 @@ export interface IClient extends EventEmitter {
         toggleNames: string[],
         context: Context,
     ) => FeatureToggleStatus[];
+
     getFeatureToggleDefinitions(): FeatureInterface[];
-    registerMetrics(metrics: any): void;
+
+    registerMetrics(metrics: IMetrics): void;
+
     isReady(): boolean;
 }
 
@@ -161,8 +166,8 @@ class Client extends EventEmitter implements IClient {
         const { toggles } = metrics.bucket;
 
         Object.keys(toggles).forEach((toggleName) => {
-            const yesCount = toggles[toggleName].yes;
-            const noCount = toggles[toggleName].no;
+            const yesCount: number = toggles[toggleName].yes ?? 0;
+            const noCount: number = toggles[toggleName].no ?? 0;
             [...Array(yesCount)].forEach(() =>
                 this.metrics.count(toggleName, true),
             );
