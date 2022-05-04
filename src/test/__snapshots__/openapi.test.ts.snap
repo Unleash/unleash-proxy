@@ -337,6 +337,10 @@ Object {
                 "additionalProperties": Object {
                   "type": "string",
                 },
+                "example": Object {
+                  "betaTester": "true",
+                  "region": "Africa",
+                },
                 "type": "object",
               },
               "remoteAddress": Object {
@@ -352,6 +356,10 @@ Object {
             "type": "object",
           },
           "toggleNames": Object {
+            "example": Array [
+              "myToggle",
+              "yourToggle",
+            ],
             "items": Object {
               "type": "string",
             },
@@ -396,6 +404,21 @@ Object {
                   },
                   "type": "object",
                 },
+                "example": Object {
+                  "myCoolToggle": Object {
+                    "no": 42,
+                    "variants": Object {
+                      "blue": 6,
+                      "green": 15,
+                      "red": 46,
+                    },
+                    "yes": 25,
+                  },
+                  "myOtherToggle": Object {
+                    "no": 100,
+                    "yes": 0,
+                  },
+                },
                 "type": "object",
               },
             },
@@ -431,6 +454,10 @@ Object {
           "properties": Object {
             "additionalProperties": Object {
               "type": "string",
+            },
+            "example": Object {
+              "betaTester": "true",
+              "region": "Africa",
             },
             "type": "object",
           },
@@ -497,6 +524,7 @@ Object {
   "paths": Object {
     "/proxy": Object {
       "get": Object {
+        "description": "This endpoint returns the list of feature toggles that the proxy evaluates to enabled for the given context. Context values are provided as query parameters.",
         "parameters": Array [
           Object {
             "description": "Your application's name",
@@ -532,6 +560,10 @@ Object {
           },
           Object {
             "description": "Additional (custom) context fields",
+            "example": Object {
+              "betaTester": "true",
+              "region": "Africa",
+            },
             "explode": true,
             "in": "query",
             "name": "properties",
@@ -570,8 +602,10 @@ Object {
             "description": "The proxy isn't ready to accept requests yet.",
           },
         },
+        "summary": "Retrieve enabled feature toggles for the provided context.",
       },
       "post": Object {
+        "description": "This endpoint accepts a JSON object with \`context\` and \`toggleNames\` properties. The Proxy will use the provided context values and evaluate the toggles provided in the \`toggleNames\` property. It returns the toggles that evaluate to false. As such, the list it returns is always a subset of the toggles you provide it.",
         "requestBody": Object {
           "content": Object {
             "application/json": Object {
@@ -607,10 +641,12 @@ Object {
             "description": "The proxy isn't ready to accept requests yet.",
           },
         },
+        "summary": "Which of the provided toggles are enabled given the provided context?",
       },
     },
     "/proxy/client/features": Object {
       "get": Object {
+        "description": "Returns the toggle configuration from the proxy's internal Unleash SDK. Use this to bootstrap other proxies and server-side SDKs. Requires you to provide one of the proxy's configured \`serverSideTokens\` for authorization.",
         "responses": Object {
           "200": Object {
             "content": Object {
@@ -637,10 +673,12 @@ Object {
             "description": "The proxy isn't ready to accept requests yet.",
           },
         },
+        "summary": "Retrive the proxy's current toggle configuration (as consumed by the internal client).",
       },
     },
     "/proxy/client/metrics": Object {
       "post": Object {
+        "description": "This endpoint lets you register usage metrics with Unleash.",
         "requestBody": Object {
           "content": Object {
             "application/json": Object {
@@ -666,10 +704,12 @@ Object {
             "description": "Authorization information is missing or invalid.",
           },
         },
+        "summary": "Send usage metrics to Unleash.",
       },
     },
     "/proxy/health": Object {
       "get": Object {
+        "description": "Returns a 200 OK if the proxy is ready to receive requests. Otherwise returns a 503 NOT READY.",
         "responses": Object {
           "200": Object {
             "content": Object {
@@ -695,6 +735,7 @@ Object {
           },
         },
         "security": Array [],
+        "summary": "Check whether the proxy is ready to serve requests yet.",
       },
     },
   },
