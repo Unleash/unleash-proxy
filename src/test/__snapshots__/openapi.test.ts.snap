@@ -694,6 +694,7 @@ Object {
             "description": "The proxy isn't ready to accept requests yet.",
           },
         },
+        "security": Array [],
       },
     },
   },

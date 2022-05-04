@@ -114,6 +114,7 @@ export default class UnleashProxy {
         router.get(
             '/health',
             openApiService.validPath({
+                security: [],
                 responses: {
                     ...standardResponses(200, 503),
                 },
