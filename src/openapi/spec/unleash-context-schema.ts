@@ -11,6 +11,10 @@ export const schema = {
         properties: {
             type: 'object',
             additionalProperties: { type: 'string' },
+            example: {
+                region: 'Africa',
+                betaTester: 'true',
+            },
         },
     },
 } as const;

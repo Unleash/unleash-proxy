@@ -68,7 +68,13 @@ export default class UnleashProxy {
                         remoteAddress: "Your application's IP address",
                     }),
                     ...createDeepObjectRequestParameters({
-                        properties: 'Additional (custom) context fields',
+                        properties: {
+                            description: 'Additional (custom) context fields',
+                            example: {
+                                region: 'Africa',
+                                betaTester: 'true',
+                            },
+                        },
                     }),
                 ],
                 responses: {
