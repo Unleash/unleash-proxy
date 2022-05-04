@@ -75,6 +75,10 @@ export default class UnleashProxy {
                     ...standardResponses(401, 503),
                     200: featuresResponse,
                 },
+                description:
+                    'This endpoint returns the list of feature toggles that the proxy evaluates to enabled for the given context. Context values are provided as query parameters.',
+                summary:
+                    'Retrieve enabled feature toggles for the provided context.',
             }),
             this.getEnabledToggles.bind(this),
         );
@@ -87,6 +91,10 @@ export default class UnleashProxy {
                     ...standardResponses(401, 503),
                     200: featuresResponse,
                 },
+                description:
+                    'This endpoint accepts a JSON object with `context` and `toggleNames` properties. The Proxy will use the provided context values and evaluate the toggles provided in the `toggleNames` property. It returns the toggles that evaluate to false. As such, the list it returns is always a subset of the toggles you provide it.',
+                summary:
+                    'Which of the provided toggles are enabled given the provided context?',
             }),
             this.lookupToggles.bind(this),
         );
@@ -98,6 +106,10 @@ export default class UnleashProxy {
                     ...standardResponses(401, 503),
                     200: apiRequestResponse,
                 },
+                description:
+                    "Returns the toggle configuration from the proxy's internal Unleash SDK. Use this to bootstrap other proxies and server-side SDKs. Requires you to provide one of the proxy's configured `serverSideTokens` for authorization.",
+                summary:
+                    "Retrive the proxy's current toggle configuration (as consumed by the internal client).",
             }),
             this.unleashApi.bind(this),
         );
@@ -107,6 +119,9 @@ export default class UnleashProxy {
             openApiService.validPath({
                 requestBody: registerMetricsRequest,
                 responses: standardResponses(200, 401),
+                description:
+                    'This endpoint lets you register usage metrics with Unleash.',
+                summary: 'Send usage metrics to Unleash.',
             }),
             this.registerMetrics.bind(this),
         );
@@ -118,6 +133,10 @@ export default class UnleashProxy {
                 responses: {
                     ...standardResponses(200, 503),
                 },
+                description:
+                    'Returns a 200 OK if the proxy is ready to receive requests. Otherwise returns a 503 NOT READY.',
+                summary:
+                    'Check whether the proxy is ready to serve requests yet.',
             }),
             this.health.bind(this),
         );
