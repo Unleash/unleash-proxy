@@ -3,14 +3,12 @@ import { createSchemaObject, CreateSchemaType } from '../openapi-types';
 export const schema = {
     type: 'object',
     required: ['appName', 'instanceId', 'bucket'],
-    additionalProperties: false,
     properties: {
         appName: { type: 'string' },
         instanceId: { type: 'string' },
         environment: { type: 'string' },
         bucket: {
             type: 'object',
-            additionalProperties: false,
             required: ['start', 'stop', 'toggles'],
             properties: {
                 start: { type: 'string', format: 'date-time' },
@@ -19,7 +17,6 @@ export const schema = {
                     type: 'object',
                     additionalProperties: {
                         type: 'object',
-                        additionalProperties: false,
                         properties: {
                             yes: { type: 'integer', minimum: 0 },
                             no: { type: 'integer', minimum: 0 },
