@@ -68,7 +68,7 @@ export default class UnleashProxy {
         );
 
         router.get(
-            '/',
+            '',
             openApiService.validPath({
                 parameters: [
                     ...createRequestParameters({
@@ -90,7 +90,7 @@ export default class UnleashProxy {
         );
 
         router.post(
-            '/',
+            '',
             openApiService.validPath({
                 requestBody: lookupTogglesRequest,
                 responses: {

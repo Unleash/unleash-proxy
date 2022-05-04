@@ -500,7 +500,7 @@ Object {
   },
   "openapi": "3.0.3",
   "paths": Object {
-    "/proxy/": Object {
+    "/proxy": Object {
       "get": Object {
         "parameters": Array [
           Object {
