@@ -603,6 +603,9 @@ Object {
           },
         },
         "summary": "Retrieve enabled feature toggles for the provided context.",
+        "tags": Array [
+          "Feature toggles (client-side)",
+        ],
       },
       "post": Object {
         "description": "This endpoint accepts a JSON object with \`context\` and \`toggleNames\` properties. The Proxy will use the provided context values and evaluate the toggles provided in the \`toggleNames\` property. It returns the toggles that evaluate to false. As such, the list it returns is always a subset of the toggles you provide it.",
@@ -642,6 +645,9 @@ Object {
           },
         },
         "summary": "Which of the provided toggles are enabled given the provided context?",
+        "tags": Array [
+          "Feature toggles (client-side)",
+        ],
       },
     },
     "/proxy/client/features": Object {
@@ -673,7 +679,10 @@ Object {
             "description": "The proxy isn't ready to accept requests yet.",
           },
         },
-        "summary": "Retrive the proxy's current toggle configuration (as consumed by the internal client).",
+        "summary": "Retrieve the proxy's current toggle configuration (as consumed by the internal client).",
+        "tags": Array [
+          "Feature toggles (server-side)",
+        ],
       },
     },
     "/proxy/client/metrics": Object {
@@ -705,6 +714,9 @@ Object {
           },
         },
         "summary": "Send usage metrics to Unleash.",
+        "tags": Array [
+          "Metrics",
+        ],
       },
     },
     "/proxy/health": Object {
@@ -736,6 +748,9 @@ Object {
         },
         "security": Array [],
         "summary": "Check whether the proxy is ready to serve requests yet.",
+        "tags": Array [
+          "Health",
+        ],
       },
     },
   },

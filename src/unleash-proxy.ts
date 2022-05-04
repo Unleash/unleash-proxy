@@ -85,6 +85,7 @@ export default class UnleashProxy {
                     'This endpoint returns the list of feature toggles that the proxy evaluates to enabled for the given context. Context values are provided as query parameters.',
                 summary:
                     'Retrieve enabled feature toggles for the provided context.',
+                tags: ['Feature toggles (client-side)'],
             }),
             this.getEnabledToggles.bind(this),
         );
@@ -101,6 +102,7 @@ export default class UnleashProxy {
                     'This endpoint accepts a JSON object with `context` and `toggleNames` properties. The Proxy will use the provided context values and evaluate the toggles provided in the `toggleNames` property. It returns the toggles that evaluate to false. As such, the list it returns is always a subset of the toggles you provide it.',
                 summary:
                     'Which of the provided toggles are enabled given the provided context?',
+                tags: ['Feature toggles (client-side)'],
             }),
             this.lookupToggles.bind(this),
         );
@@ -116,6 +118,7 @@ export default class UnleashProxy {
                     "Returns the toggle configuration from the proxy's internal Unleash SDK. Use this to bootstrap other proxies and server-side SDKs. Requires you to provide one of the proxy's configured `serverSideTokens` for authorization.",
                 summary:
                     "Retrieve the proxy's current toggle configuration (as consumed by the internal client).",
+                tags: ['Feature toggles (server-side)'],
             }),
             this.unleashApi.bind(this),
         );
@@ -128,6 +131,7 @@ export default class UnleashProxy {
                 description:
                     'This endpoint lets you register usage metrics with Unleash.',
                 summary: 'Send usage metrics to Unleash.',
+                tags: ['Metrics'],
             }),
             this.registerMetrics.bind(this),
         );
@@ -143,6 +147,7 @@ export default class UnleashProxy {
                     'Returns a 200 OK if the proxy is ready to receive requests. Otherwise returns a 503 NOT READY.',
                 summary:
                     'Check whether the proxy is ready to serve requests yet.',
+                tags: ['Health'],
             }),
             this.health.bind(this),
         );
