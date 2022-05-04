@@ -58,16 +58,6 @@ export default class UnleashProxy {
 
         // Routes
         router.get(
-            '/health',
-            openApiService.validPath({
-                responses: {
-                    ...standardResponses(200, 503),
-                },
-            }),
-            this.health.bind(this),
-        );
-
-        router.get(
             '',
             openApiService.validPath({
                 parameters: [
@@ -101,6 +91,17 @@ export default class UnleashProxy {
             this.lookupToggles.bind(this),
         );
 
+        router.get(
+            '/client/features',
+            openApiService.validPath({
+                responses: {
+                    ...standardResponses(401, 503),
+                    200: apiRequestResponse,
+                },
+            }),
+            this.unleashApi.bind(this),
+        );
+
         router.post(
             '/client/metrics',
             openApiService.validPath({
@@ -111,14 +112,13 @@ export default class UnleashProxy {
         );
 
         router.get(
-            '/client/features',
+            '/health',
             openApiService.validPath({
                 responses: {
-                    ...standardResponses(401, 503),
-                    200: apiRequestResponse,
+                    ...standardResponses(200, 503),
                 },
             }),
-            this.unleashApi.bind(this),
+            this.health.bind(this),
         );
     }
 
