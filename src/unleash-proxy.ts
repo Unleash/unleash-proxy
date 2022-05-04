@@ -115,7 +115,7 @@ export default class UnleashProxy {
                 description:
                     "Returns the toggle configuration from the proxy's internal Unleash SDK. Use this to bootstrap other proxies and server-side SDKs. Requires you to provide one of the proxy's configured `serverSideTokens` for authorization.",
                 summary:
-                    "Retrive the proxy's current toggle configuration (as consumed by the internal client).",
+                    "Retrieve the proxy's current toggle configuration (as consumed by the internal client).",
             }),
             this.unleashApi.bind(this),
         );
