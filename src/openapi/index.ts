@@ -23,6 +23,22 @@ export const createOpenApiSchema = (
             apiKey: [],
         },
     ],
+    tags: [
+        {
+            name: 'Proxy client',
+            description:
+                'Feature toggle endpoints intended to be consumed by proxy clients.',
+        },
+        {
+            name: 'Server-side client',
+            description:
+                'Feature toggle endpoints related to and intended to be consumed by server-side clients and other proxies.',
+        },
+        {
+            name: 'Operational',
+            description: 'Endpoints related to operating the Unleash proxy.',
+        },
+    ],
     components: {
         securitySchemes: {
             apiKey: {
