@@ -1,8 +1,6 @@
 {
-    "toggles": [
-        "AB_super_insurance"
-    ],
-    "context": {
-        "userId": "123"
-    }
+  "toggles": ["AB_super_insurance"],
+  "context": {
+    "userId": "123"
+  }
 }

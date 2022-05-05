@@ -350,6 +350,24 @@ test('Should require metrics to have correct format', () => {
         .expect(400);
 });
 
+test('Should return errors as JSON', () => {
+    const client = new MockClient();
+
+    const proxySecrets = ['sdf'];
+    const app = createApp(
+        { unleashUrl, unleashApiToken, proxySecrets },
+        client,
+    );
+    client.emit('ready');
+
+    return request(app)
+        .post('/proxy/client/metrics')
+        .send({ some: 'blob' })
+        .set('Authorization', 'sdf')
+        .expect(400)
+        .expect('Content-Type', /json/);
+});
+
 test('Should return not ready', () => {
     const client = new MockClient();
 

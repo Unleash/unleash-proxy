@@ -1,12 +1,21 @@
 import { Request, Response, Router } from 'express';
 import { createContext } from './create-context';
-import { clientMetricsSchema } from './metrics-schema';
 import { IProxyConfig } from './config';
 import { IClient } from './client';
 import { Logger } from './logger';
-
-const NOT_READY =
-    'Unleash Proxy has not connected to Unleash API and is not ready to accept requests yet.';
+import { OpenApiService } from './openapi/openapi-service';
+import { featuresResponse } from './openapi/spec/features-response';
+import { NOT_READY_MSG, standardResponses } from './openapi/common-responses';
+import { apiRequestResponse } from './openapi/spec/api-request-response';
+import { ApiRequestSchema } from './openapi/spec/api-request-schema';
+import { FeaturesSchema } from './openapi/spec/features-schema';
+import { lookupTogglesRequest } from './openapi/spec/lookup-toggles-request';
+import { registerMetricsRequest } from './openapi/spec/register-metrics-request';
+import {
+    createDeepObjectRequestParameters,
+    createRequestParameters,
+} from './openapi/openapi-helpers';
+import { RegisterMetricsSchema } from './openapi/spec/register-metrics-schema';
 
 export default class UnleashProxy {
     private logger: Logger;
@@ -23,7 +32,11 @@ export default class UnleashProxy {
 
     public middleware: Router;
 
-    constructor(client: IClient, config: IProxyConfig) {
+    constructor(
+        client: IClient,
+        config: IProxyConfig,
+        openApiService: OpenApiService,
+    ) {
         this.logger = config.logger;
         this.clientKeys = config.clientKeys;
         this.serverSideTokens = config.serverSideSdkConfig
@@ -44,11 +57,100 @@ export default class UnleashProxy {
         this.middleware = router;
 
         // Routes
-        router.get('/health', this.health.bind(this));
-        router.get('/', this.getEnabledToggles.bind(this));
-        router.post('/', this.lookupToggles.bind(this));
-        router.post('/client/metrics', this.registerMetrics.bind(this));
-        router.get('/client/features', this.unleashApi.bind(this));
+        router.get(
+            '',
+            openApiService.validPath({
+                parameters: [
+                    ...createRequestParameters({
+                        appName: "Your application's name",
+                        userId: "The current user's ID",
+                        sessionId: "The current session's ID",
+                        remoteAddress: "Your application's IP address",
+                    }),
+                    ...createDeepObjectRequestParameters({
+                        properties: {
+                            description: 'Additional (custom) context fields',
+                            example: {
+                                region: 'Africa',
+                                betaTester: 'true',
+                            },
+                        },
+                    }),
+                ],
+                responses: {
+                    ...standardResponses(401, 503),
+                    200: featuresResponse,
+                },
+                description:
+                    'This endpoint returns the list of feature toggles that the proxy evaluates to enabled for the given context. Context values are provided as query parameters.',
+                summary:
+                    'Retrieve enabled feature toggles for the provided context.',
+                tags: ['Proxy client'],
+            }),
+            this.getEnabledToggles.bind(this),
+        );
+
+        router.post(
+            '',
+            openApiService.validPath({
+                requestBody: lookupTogglesRequest,
+                responses: {
+                    ...standardResponses(401, 503),
+                    200: featuresResponse,
+                },
+                description:
+                    'This endpoint accepts a JSON object with `context` and `toggleNames` properties. The Proxy will use the provided context values and evaluate the toggles provided in the `toggleNames` property. It returns the toggles that evaluate to false. As such, the list it returns is always a subset of the toggles you provide it.',
+                summary:
+                    'Which of the provided toggles are enabled given the provided context?',
+                tags: ['Proxy client'],
+            }),
+            this.lookupToggles.bind(this),
+        );
+
+        router.get(
+            '/client/features',
+            openApiService.validPath({
+                responses: {
+                    ...standardResponses(401, 503),
+                    200: apiRequestResponse,
+                },
+                description:
+                    "Returns the toggle configuration from the proxy's internal Unleash SDK. Use this to bootstrap other proxies and server-side SDKs. Requires you to provide one of the proxy's configured `serverSideTokens` for authorization.",
+                summary:
+                    "Retrieve the proxy's current toggle configuration (as consumed by the internal client).",
+                tags: ['Server-side client'],
+            }),
+            this.unleashApi.bind(this),
+        );
+
+        router.post(
+            '/client/metrics',
+            openApiService.validPath({
+                requestBody: registerMetricsRequest,
+                responses: standardResponses(200, 401),
+                description:
+                    "This endpoint lets you register usage metrics with Unleash. Accepts either one of the proxy's configured `serverSideTokens` or one of its `clientKeys` for authorization.",
+                summary: 'Send usage metrics to Unleash.',
+                tags: ['Operational', 'Server-side client'],
+            }),
+            this.registerMetrics.bind(this),
+        );
+
+        router.get(
+            '/health',
+            openApiService.validPath({
+                security: [],
+                responses: {
+                    ...standardResponses(200, 503),
+                },
+                description:
+                    'Returns a 200 OK if the proxy is ready to receive requests. Otherwise returns a 503 NOT READY.',
+                summary:
+                    'Check whether the proxy is ready to serve requests yet.',
+                tags: ['Operational'],
+            }),
+            this.health.bind(this),
+        );
     }
 
     private setReady() {
@@ -67,11 +169,14 @@ export default class UnleashProxy {
         this.clientKeys = clientKeys;
     }
 
-    getEnabledToggles(req: Request, res: Response): void {
+    getEnabledToggles(
+        req: Request,
+        res: Response<FeaturesSchema | string>,
+    ): void {
         const apiToken = req.header(this.clientKeysHeaderName);
 
         if (!this.ready) {
-            res.status(503).send(NOT_READY);
+            res.status(503).send(NOT_READY_MSG);
         } else if (!apiToken || !this.clientKeys.includes(apiToken)) {
             res.sendStatus(401);
         } else {
@@ -84,11 +189,11 @@ export default class UnleashProxy {
         }
     }
 
-    lookupToggles(req: Request, res: Response): void {
+    lookupToggles(req: Request, res: Response<FeaturesSchema | string>): void {
         const clientToken = req.header(this.clientKeysHeaderName);
 
         if (!this.ready) {
-            res.status(503).send(NOT_READY);
+            res.status(503).send(NOT_READY_MSG);
         } else if (!clientToken || !this.clientKeys.includes(clientToken)) {
             res.sendStatus(401);
         } else {
@@ -99,37 +204,33 @@ export default class UnleashProxy {
         }
     }
 
-    health(req: Request, res: Response): void {
+    health(_: Request, res: Response<string>): void {
         if (!this.ready) {
-            res.status(503).send(NOT_READY);
+            res.status(503).send(NOT_READY_MSG);
         } else {
             res.send('ok');
         }
     }
 
-    registerMetrics(req: Request, res: Response): void {
+    registerMetrics(
+        req: Request<{}, undefined, RegisterMetricsSchema>,
+        res: Response<string>,
+    ): void {
         const token = req.header(this.clientKeysHeaderName);
         const validTokens = [...this.clientKeys, ...this.serverSideTokens];
 
         if (token && validTokens.includes(token)) {
-            const data = req.body;
-            const { error, value } = clientMetricsSchema.validate(data);
-            if (error) {
-                this.logger.warn('Invalid metrics posted', error);
-                res.status(400).json(error);
-                return;
-            }
-            this.client.registerMetrics(value);
+            this.client.registerMetrics(req.body);
             res.sendStatus(200);
         } else {
             res.sendStatus(401);
         }
     }
 
-    unleashApi(req: Request, res: Response): void {
+    unleashApi(req: Request, res: Response<string | ApiRequestSchema>): void {
         const apiToken = req.header(this.clientKeysHeaderName);
         if (!this.ready) {
-            res.status(503).send(NOT_READY);
+            res.status(503).send(NOT_READY_MSG);
         } else if (apiToken && this.serverSideTokens.includes(apiToken)) {
             const features = this.client.getFeatureToggleDefinitions();
             res.set('Cache-control', 'public, max-age=2');
