@@ -25,7 +25,7 @@ export const createDeepObjectRequestParameters = (
             type: 'object',
             additionalProperties: { type: 'string' },
         },
-        style: 'deepObject',
+        style: 'form',
         explode: true,
         name,
         description,
