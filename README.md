@@ -124,6 +124,7 @@ Keep-Alive: timeout=5
 | namePrefix        | `UNLEASH_NAME_PREFIX`              | undefined        | no       | Used to filter features by using prefix when requesting backend values. |
 | tags        | `UNLEASH_TAGS`              | undefined        | no       | Used to filter features by using tags set for features. Format should be `tagName:tagValue,tagName2:tagValue2` |
 | clientKeysHeaderName        | `CLIENT_KEY_HEADER_NAME`              | "authorization"        | no       | The name of the HTTP header to use for client keys. Incoming requests must set the value of this header to one of the Proxy's `clientKeys` to be authorized successfully. |
+| enableOAS            | `ENABLE_OAS`                     | `false`         | no       | Set to `true` to expose the proxy's OpenAPI spec at `/docs/openapi.json` and an interactive Swagger interface at `/docs/openapi`.|
 
 
 ### Experimental options
