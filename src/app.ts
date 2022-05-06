@@ -5,6 +5,7 @@ import Client, { IClient } from './client';
 import { createProxyConfig, IProxyOption } from './config';
 
 import UnleashProxy from './unleash-proxy';
+import { OpenApiService } from './openapi/openapi-service';
 
 const corsOptions = {
     exposedHeaders: 'ETag',
@@ -19,7 +20,15 @@ export function createApp(
     const config = createProxyConfig(options);
     const client = unleashClient || new Client(config);
 
-    const proxy = new UnleashProxy(client, config);
+    const openApiService = new OpenApiService(config);
+
+    if (config.enableOAS) {
+        openApiService.useDocs(app);
+    }
+
+    openApiService.useErrorHandler(app);
+
+    const proxy = new UnleashProxy(client, config, openApiService);
 
     app.disable('x-powered-by');
     try {
@@ -29,6 +38,10 @@ export function createApp(
             `The provided "trustProxy" option was not valid ("${config.trustProxy}")`,
             err,
         );
+    }
+
+    if (typeof options.preHook === 'function') {
+        options.preHook(app);
     }
 
     app.use(cors(corsOptions));
@@ -41,6 +54,7 @@ export function createApp(
         express.json(),
         proxy.middleware,
     );
+    openApiService.useErrorHandler(app);
     return app;
 }
 

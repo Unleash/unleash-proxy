@@ -1,18 +1,18 @@
 {
-    "appName": "appName",
-    "instanceId": "instanceId",
-    "bucket": {
-      "start": "2016-11-03T07:16:43.572Z",
-      "stop": "2016-11-03T07:16:53.572Z",
-      "toggles": {
-        "app.demo": {
-          "yes": 123,
-          "no": 0
-        },
-        "A01-How.to.connect.my.app": {
-          "yes": 42,
-          "no": 3
-        }
+  "appName": "appName",
+  "instanceId": "instanceId",
+  "bucket": {
+    "start": "2016-11-03T07:16:43.572Z",
+    "stop": "2016-11-03T07:16:53.572Z",
+    "toggles": {
+      "app.demo": {
+        "yes": 123,
+        "no": 0
+      },
+      "A01-How.to.connect.my.app": {
+        "yes": 42,
+        "no": 3
       }
     }
   }
+}
