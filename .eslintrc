@@ -5,7 +5,8 @@
   },
   "extends": [
       "airbnb-typescript/base",
-      "prettier"
+      "prettier",
+      "plugin:import/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -16,7 +17,7 @@
   "root": true,
   "rules": {
       "@typescript-eslint/no-var-requires": 0,
-      "@typescript-eslint/indent": ["error", 4],
+      "@typescript-eslint/indent": "off", // prettier
       "@typescript-eslint/naming-convention": 0,
       "@typescript-eslint/space-before-function-paren": 0,
       "import/prefer-default-export": 0,
@@ -46,7 +47,6 @@
           "files": ["*.ts", "*.tsx"],
           "rules": {
               "@typescript-eslint/explicit-module-boundary-types": ["error"],
-              "@typescript-eslint/indent": ["error"],
               "@typescript-eslint/naming-convention": ["error"],
               "@typescript-eslint/space-before-function-paren": ["error"]
           }
