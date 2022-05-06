@@ -182,10 +182,8 @@ To make the integration simple we have developed proxy client SDKs. You can find
 
 ## OpenAPI
 
-The proxy can optionally expose a runtime-generated OpenAPI JSON spec and a corresponding OpenAPI UI for its API. 
+The proxy can optionally expose a runtime-generated OpenAPI JSON spec and a corresponding OpenAPI UI for its API. The OpenAPI UI page is an interactive page where you can discover and test the API endpoints the proxy exposes. The JSON spec can be used to generate an OpenAPI client with OpenAPI tooling such as the [OpenAPI generator](https://openapi-generator.tech/).
 
-To enable the JSON spec and UI, set `ENABLE_OAS` (environment variable) or `enableOAS` (in-code configuration variable) to `true`. 
+To enable the JSON spec and UI, set `ENABLE_OAS` (environment variable) or `enableOAS` (in-code configuration variable) to `true`.
 
-The spec and UI may then be found at `<base url>/docs/openapi.json` and `<base url>/docs/openapi` respectively.
-
-The swagger page is an interactive page where you can discover and test the API endpoints the proxy exposes. The JSON spec can be used to generate an OpenAPI client with OpenAPI tooling such as the [OpenAPI generator](https://openapi-generator.tech/).
+The spec and UI can then be found at `<base url>/docs/openapi.json` and `<base url>/docs/openapi` respectively.
