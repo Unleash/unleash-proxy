@@ -180,7 +180,7 @@ To make the integration simple we have developed proxy client SDKs. You can find
 - [Android Proxy SDK](https://github.com/Unleash/unleash-android-proxy-sdk)
 - [iOS Proxy SDK](https://github.com/Unleash/unleash-proxy-client-swift)
 
-## OpenAPI integration and API documentation
+## OpenAPI
 
 The proxy exposes an optional OpenAPI spec and Swagger page. If you run it with the `ENABLE_OAS` (environment variable) or `enableOAS` (in-code configuration variable) set to `true`, these can be found at `<base url>/docs/openapi.json` and `<base url>/docs/openapi` respectively.
 
