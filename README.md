@@ -124,7 +124,7 @@ Keep-Alive: timeout=5
 | namePrefix        | `UNLEASH_NAME_PREFIX`              | undefined        | no       | Used to filter features by using prefix when requesting backend values. |
 | tags        | `UNLEASH_TAGS`              | undefined        | no       | Used to filter features by using tags set for features. Format should be `tagName:tagValue,tagName2:tagValue2` |
 | clientKeysHeaderName        | `CLIENT_KEY_HEADER_NAME`              | "authorization"        | no       | The name of the HTTP header to use for client keys. Incoming requests must set the value of this header to one of the Proxy's `clientKeys` to be authorized successfully. |
-| enableOAS            | `ENABLE_OAS`                     | `false`         | no       | Set to `true` to expose the proxy's OpenAPI spec at `/docs/openapi.json` and an interactive Swagger interface at `/docs/openapi`. Read more in the [OpenAPI section](#openapi).|
+| enableOAS            | `ENABLE_OAS`                     | `false`         | no       | Set to `true` to expose the proxy's OpenAPI spec at `/docs/openapi.json` and an interactive OpenAPI UI at `/docs/openapi`. Read more in the [OpenAPI section](#openapi).|
 
 
 ### Experimental options
@@ -182,6 +182,10 @@ To make the integration simple we have developed proxy client SDKs. You can find
 
 ## OpenAPI
 
-The proxy exposes an optional OpenAPI spec and Swagger page. If you run it with the `ENABLE_OAS` (environment variable) or `enableOAS` (in-code configuration variable) set to `true`, these can be found at `<base url>/docs/openapi.json` and `<base url>/docs/openapi` respectively.
+The proxy can optionally expose a runtime-generated OpenAPI JSON spec and a corresponding OpenAPI UI for its API. 
+
+To enable the JSON spec and UI, set `ENABLE_OAS` (environment variable) or `enableOAS` (in-code configuration variable) to `true`. 
+
+The spec and UI may then be found at `<base url>/docs/openapi.json` and `<base url>/docs/openapi` respectively.
 
 The swagger page is an interactive page where you can discover and test the API endpoints the proxy exposes. The JSON spec can be used to generate an OpenAPI client with OpenAPI tooling such as the [OpenAPI generator](https://openapi-generator.tech/).
