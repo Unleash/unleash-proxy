@@ -46,7 +46,7 @@
           "files": ["*.ts", "*.tsx"],
           "rules": {
               "@typescript-eslint/explicit-module-boundary-types": ["error"],
-              "@typescript-eslint/indent": ["error"],
+              "@typescript-eslint/indent": ["off"],
               "@typescript-eslint/naming-convention": ["error"],
               "@typescript-eslint/space-before-function-paren": ["error"]
           }
