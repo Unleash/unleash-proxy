@@ -1,4 +1,4 @@
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || process.env.PROXY_PORT || 3000;
 
 const { createApp } = require('./dist/app');
 
