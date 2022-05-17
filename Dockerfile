@@ -4,7 +4,7 @@ WORKDIR /unleash-proxy
 
 COPY . .
 
-RUN yarn install --frozen-lockfile
+RUN yarn install --frozen-lockfile --ignore-scripts
 
 RUN yarn build
 
