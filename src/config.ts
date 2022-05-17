@@ -16,7 +16,6 @@ export interface IProxyOption {
     proxySecrets?: string[];
     clientKeys?: string[];
     preHook?: (app: Application) => void;
-    proxyPort?: number;
     proxyBasePath?: string;
     refreshInterval?: number;
     metricsInterval?: number;
