@@ -142,7 +142,7 @@ Some functionality is under validation and introduced as experimental, to allow 
 **STEP 1: Install dependency**
 
 ```
- npm install @unleash/proxy
+npm install @unleash/proxy
 ```
 
 
