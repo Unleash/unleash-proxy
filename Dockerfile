@@ -4,11 +4,11 @@ WORKDIR /unleash-proxy
 
 COPY . .
 
-RUN npm ci
+RUN yarn install --frozen-lockfile --ignore-scripts
 
-RUN npm run build
+RUN yarn build
 
-RUN npm prune --production
+RUN yarn install --production  --frozen-lockfile --ignore-scripts --prefer-offline
 
 FROM node:14-alpine
 
