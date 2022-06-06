@@ -4512,10 +4512,10 @@ unique-slug@^2.0.0:
   dependencies:
     imurmurhash "^0.1.4"
 
-unleash-client@^3.13.4:
-  version "3.13.4"
-  resolved "https://registry.yarnpkg.com/unleash-client/-/unleash-client-3.13.4.tgz#e23da40ea3545b08e365417cde7bc09884a9154a"
-  integrity sha512-zpKgxR0u7mRFjcNA493wqcXfdj+jGSnDahh/PFfM3lR9RKeyrq34mGp2zfkGngrbvHwn8rd43ygfWRXcOc+ofA==
+unleash-client@^3.14.1:
+  version "3.14.1"
+  resolved "https://registry.yarnpkg.com/unleash-client/-/unleash-client-3.14.1.tgz#17ed6ba1107604e4067bee9e041c9ebfec600701"
+  integrity sha512-kNVnra8M0WtA/fYUyDTwNaUdV8vnPIejigxzCYfeDGKCYvfMaUwJnlwu4HDxefeQWT/EI4ZZ1Boxv4HZy5Ra6A==
   dependencies:
     ip "^1.1.5"
     make-fetch-happen "^9.0.4"

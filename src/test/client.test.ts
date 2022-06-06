@@ -28,6 +28,7 @@ test('should add environment to isEnabled calls', () => {
     fakeUnleash.toggleDefinitions.push({
         name: 'test',
         enabled: false,
+        type: 'experiment',
         stale: false,
         strategies: [],
         variants: [],
@@ -64,6 +65,7 @@ test('should override environment to isEnabled calls', () => {
     fakeUnleash.toggleDefinitions.push({
         name: 'test',
         enabled: false,
+        type: 'experiment',
         stale: false,
         strategies: [],
         variants: [],
