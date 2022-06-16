@@ -326,7 +326,7 @@ test('should transform comma-separated list of urls from env and set cors origin
     delete process.env.CORS_ORIGIN;
 });
 
-test('should load cors origin and maxAge default values', () => {
+test('should load cors origin, maxAge and exposedHeaders default values', () => {
     const config = createProxyConfig({
         unleashUrl: 'some',
         unleashApiToken: 'some',
@@ -335,4 +335,5 @@ test('should load cors origin and maxAge default values', () => {
 
     expect(config.cors.origin).toBe('*');
     expect(config.cors.maxAge).toBe(172800);
+    expect(config.cors.exposedHeaders).toBe('ETag');
 });

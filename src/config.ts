@@ -163,6 +163,7 @@ function loadCorsOptions(option: IProxyOption): CorsOptions {
     const computedCorsOptions: CorsOptions = {
         origin: process.env.CORS_ORIGIN || '*',
         maxAge: safeNumber(process.env.CORS_MAX_AGE, 172800),
+        exposedHeaders: 'ETag',
     };
 
     // if cors origin provided contains "," it means it's a list of urls, transform to array
