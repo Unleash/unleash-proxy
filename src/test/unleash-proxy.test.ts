@@ -420,3 +420,56 @@ test('Should return 504 for proxy', () => {
         .set('Authorization', 'secret2')
         .expect(503);
 });
+
+test('Should allow every origin (*)', async () => {
+    const client = new MockClient();
+
+    const proxySecrets = ['sdf'];
+    const app = createApp(
+        { proxySecrets, unleashUrl, unleashApiToken },
+        client,
+    );
+    client.emit('ready');
+
+    const response = await request(app)
+        .get('/proxy?userId=999&tenantId=me')
+        .set('Origin', 'https://test.com')
+        .set('Authorization', 'sdf')
+        .expect(200)
+        .expect('Content-Type', /json/);
+
+    expect(response.headers).toHaveProperty('access-control-allow-origin', '*');
+});
+
+test('Should return the same origin based on cors options', async () => {
+    const client = new MockClient();
+
+    const proxySecrets = ['sdf'];
+    const app = createApp(
+        {
+            proxySecrets,
+            unleashUrl,
+            unleashApiToken,
+            cors: {
+                origin: [
+                    'https://example.com',
+                    'https://demo.unleash-hosted.com',
+                ],
+            },
+        },
+        client,
+    );
+    client.emit('ready');
+
+    const response = await request(app)
+        .get('/proxy?userId=999&tenantId=me')
+        .set('Origin', 'https://demo.unleash-hosted.com')
+        .set('Authorization', 'sdf')
+        .expect(200)
+        .expect('Content-Type', /json/);
+
+    expect(response.headers).toHaveProperty(
+        'access-control-allow-origin',
+        'https://demo.unleash-hosted.com',
+    );
+});

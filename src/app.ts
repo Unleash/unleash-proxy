@@ -7,11 +7,6 @@ import { createProxyConfig, IProxyOption } from './config';
 import UnleashProxy from './unleash-proxy';
 import { OpenApiService } from './openapi/openapi-service';
 
-const corsOptions = {
-    exposedHeaders: 'ETag',
-    maxAge: 172800,
-};
-
 export function createApp(
     options: IProxyOption,
     unleashClient?: IClient,
@@ -44,6 +39,7 @@ export function createApp(
         options.preHook(app);
     }
 
+    const corsOptions = config.cors;
     app.use(cors(corsOptions));
 
     app.use(compression());

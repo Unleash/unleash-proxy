@@ -125,6 +125,10 @@ Keep-Alive: timeout=5
 | tags                 | `UNLEASH_TAGS`                   | undefined       |    no    | Used to filter features by using tags set for features. Format should be `tagName:tagValue,tagName2:tagValue2`                                                                                                                                                                                                                                                                                                                                                           |
 | clientKeysHeaderName | `CLIENT_KEY_HEADER_NAME`         | "authorization" |    no    | The name of the HTTP header to use for client keys. Incoming requests must set the value of this header to one of the Proxy's `clientKeys` to be authorized successfully.                                                                                                                                                                                                                                                                                                |
 | enableOAS            | `ENABLE_OAS`                     | `false`         |    no    | Set to `true` to expose the proxy's OpenAPI spec at `/docs/openapi.json` and an interactive OpenAPI UI at `/docs/openapi`. Read more in the [OpenAPI section](#openapi).                                                                                                                                                                                                                                                                                                 |
+| cors | n/a        | n/a             | no       | Pass custom options for CORS module, see [cors module](https://www.npmjs.com/package/cors#configuration-options) |
+| cors.origin | `CORS_ORIGIN`        | *             | no       | Origin URL or list of URLs to whitelist for CORS |
+| cors.maxAge | `CORS_MAX_AGE`       | 172800        | no       | Maximum number of seconds to cache CORS results  |
+
 
 
 ### Experimental options
@@ -148,7 +152,7 @@ npm install @unleash/proxy
 
 **STEP 2: use in your code**
 
-```
+```js
 const port = 3000;
 
 const { createApp } = require('@unleash/proxy');
