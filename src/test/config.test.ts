@@ -270,3 +270,70 @@ test('should read bootstrap from env vars', () => {
     delete process.env.EXP_BOOTSTRAP_URL;
     delete process.env.EXP_BOOTSTRAP_AUTHORIZATION;
 });
+
+test('should load cors origin and max age from env', () => {
+    process.env.CORS_ORIGIN = 'https://my-custom-domain.com/test';
+    process.env.CORS_MAX_AGE = '1234567';
+
+    const config = createProxyConfig({
+        unleashUrl: 'some',
+        unleashApiToken: 'some',
+        clientKeys: ['s1'],
+    });
+
+    expect(config.cors.origin).toBe('https://my-custom-domain.com/test');
+    expect(config.cors.maxAge).toBe(1234567);
+
+    delete process.env.CORS_ORIGIN;
+    delete process.env.CORS_MAX_AGE;
+});
+
+test('should load cors options provided', () => {
+    const config = createProxyConfig({
+        unleashUrl: 'some',
+        unleashApiToken: 'some',
+        clientKeys: ['s1'],
+        cors: {
+            origin: ['https://test.com/x', 'http://example.com'],
+            maxAge: 9876,
+            optionsSuccessStatus: 418,
+        },
+    });
+
+    expect(config.cors.origin).toStrictEqual([
+        'https://test.com/x',
+        'http://example.com',
+    ]);
+    expect(config.cors.maxAge).toBe(9876);
+    expect(config.cors.optionsSuccessStatus).toBe(418);
+});
+
+test('should transform comma-separated list of urls from env and set cors origin as an array', () => {
+    process.env.CORS_ORIGIN =
+        'https://my-custom-domain.com,https://example.com/my-custom-page';
+
+    const config = createProxyConfig({
+        unleashUrl: 'some',
+        unleashApiToken: 'some',
+        clientKeys: ['s1'],
+    });
+
+    expect(config.cors.origin).toStrictEqual([
+        'https://my-custom-domain.com',
+        'https://example.com/my-custom-page',
+    ]);
+
+    delete process.env.CORS_ORIGIN;
+});
+
+test('should load cors origin, maxAge and exposedHeaders default values', () => {
+    const config = createProxyConfig({
+        unleashUrl: 'some',
+        unleashApiToken: 'some',
+        clientKeys: ['s1'],
+    });
+
+    expect(config.cors.origin).toBe('*');
+    expect(config.cors.maxAge).toBe(172800);
+    expect(config.cors.exposedHeaders).toBe('ETag');
+});

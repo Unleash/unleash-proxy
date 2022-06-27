@@ -1,3 +1,4 @@
+import { CorsOptions } from 'cors';
 import { Application } from 'express';
 import { Strategy, TagFilter } from 'unleash-client';
 import { BootstrapOptions } from 'unleash-client/lib/repository/bootstrap-provider';
@@ -28,6 +29,7 @@ export interface IProxyOption {
     tags?: Array<TagFilter>;
     clientKeysHeaderName?: string;
     enableOAS?: boolean;
+    cors?: CorsOptions;
     // experimental options
     expBootstrap?: BootstrapOptions;
     expServerSideSdkConfig?: ServerSideSdkConfig;
@@ -54,6 +56,7 @@ export interface IProxyConfig {
     clientKeysHeaderName: string;
     serverSideSdkConfig?: ServerSideSdkConfig;
     bootstrap?: BootstrapOptions;
+    cors: CorsOptions;
 }
 
 function resolveStringToArray(value?: string): string[] | undefined {
@@ -152,6 +155,36 @@ function loadBootstrapOptions(
     return undefined;
 }
 
+function loadCorsOptions(option: IProxyOption): CorsOptions {
+    if (option.cors) {
+        return option.cors;
+    }
+
+    const computedCorsOptions: CorsOptions = {
+        origin: process.env.CORS_ORIGIN || '*',
+        maxAge: safeNumber(process.env.CORS_MAX_AGE, 172800),
+        exposedHeaders: 'ETag',
+    };
+
+    // if cors origin provided contains "," it means it's a list of urls, transform to array
+    if (
+        typeof computedCorsOptions.origin === 'string' &&
+        computedCorsOptions.origin.includes(',')
+    ) {
+        const transformedOriginList = resolveStringToArray(
+            computedCorsOptions.origin,
+        );
+        if (!transformedOriginList) {
+            throw new TypeError(
+                `corsOptions.origin (CORS_ORIGIN) unable to transform string to array`,
+            );
+        }
+        computedCorsOptions.origin = transformedOriginList;
+    }
+
+    return computedCorsOptions;
+}
+
 export function createProxyConfig(option: IProxyOption): IProxyConfig {
     const unleashUrl = option.unleashUrl || process.env.UNLEASH_URL;
     if (!unleashUrl) {
@@ -224,5 +257,6 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         bootstrap: loadBootstrapOptions(option),
         enableOAS:
             option.enableOAS || safeBoolean(process.env.ENABLE_OAS, false),
+        cors: loadCorsOptions(option),
     };
 }
