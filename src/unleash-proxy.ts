@@ -163,8 +163,7 @@ export default class UnleashProxy {
                 },
                 description:
                     'Returns a 200 and valid Prometheus text syntax if the proxy is ready to receive requests. Otherwise returns a 503 NOT READY.',
-                summary:
-                    'Check whether the proxy is up and running',
+                summary: 'Check whether the proxy is up and running',
                 tags: ['Operational'],
             }),
             this.prometheus.bind(this),
@@ -234,9 +233,10 @@ export default class UnleashProxy {
         if (!this.ready) {
             res.status(503).send(NOT_READY_MSG);
         } else {
-            const prometheusResponse = '# HELP unleash_proxy_up Indication that the service is up. \n'
-              + '# TYPE unleash_proxy_up counter\n'
-              + 'unleash_proxy_up 1\n';
+            const prometheusResponse =
+                '# HELP unleash_proxy_up Indication that the service is up. \n' +
+                '# TYPE unleash_proxy_up counter\n' +
+                'unleash_proxy_up 1\n';
             res.set('Content-type', 'text/plain');
             res.send(prometheusResponse);
         }
