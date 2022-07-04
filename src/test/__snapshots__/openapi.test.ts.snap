@@ -754,7 +754,7 @@ Object {
         ],
       },
     },
-    "/proxy/prometheus": Object {
+    "/proxy/internal-backstage/prometheus": Object {
       "get": Object {
         "description": "Returns a 200 and valid Prometheus text syntax if the proxy is ready to receive requests. Otherwise returns a 503 NOT READY.",
         "responses": Object {

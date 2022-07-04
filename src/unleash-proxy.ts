@@ -154,7 +154,7 @@ export default class UnleashProxy {
         );
 
         router.get(
-            '/prometheus',
+            '/internal-backstage/prometheus',
             openApiService.validPath({
                 security: [],
                 responses: {
