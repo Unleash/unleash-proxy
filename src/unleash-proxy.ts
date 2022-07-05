@@ -7,6 +7,7 @@ import { OpenApiService } from './openapi/openapi-service';
 import { featuresResponse } from './openapi/spec/features-response';
 import { NOT_READY_MSG, standardResponses } from './openapi/common-responses';
 import { apiRequestResponse } from './openapi/spec/api-request-response';
+import { prometheusRequestResponse } from './openapi/spec/prometheus-request-response';
 import { ApiRequestSchema } from './openapi/spec/api-request-schema';
 import { FeaturesSchema } from './openapi/spec/features-schema';
 import { lookupTogglesRequest } from './openapi/spec/lookup-toggles-request';
@@ -151,6 +152,22 @@ export default class UnleashProxy {
             }),
             this.health.bind(this),
         );
+
+        router.get(
+            '/internal-backstage/prometheus',
+            openApiService.validPath({
+                security: [],
+                responses: {
+                    ...standardResponses(503),
+                    200: prometheusRequestResponse,
+                },
+                description:
+                    'Returns a 200 and valid Prometheus text syntax if the proxy is ready to receive requests. Otherwise returns a 503 NOT READY.',
+                summary: 'Check whether the proxy is up and running',
+                tags: ['Operational'],
+            }),
+            this.prometheus.bind(this),
+        );
     }
 
     private setReady() {
@@ -209,6 +226,19 @@ export default class UnleashProxy {
             res.status(503).send(NOT_READY_MSG);
         } else {
             res.send('ok');
+        }
+    }
+
+    prometheus(_: Request, res: Response<string>): void {
+        if (!this.ready) {
+            res.status(503).send(NOT_READY_MSG);
+        } else {
+            const prometheusResponse =
+                '# HELP unleash_proxy_up Indication that the service is up. \n' +
+                '# TYPE unleash_proxy_up counter\n' +
+                'unleash_proxy_up 1\n';
+            res.set('Content-type', 'text/plain');
+            res.send(prometheusResponse);
         }
     }
 

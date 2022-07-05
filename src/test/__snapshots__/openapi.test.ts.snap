@@ -754,6 +754,40 @@ Object {
         ],
       },
     },
+    "/proxy/internal-backstage/prometheus": Object {
+      "get": Object {
+        "description": "Returns a 200 and valid Prometheus text syntax if the proxy is ready to receive requests. Otherwise returns a 503 NOT READY.",
+        "responses": Object {
+          "200": Object {
+            "content": Object {
+              "text/plain": Object {
+                "schema": Object {
+                  "example": "metric_name 1",
+                  "type": "string",
+                },
+              },
+            },
+            "description": "The request was successful. Response in plain text format conforming to Prometheus exposition format",
+          },
+          "503": Object {
+            "content": Object {
+              "text/plain": Object {
+                "schema": Object {
+                  "example": "The Unleash Proxy has not connected to the Unleash API and is not ready to accept requests yet.",
+                  "type": "string",
+                },
+              },
+            },
+            "description": "The proxy isn't ready to accept requests yet.",
+          },
+        },
+        "security": Array [],
+        "summary": "Check whether the proxy is up and running",
+        "tags": Array [
+          "Operational",
+        ],
+      },
+    },
   },
   "security": Array [
     Object {
