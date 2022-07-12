@@ -473,3 +473,21 @@ test('Should return the same origin based on cors options', async () => {
         'https://demo.unleash-hosted.com',
     );
 });
+
+test('POST /features: JSON parse errors are returned as 400 JSON responses', () => {
+    const client = new MockClient();
+
+    const proxySecrets = ['sdf'];
+    const app = createApp(
+        { unleashUrl, unleashApiToken, proxySecrets },
+        client,
+    );
+    client.emit('ready');
+
+    return request(app)
+        .post('/proxy/features')
+        .send('{toggles: []}')
+        .set('Authorization', 'sdf')
+        .expect(400)
+        .expect('Content-Type', /json/);
+});
