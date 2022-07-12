@@ -17,6 +17,7 @@ import {
     createRequestParameters,
 } from './openapi/openapi-helpers';
 import { RegisterMetricsSchema } from './openapi/spec/register-metrics-schema';
+import { LookupTogglesSchema } from './openapi/spec/lookup-toggles-schema';
 
 export default class UnleashProxy {
     private logger: Logger;
@@ -206,7 +207,10 @@ export default class UnleashProxy {
         }
     }
 
-    lookupToggles(req: Request, res: Response<FeaturesSchema | string>): void {
+    lookupToggles(
+        req: Request<any, any, LookupTogglesSchema>,
+        res: Response<FeaturesSchema | string>,
+    ): void {
         const clientToken = req.header(this.clientKeysHeaderName);
 
         if (!this.ready) {
