@@ -355,7 +355,7 @@ Object {
             },
             "type": "object",
           },
-          "toggleNames": Object {
+          "toggles": Object {
             "example": Array [
               "myToggle",
               "yourToggle",
