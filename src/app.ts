@@ -21,8 +21,6 @@ export function createApp(
         openApiService.useDocs(app);
     }
 
-    openApiService.useErrorHandler(app);
-
     const proxy = new UnleashProxy(client, config, openApiService);
 
     app.disable('x-powered-by');
