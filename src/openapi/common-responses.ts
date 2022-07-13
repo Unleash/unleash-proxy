@@ -3,7 +3,7 @@ import { OpenAPIV3 } from 'openapi-types';
 export const NOT_READY_MSG =
     'The Unleash Proxy has not connected to the Unleash API and is not ready to accept requests yet.';
 
-export const notReadyResponse = {
+export const notReadyResponse: OpenAPIV3.ResponseObject = {
     description: "The proxy isn't ready to accept requests yet.",
     content: {
         'text/plain': {
@@ -13,13 +13,13 @@ export const notReadyResponse = {
             },
         },
     },
-} as const;
+};
 
-export const unauthorizedResponse = {
+export const unauthorizedResponse: OpenAPIV3.ResponseObject = {
     description: 'Authorization information is missing or invalid.',
-} as const;
+};
 
-export const badRequestResponse = {
+export const badRequestResponse: OpenAPIV3.ResponseObject = {
     description: 'The provided request data is invalid.',
     content: {
         'application/json': {
@@ -51,9 +51,9 @@ export const badRequestResponse = {
             },
         },
     },
-} as const;
+};
 
-export const emptySuccessResponse = {
+export const emptySuccessResponse: OpenAPIV3.ResponseObject = {
     description: 'The request was successful.',
     content: {
         'text/plain': {
@@ -63,7 +63,7 @@ export const emptySuccessResponse = {
             },
         },
     },
-} as const;
+};
 
 const commonResponses = {
     200: emptySuccessResponse,
