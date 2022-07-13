@@ -97,6 +97,30 @@ test('Should handle POST with empty/nonsensical body', async () => {
     );
 });
 
+test('Should handle POST with extra context properties', () => {
+    const client = new MockClient();
+
+    const proxySecrets = ['sdf'];
+    const app = createApp(
+        { proxySecrets, unleashUrl, unleashApiToken },
+        client,
+    );
+    client.emit('ready');
+
+    return request(app)
+        .post('/proxy')
+        .send({
+            context: {
+                customProperty: 'string',
+                properties: { otherCustomProperty: 24 },
+            },
+        })
+        .set('Accept', 'application/json')
+        .set('Authorization', 'sdf')
+        .expect(200)
+        .expect('Content-Type', /json/);
+});
+
 test('Should handle POST with toggle names', () => {
     const toggles = [
         {
