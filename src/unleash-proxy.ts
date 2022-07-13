@@ -218,9 +218,10 @@ export default class UnleashProxy {
         } else if (!clientToken || !this.clientKeys.includes(clientToken)) {
             res.sendStatus(401);
         } else {
-            const { context, toggles: toggleNames = [] } = req.body;
+            const { context = {}, toggles: toggleNames = [] } = req.body;
 
             const toggles = this.client.getDefinedToggles(toggleNames, context);
+
             res.send({ toggles });
         }
     }

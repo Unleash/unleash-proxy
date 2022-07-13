@@ -2,6 +2,7 @@ import { createSchemaObject, CreateSchemaType } from '../openapi-types';
 
 export const schema = {
     type: 'object',
+    additionalProperties: false,
     properties: {
         appName: { type: 'string' },
         environment: { type: 'string' },
@@ -10,7 +11,9 @@ export const schema = {
         remoteAddress: { type: 'string' },
         properties: {
             type: 'object',
-            additionalProperties: { type: 'string' },
+            additionalProperties: {
+                anyOf: [{ type: 'string' }, { type: 'number' }],
+            },
             example: {
                 region: 'Africa',
                 betaTester: 'true',
