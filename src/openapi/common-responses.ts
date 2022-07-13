@@ -3,7 +3,7 @@ import { OpenAPIV3 } from 'openapi-types';
 export const NOT_READY_MSG =
     'The Unleash Proxy has not connected to the Unleash API and is not ready to accept requests yet.';
 
-export const notReadyResponse: OpenAPIV3.ResponseObject = {
+export const notReadyResponse = {
     description: "The proxy isn't ready to accept requests yet.",
     content: {
         'text/plain': {
@@ -15,11 +15,11 @@ export const notReadyResponse: OpenAPIV3.ResponseObject = {
     },
 } as const;
 
-export const unauthorizedResponse: OpenAPIV3.ResponseObject = {
+export const unauthorizedResponse = {
     description: 'Authorization information is missing or invalid.',
 } as const;
 
-export const emptySuccessResponse: OpenAPIV3.ResponseObject = {
+export const emptySuccessResponse = {
     description: 'The request was successful.',
     content: {
         'text/plain': {
@@ -31,21 +31,21 @@ export const emptySuccessResponse: OpenAPIV3.ResponseObject = {
     },
 } as const;
 
-const commonResponses: Record<string, OpenAPIV3.ResponseObject> = {
+const commonResponses = {
     200: emptySuccessResponse,
     401: unauthorizedResponse,
     503: notReadyResponse,
 } as const;
 
+type CommonResponses = typeof commonResponses;
+
 export const standardResponses = (
-    ...statusCodes: number[]
-): OpenAPIV3.ResponsesObject =>
-    statusCodes
-        .filter((n) => n in commonResponses)
-        .reduce(
-            (acc, n) => ({
-                ...acc,
-                [n]: commonResponses[String(n)] as OpenAPIV3.ResponseObject,
-            }),
-            {},
-        );
+    ...statusCodes: (keyof CommonResponses)[]
+): Partial<CommonResponses> =>
+    statusCodes.reduce(
+        (acc, n) => ({
+            ...acc,
+            [n]: commonResponses[n],
+        }),
+        {} as Partial<CommonResponses>,
+    );
