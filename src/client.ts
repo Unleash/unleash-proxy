@@ -148,7 +148,7 @@ class Client extends EventEmitter implements IClient {
                 name,
                 enabled,
                 variant: this.unleash.getVariant(name, context),
-                impressionData: definition.impressionData,
+                impressionData: definition?.impressionData ?? false,
             };
         });
     }
