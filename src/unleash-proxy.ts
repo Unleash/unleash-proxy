@@ -97,7 +97,7 @@ export default class UnleashProxy {
             openApiService.validPath({
                 requestBody: lookupTogglesRequest,
                 responses: {
-                    ...standardResponses(401, 503),
+                    ...standardResponses(400, 401, 503),
                     200: featuresResponse,
                 },
                 description:
@@ -129,7 +129,7 @@ export default class UnleashProxy {
             '/client/metrics',
             openApiService.validPath({
                 requestBody: registerMetricsRequest,
-                responses: standardResponses(200, 401),
+                responses: standardResponses(200, 400, 401),
                 description:
                     "This endpoint lets you register usage metrics with Unleash. Accepts either one of the proxy's configured `serverSideTokens` or one of its `clientKeys` for authorization.",
                 summary: 'Send usage metrics to Unleash.',
