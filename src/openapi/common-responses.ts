@@ -19,6 +19,40 @@ export const unauthorizedResponse = {
     description: 'Authorization information is missing or invalid.',
 } as const;
 
+export const badRequestResponse = {
+    description: 'The provided request data is invalid.',
+    content: {
+        'application/json': {
+            schema: {
+                type: 'object',
+                required: ['error'],
+                properties: {
+                    error: { type: 'string' },
+                    validation: {
+                        type: 'array',
+                        items: { type: 'object' },
+                    },
+                },
+                example: {
+                    error: 'Request validation failed',
+                    validation: [
+                        {
+                            keyword: 'required',
+                            dataPath: '.body',
+                            schemaPath:
+                                '#/components/schemas/registerMetricsSchema/required',
+                            params: {
+                                missingProperty: 'appName',
+                            },
+                            message: "should have required property 'appName'",
+                        },
+                    ],
+                },
+            },
+        },
+    },
+} as const;
+
 export const emptySuccessResponse = {
     description: 'The request was successful.',
     content: {
@@ -33,6 +67,7 @@ export const emptySuccessResponse = {
 
 const commonResponses = {
     200: emptySuccessResponse,
+    400: badRequestResponse,
     401: unauthorizedResponse,
     503: notReadyResponse,
 } as const;
