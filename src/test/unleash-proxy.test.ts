@@ -84,6 +84,7 @@ test('Should handle POST with empty/nonsensical body', async () => {
         [{ blah: 'hello' }, undefined, {}].map((body) =>
             request(app)
                 .post('/proxy')
+                .type('json')
                 .send(body)
                 .set('Accept', 'application/json')
                 .set('Authorization', 'sdf')
