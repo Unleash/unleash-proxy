@@ -83,6 +83,7 @@ class Client extends EventEmitter implements IClient {
             tags: config.tags,
             customHeadersFunction,
             bootstrap: config.bootstrap,
+            httpOptions: config.httpOptions
         });
 
         // Custom metrics Instance
@@ -94,6 +95,7 @@ class Client extends EventEmitter implements IClient {
             metricsInterval: config.metricsInterval,
             url: config.unleashUrl,
             customHeadersFunction,
+            httpOptions: config.httpOptions
         });
 
         this.metrics.on('error', (msg) => this.logger.error(`metrics: ${msg}`));

@@ -4,6 +4,7 @@ import { Strategy, TagFilter } from 'unleash-client';
 import { BootstrapOptions } from 'unleash-client/lib/repository/bootstrap-provider';
 import { Logger, LogLevel, SimpleLogger } from './logger';
 import { generateInstanceId } from './util';
+import { HttpOptions } from 'unleash-client/lib/http-options';
 
 export interface ServerSideSdkConfig {
     tokens: string[];
@@ -33,6 +34,7 @@ export interface IProxyOption {
     // experimental options
     expBootstrap?: BootstrapOptions;
     expServerSideSdkConfig?: ServerSideSdkConfig;
+    httpOptions?: HttpOptions;
 }
 
 export interface IProxyConfig {
@@ -57,6 +59,7 @@ export interface IProxyConfig {
     serverSideSdkConfig?: ServerSideSdkConfig;
     bootstrap?: BootstrapOptions;
     cors: CorsOptions;
+    httpOptions?: HttpOptions;
 }
 
 function resolveStringToArray(value?: string): string[] | undefined {
@@ -258,5 +261,6 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         enableOAS:
             option.enableOAS || safeBoolean(process.env.ENABLE_OAS, false),
         cors: loadCorsOptions(option),
+        ...(!!option.httpOptions ? { httpOptions: option.httpOptions } : {})
     };
 }

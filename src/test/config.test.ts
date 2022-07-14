@@ -1,6 +1,7 @@
 import * as path from 'path';
 import { Strategy } from 'unleash-client';
 import { createProxyConfig } from '../config';
+import * as https from "https";
 
 test('should require "unleashUrl', () => {
     const t = () => createProxyConfig({});
@@ -337,3 +338,15 @@ test('should load cors origin, maxAge and exposedHeaders default values', () => 
     expect(config.cors.maxAge).toBe(172800);
     expect(config.cors.exposedHeaders).toBe('ETag');
 });
+
+test('should load passed in http agent', () => {
+    const config = createProxyConfig({
+        unleashUrl: 'some',
+        unleashApiToken: 'some',
+        clientKeys: ['s1'],
+        httpOptions: {
+            agent: _ => https.globalAgent
+        }
+    });
+    expect(config.httpOptions?.agent?.(new URL('https://example.com'))).toBe(https.globalAgent);
+})
