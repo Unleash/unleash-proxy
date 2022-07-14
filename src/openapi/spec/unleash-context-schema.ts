@@ -10,7 +10,9 @@ export const schema = {
         remoteAddress: { type: 'string' },
         properties: {
             type: 'object',
-            additionalProperties: { type: 'string' },
+            additionalProperties: {
+                anyOf: [{ type: 'string' }, { type: 'number' }],
+            },
             example: {
                 region: 'Africa',
                 betaTester: 'true',

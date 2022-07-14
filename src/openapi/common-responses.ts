@@ -13,11 +13,45 @@ export const notReadyResponse: OpenAPIV3.ResponseObject = {
             },
         },
     },
-} as const;
+};
 
 export const unauthorizedResponse: OpenAPIV3.ResponseObject = {
     description: 'Authorization information is missing or invalid.',
-} as const;
+};
+
+export const badRequestResponse: OpenAPIV3.ResponseObject = {
+    description: 'The provided request data is invalid.',
+    content: {
+        'application/json': {
+            schema: {
+                type: 'object',
+                required: ['error'],
+                properties: {
+                    error: { type: 'string' },
+                    validation: {
+                        type: 'array',
+                        items: { type: 'object' },
+                    },
+                },
+                example: {
+                    error: 'Request validation failed',
+                    validation: [
+                        {
+                            keyword: 'required',
+                            dataPath: '.body',
+                            schemaPath:
+                                '#/components/schemas/registerMetricsSchema/required',
+                            params: {
+                                missingProperty: 'appName',
+                            },
+                            message: "should have required property 'appName'",
+                        },
+                    ],
+                },
+            },
+        },
+    },
+};
 
 export const emptySuccessResponse: OpenAPIV3.ResponseObject = {
     description: 'The request was successful.',
@@ -29,23 +63,24 @@ export const emptySuccessResponse: OpenAPIV3.ResponseObject = {
             },
         },
     },
-} as const;
+};
 
-const commonResponses: Record<string, OpenAPIV3.ResponseObject> = {
+const commonResponses = {
     200: emptySuccessResponse,
+    400: badRequestResponse,
     401: unauthorizedResponse,
     503: notReadyResponse,
 } as const;
 
+type CommonResponses = typeof commonResponses;
+
 export const standardResponses = (
-    ...statusCodes: number[]
-): OpenAPIV3.ResponsesObject =>
-    statusCodes
-        .filter((n) => n in commonResponses)
-        .reduce(
-            (acc, n) => ({
-                ...acc,
-                [n]: commonResponses[String(n)] as OpenAPIV3.ResponseObject,
-            }),
-            {},
-        );
+    ...statusCodes: (keyof CommonResponses)[]
+): Partial<CommonResponses> =>
+    statusCodes.reduce(
+        (acc, n) => ({
+            ...acc,
+            [n]: commonResponses[n],
+        }),
+        {} as Partial<CommonResponses>,
+    );

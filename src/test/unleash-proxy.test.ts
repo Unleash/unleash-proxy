@@ -58,7 +58,7 @@ test('Should return list of toggles', () => {
         });
 });
 
-test('Should handle POST with empty body', () => {
+test('Should handle POST with empty/nonsensical body', async () => {
     const toggles = [
         {
             name: 'test',
@@ -80,16 +80,45 @@ test('Should handle POST with empty body', () => {
     );
     client.emit('ready');
 
+    await Promise.all(
+        [{ blah: 'hello' }, undefined, {}].map((body) =>
+            request(app)
+                .post('/proxy')
+                .type('json')
+                .send(body)
+                .set('Accept', 'application/json')
+                .set('Authorization', 'sdf')
+                .expect(200)
+                .expect('Content-Type', /json/)
+                .then((response) => {
+                    expect(response.body.toggles).toHaveLength(0);
+                }),
+        ),
+    );
+});
+
+test('Should handle POST with extra context properties', () => {
+    const client = new MockClient();
+
+    const proxySecrets = ['sdf'];
+    const app = createApp(
+        { proxySecrets, unleashUrl, unleashApiToken },
+        client,
+    );
+    client.emit('ready');
+
     return request(app)
         .post('/proxy')
-        .send({ blah: 'hello' })
+        .send({
+            context: {
+                customProperty: 'string',
+                properties: { otherCustomProperty: 24 },
+            },
+        })
         .set('Accept', 'application/json')
         .set('Authorization', 'sdf')
         .expect(200)
-        .expect('Content-Type', /json/)
-        .then((response) => {
-            expect(response.body.toggles).toHaveLength(0);
-        });
+        .expect('Content-Type', /json/);
 });
 
 test('Should handle POST with toggle names', () => {
@@ -472,4 +501,25 @@ test('Should return the same origin based on cors options', async () => {
         'access-control-allow-origin',
         'https://demo.unleash-hosted.com',
     );
+});
+
+test('Should return 400 bad request for malformed JSON', async () => {
+    const body = '{ toggles": [] }';
+    const client = new MockClient();
+
+    const proxySecrets = ['sdf'];
+    const app = createApp(
+        { proxySecrets, unleashUrl, unleashApiToken },
+        client,
+    );
+    client.emit('ready');
+
+    await request(app)
+        .post('/proxy')
+        .type('json')
+        .send(body)
+        .set('Accept', 'application/json')
+        .set('Authorization', 'sdf')
+        .expect(400)
+        .expect('Content-Type', /json/);
 });

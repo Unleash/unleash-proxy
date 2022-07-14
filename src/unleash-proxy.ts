@@ -1,4 +1,5 @@
 import { Request, Response, Router } from 'express';
+import { Context } from 'unleash-client';
 import { createContext } from './create-context';
 import { IProxyConfig } from './config';
 import { IClient } from './client';
@@ -17,6 +18,7 @@ import {
     createRequestParameters,
 } from './openapi/openapi-helpers';
 import { RegisterMetricsSchema } from './openapi/spec/register-metrics-schema';
+import { LookupTogglesSchema } from './openapi/spec/lookup-toggles-schema';
 
 export default class UnleashProxy {
     private logger: Logger;
@@ -96,11 +98,11 @@ export default class UnleashProxy {
             openApiService.validPath({
                 requestBody: lookupTogglesRequest,
                 responses: {
-                    ...standardResponses(401, 503),
+                    ...standardResponses(400, 401, 503),
                     200: featuresResponse,
                 },
                 description:
-                    'This endpoint accepts a JSON object with `context` and `toggleNames` properties. The Proxy will use the provided context values and evaluate the toggles provided in the `toggleNames` property. It returns the toggles that evaluate to false. As such, the list it returns is always a subset of the toggles you provide it.',
+                    'This endpoint accepts a JSON object with `context` and `toggles` properties. The Proxy will use the provided context values and evaluate the toggles provided in the `toggle` property. It returns the toggles that evaluate to false. As such, the list it returns is always a subset of the toggles you provide it.',
                 summary:
                     'Which of the provided toggles are enabled given the provided context?',
                 tags: ['Proxy client'],
@@ -128,7 +130,7 @@ export default class UnleashProxy {
             '/client/metrics',
             openApiService.validPath({
                 requestBody: registerMetricsRequest,
-                responses: standardResponses(200, 401),
+                responses: standardResponses(200, 400, 401),
                 description:
                     "This endpoint lets you register usage metrics with Unleash. Accepts either one of the proxy's configured `serverSideTokens` or one of its `clientKeys` for authorization.",
                 summary: 'Send usage metrics to Unleash.',
@@ -206,7 +208,10 @@ export default class UnleashProxy {
         }
     }
 
-    lookupToggles(req: Request, res: Response<FeaturesSchema | string>): void {
+    lookupToggles(
+        req: Request<any, any, LookupTogglesSchema>,
+        res: Response<FeaturesSchema | string>,
+    ): void {
         const clientToken = req.header(this.clientKeysHeaderName);
 
         if (!this.ready) {
@@ -214,9 +219,13 @@ export default class UnleashProxy {
         } else if (!clientToken || !this.clientKeys.includes(clientToken)) {
             res.sendStatus(401);
         } else {
-            const { context, toggles: toggleNames = [] } = req.body;
+            const { context = {}, toggles: toggleNames = [] } = req.body;
 
-            const toggles = this.client.getDefinedToggles(toggleNames, context);
+            const toggles = this.client.getDefinedToggles(
+                toggleNames,
+                context as Context,
+            );
+
             res.send({ toggles });
         }
     }

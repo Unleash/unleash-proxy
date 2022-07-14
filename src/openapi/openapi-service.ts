@@ -41,11 +41,20 @@ export class OpenApiService {
     useErrorHandler(app: Application): void {
         app.use((err: any, _: any, res: any, next: any) => {
             if (err && err.status && err.validationErrors) {
-                res.status(err.status).json({
+                res.status(err.statusCode).json({
                     error: err.message,
                     validation: err.validationErrors,
                 });
-            } else {
+            } else if (err instanceof SyntaxError) {
+                res.status(400).json({
+                    error: `We were unable to parse the data you provided. Please check it for syntax errors. The message we got was: "${err.message}"`,
+                });
+            } else if (err) {
+                res.status(500).json({
+                    error: `Whoops! We dropped the ball on this one (an unexpected error occurred): ${err.message}`,
+                });
+            }
+            {
                 next();
             }
         });

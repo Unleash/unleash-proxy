@@ -5,7 +5,7 @@ export const schema = {
     type: 'object',
     properties: {
         context: unleashContextSchema,
-        toggleNames: {
+        toggles: {
             type: 'array',
             example: ['myToggle', 'yourToggle'],
             items: {

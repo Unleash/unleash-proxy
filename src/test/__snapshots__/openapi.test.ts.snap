@@ -335,7 +335,14 @@ Object {
               },
               "properties": Object {
                 "additionalProperties": Object {
-                  "type": "string",
+                  "anyOf": Array [
+                    Object {
+                      "type": "string",
+                    },
+                    Object {
+                      "type": "number",
+                    },
+                  ],
                 },
                 "example": Object {
                   "betaTester": "true",
@@ -355,7 +362,7 @@ Object {
             },
             "type": "object",
           },
-          "toggleNames": Object {
+          "toggles": Object {
             "example": Array [
               "myToggle",
               "yourToggle",
@@ -453,7 +460,14 @@ Object {
           },
           "properties": Object {
             "additionalProperties": Object {
-              "type": "string",
+              "anyOf": Array [
+                Object {
+                  "type": "string",
+                },
+                Object {
+                  "type": "number",
+                },
+              ],
             },
             "example": Object {
               "betaTester": "true",
@@ -608,7 +622,7 @@ Object {
         ],
       },
       "post": Object {
-        "description": "This endpoint accepts a JSON object with \`context\` and \`toggleNames\` properties. The Proxy will use the provided context values and evaluate the toggles provided in the \`toggleNames\` property. It returns the toggles that evaluate to false. As such, the list it returns is always a subset of the toggles you provide it.",
+        "description": "This endpoint accepts a JSON object with \`context\` and \`toggles\` properties. The Proxy will use the provided context values and evaluate the toggles provided in the \`toggle\` property. It returns the toggles that evaluate to false. As such, the list it returns is always a subset of the toggles you provide it.",
         "requestBody": Object {
           "content": Object {
             "application/json": Object {
@@ -628,6 +642,44 @@ Object {
               },
             },
             "description": "The list of enabled toggles for the provided context.",
+          },
+          "400": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "example": Object {
+                    "error": "Request validation failed",
+                    "validation": Array [
+                      Object {
+                        "dataPath": ".body",
+                        "keyword": "required",
+                        "message": "should have required property 'appName'",
+                        "params": Object {
+                          "missingProperty": "appName",
+                        },
+                        "schemaPath": "#/components/schemas/registerMetricsSchema/required",
+                      },
+                    ],
+                  },
+                  "properties": Object {
+                    "error": Object {
+                      "type": "string",
+                    },
+                    "validation": Object {
+                      "items": Object {
+                        "type": "object",
+                      },
+                      "type": "array",
+                    },
+                  },
+                  "required": Array [
+                    "error",
+                  ],
+                  "type": "object",
+                },
+              },
+            },
+            "description": "The provided request data is invalid.",
           },
           "401": Object {
             "description": "Authorization information is missing or invalid.",
@@ -708,6 +760,44 @@ Object {
               },
             },
             "description": "The request was successful.",
+          },
+          "400": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "example": Object {
+                    "error": "Request validation failed",
+                    "validation": Array [
+                      Object {
+                        "dataPath": ".body",
+                        "keyword": "required",
+                        "message": "should have required property 'appName'",
+                        "params": Object {
+                          "missingProperty": "appName",
+                        },
+                        "schemaPath": "#/components/schemas/registerMetricsSchema/required",
+                      },
+                    ],
+                  },
+                  "properties": Object {
+                    "error": Object {
+                      "type": "string",
+                    },
+                    "validation": Object {
+                      "items": Object {
+                        "type": "object",
+                      },
+                      "type": "array",
+                    },
+                  },
+                  "required": Array [
+                    "error",
+                  ],
+                  "type": "object",
+                },
+              },
+            },
+            "description": "The provided request data is invalid.",
           },
           "401": Object {
             "description": "Authorization information is missing or invalid.",
