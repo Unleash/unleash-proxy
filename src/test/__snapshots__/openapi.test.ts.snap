@@ -326,7 +326,6 @@ Object {
       "lookupTogglesSchema": Object {
         "properties": Object {
           "context": Object {
-            "additionalProperties": false,
             "properties": Object {
               "appName": Object {
                 "type": "string",
@@ -452,7 +451,6 @@ Object {
         "type": "object",
       },
       "unleashContextSchema": Object {
-        "additionalProperties": false,
         "properties": Object {
           "appName": Object {
             "type": "string",
