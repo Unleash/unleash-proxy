@@ -1,4 +1,5 @@
 import { Request, Response, Router } from 'express';
+import { Context } from 'unleash-client';
 import { createContext } from './create-context';
 import { IProxyConfig } from './config';
 import { IClient } from './client';
@@ -220,7 +221,10 @@ export default class UnleashProxy {
         } else {
             const { context = {}, toggles: toggleNames = [] } = req.body;
 
-            const toggles = this.client.getDefinedToggles(toggleNames, context);
+            const toggles = this.client.getDefinedToggles(
+                toggleNames,
+                context as Context,
+            );
 
             res.send({ toggles });
         }
