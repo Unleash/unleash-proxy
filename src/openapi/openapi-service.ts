@@ -51,7 +51,7 @@ export class OpenApiService {
                 });
             } else if (err) {
                 res.status(500).json({
-                    error: `We dropped the ball on this one: ${err.message}`,
+                    error: `Whoops! We dropped the ball on this one (an unexpected error occurred): ${err.message}`,
                 });
             }
             {
