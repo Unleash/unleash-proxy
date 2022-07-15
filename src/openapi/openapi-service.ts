@@ -52,10 +52,9 @@ export class OpenApiService {
                 });
             } else if (err) {
                 res.status(500).json({
-                  error: format500ErrorMessage(err.message),
+                    error: format500ErrorMessage(err.message),
                 });
-            }
-            {
+            } else {
                 next();
             }
         });
