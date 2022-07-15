@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { Strategy } from 'unleash-client';
 import { createProxyConfig } from '../config';
-import * as https from "https";
+import * as https from 'https';
 
 test('should require "unleashUrl', () => {
     const t = () => createProxyConfig({});
@@ -345,8 +345,10 @@ test('should load passed in http agent', () => {
         unleashApiToken: 'some',
         clientKeys: ['s1'],
         httpOptions: {
-            agent: _ => https.globalAgent
-        }
+            agent: (_) => https.globalAgent,
+        },
     });
-    expect(config.httpOptions?.agent?.(new URL('https://example.com'))).toBe(https.globalAgent);
-})
+    expect(config.httpOptions?.agent?.(new URL('https://example.com'))).toBe(
+        https.globalAgent,
+    );
+});

@@ -261,6 +261,6 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         enableOAS:
             option.enableOAS || safeBoolean(process.env.ENABLE_OAS, false),
         cors: loadCorsOptions(option),
-        ...(!!option.httpOptions ? { httpOptions: option.httpOptions } : {})
+        ...(!!option.httpOptions ? { httpOptions: option.httpOptions } : {}),
     };
 }
