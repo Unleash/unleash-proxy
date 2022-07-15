@@ -339,7 +339,7 @@ test('should load cors origin, maxAge and exposedHeaders default values', () => 
     expect(config.cors.exposedHeaders).toBe('ETag');
 });
 
-test('should load passed in http agent', () => {
+test('when passed with agent in httpOptions config.httpOptions.agent should be callable with url', () => {
     const config = createProxyConfig({
         unleashUrl: 'some',
         unleashApiToken: 'some',
@@ -351,4 +351,13 @@ test('should load passed in http agent', () => {
     expect(config.httpOptions?.agent?.(new URL('https://example.com'))).toBe(
         https.globalAgent,
     );
+});
+
+test('when not passed with httpOptions the config should not contain that property', () => {
+    const config = createProxyConfig({
+        unleashUrl: 'some',
+        unleashApiToken: 'some',
+        clientKeys: ['s1'],
+    });
+    expect(config.httpOptions).toBeUndefined();
 });
