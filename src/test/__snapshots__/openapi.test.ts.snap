@@ -604,6 +604,27 @@ Object {
           "401": Object {
             "description": "Authorization information is missing or invalid.",
           },
+          "500": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "example": Object {
+                    "error": "Whoops! We dropped the ball on this one (an unexpected error occurred): Cannot read properties of undefined (reading 'includes')",
+                  },
+                  "properties": Object {
+                    "error": Object {
+                      "type": "string",
+                    },
+                  },
+                  "required": Array [
+                    "error",
+                  ],
+                  "type": "object",
+                },
+              },
+            },
+            "description": "Something went wrong on the server side and we were unable to recover. If you have custom strategies loaded, make sure they don't throw errors.",
+          },
           "503": Object {
             "content": Object {
               "text/plain": Object {
@@ -684,6 +705,27 @@ Object {
           "401": Object {
             "description": "Authorization information is missing or invalid.",
           },
+          "500": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "example": Object {
+                    "error": "Whoops! We dropped the ball on this one (an unexpected error occurred): Cannot read properties of undefined (reading 'includes')",
+                  },
+                  "properties": Object {
+                    "error": Object {
+                      "type": "string",
+                    },
+                  },
+                  "required": Array [
+                    "error",
+                  ],
+                  "type": "object",
+                },
+              },
+            },
+            "description": "Something went wrong on the server side and we were unable to recover. If you have custom strategies loaded, make sure they don't throw errors.",
+          },
           "503": Object {
             "content": Object {
               "text/plain": Object {
@@ -714,7 +756,7 @@ Object {
                 },
               },
             },
-            "description": "The list of enabled toggles for the provided context.",
+            "description": "The proxy's current feature toggle configuration. A list of feature toggles that is parseable by other server-side clients.",
           },
           "401": Object {
             "description": "Authorization information is missing or invalid.",

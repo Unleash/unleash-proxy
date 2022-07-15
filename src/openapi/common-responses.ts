@@ -1,5 +1,8 @@
 import { OpenAPIV3 } from 'openapi-types';
 
+export const format500ErrorMessage = (errorMessage: string): string =>
+    `Whoops! We dropped the ball on this one (an unexpected error occurred): ${errorMessage}`;
+
 export const NOT_READY_MSG =
     'The Unleash Proxy has not connected to the Unleash API and is not ready to accept requests yet.';
 
@@ -65,10 +68,32 @@ export const emptySuccessResponse: OpenAPIV3.ResponseObject = {
     },
 };
 
+export const internalServerErrorResponse: OpenAPIV3.ResponseObject = {
+    description:
+        "Something went wrong on the server side and we were unable to recover. If you have custom strategies loaded, make sure they don't throw errors.",
+    content: {
+        'application/json': {
+            schema: {
+                type: 'object',
+                required: ['error'],
+                properties: {
+                    error: { type: 'string' },
+                },
+                example: {
+                    error: format500ErrorMessage(
+                        "Cannot read properties of undefined (reading 'includes')",
+                    ),
+                },
+            },
+        },
+    },
+};
+
 const commonResponses = {
     200: emptySuccessResponse,
     400: badRequestResponse,
     401: unauthorizedResponse,
+    500: internalServerErrorResponse,
     503: notReadyResponse,
 } as const;
 

@@ -3,6 +3,7 @@ import { OpenAPIV3 } from 'openapi-types';
 import openapi, { IExpressOpenApi } from '@unleash/express-openapi';
 import { IProxyConfig } from '../config';
 import { createOpenApiSchema } from '.';
+import { format500ErrorMessage } from './common-responses';
 
 export class OpenApiService {
     private readonly config: IProxyConfig;
@@ -51,10 +52,9 @@ export class OpenApiService {
                 });
             } else if (err) {
                 res.status(500).json({
-                    error: `Whoops! We dropped the ball on this one (an unexpected error occurred): ${err.message}`,
+                    error: format500ErrorMessage(err.message),
                 });
-            }
-            {
+            } else {
                 next();
             }
         });
