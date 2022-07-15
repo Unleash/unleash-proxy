@@ -81,7 +81,7 @@ export default class UnleashProxy {
                     }),
                 ],
                 responses: {
-                    ...standardResponses(401, 503),
+                    ...standardResponses(401, 500, 503),
                     200: featuresResponse,
                 },
                 description:
@@ -98,7 +98,7 @@ export default class UnleashProxy {
             openApiService.validPath({
                 requestBody: lookupTogglesRequest,
                 responses: {
-                    ...standardResponses(400, 401, 503),
+                    ...standardResponses(400, 401, 500, 503),
                     200: featuresResponse,
                 },
                 description:
