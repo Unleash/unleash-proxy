@@ -345,7 +345,7 @@ test('should load the passed-in http agent when config.httpOptions is provided',
         unleashApiToken: 'some',
         clientKeys: ['s1'],
         httpOptions: {
-            agent: (_) => https.globalAgent,
+            agent: () => https.globalAgent,
         },
     });
     expect(config.httpOptions?.agent?.(new URL('https://example.com'))).toBe(
