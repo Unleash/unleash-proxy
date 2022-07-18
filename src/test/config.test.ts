@@ -339,7 +339,7 @@ test('should load cors origin, maxAge and exposedHeaders default values', () => 
     expect(config.cors.exposedHeaders).toBe('ETag');
 });
 
-test('when passed with agent in httpOptions config.httpOptions.agent should be callable with url', () => {
+test('should load the passed-in http agent when config.httpOptions is provided', () => {
     const config = createProxyConfig({
         unleashUrl: 'some',
         unleashApiToken: 'some',
