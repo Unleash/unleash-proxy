@@ -353,7 +353,7 @@ test('when passed with agent in httpOptions config.httpOptions.agent should be c
     );
 });
 
-test('when not passed with httpOptions the config should not contain that property', () => {
+test('should not set config.httpOptions if no http options are provided at creation', () => {
     const config = createProxyConfig({
         unleashUrl: 'some',
         unleashApiToken: 'some',
