@@ -523,3 +523,41 @@ test('Should return 400 bad request for malformed JSON', async () => {
         .expect(400)
         .expect('Content-Type', /json/);
 });
+
+test('Should register server SDK', async () => {
+    const toggles = [
+        {
+            name: 'test',
+            enabled: true,
+            impressionData: true,
+        },
+    ];
+    const client = new MockClient(toggles);
+
+    const proxySecrets = ['sdf'];
+    const app = createApp(
+        {
+            unleashUrl,
+            unleashApiToken,
+            proxySecrets,
+            expServerSideSdkConfig: { tokens: ['s1'] },
+        },
+        client,
+    );
+    client.emit('ready');
+
+    const res = await request(app)
+        .post('/proxy/client/register')
+        .send({
+            appName: 'test',
+            instanceId: 'i1',
+            sdkVersion: 'custom1',
+            environment: 'prod',
+            interval: 10000,
+            started: new Date(),
+            strategies: ['default'],
+        })
+        .set('Authorization', 'sdf');
+
+    expect(res.statusCode).toBe(200);
+});

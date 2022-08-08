@@ -375,6 +375,49 @@ Object {
         },
         "type": "object",
       },
+      "registerClientSchema": Object {
+        "properties": Object {
+          "appName": Object {
+            "type": "string",
+          },
+          "environment": Object {
+            "type": "string",
+          },
+          "instanceId": Object {
+            "type": "string",
+          },
+          "interval": Object {
+            "type": "number",
+          },
+          "sdkVersion": Object {
+            "type": "string",
+          },
+          "started": Object {
+            "oneOf": Array [
+              Object {
+                "format": "date-time",
+                "type": "string",
+              },
+              Object {
+                "type": "number",
+              },
+            ],
+          },
+          "strategies": Object {
+            "items": Object {
+              "type": "string",
+            },
+            "type": "array",
+          },
+        },
+        "required": Array [
+          "appName",
+          "interval",
+          "started",
+          "strategies",
+        ],
+        "type": "object",
+      },
       "registerMetricsSchema": Object {
         "properties": Object {
           "appName": Object {
@@ -846,6 +889,79 @@ Object {
           },
         },
         "summary": "Send usage metrics to Unleash.",
+        "tags": Array [
+          "Operational",
+          "Server-side client",
+        ],
+      },
+    },
+    "/proxy/client/register": Object {
+      "post": Object {
+        "description": "This endpoint lets you register application with Unleash. Accepts either one of the proxy's configured \`serverSideTokens\` or one of its \`clientKeys\` for authorization.",
+        "requestBody": Object {
+          "content": Object {
+            "application/json": Object {
+              "schema": Object {
+                "$ref": "#/components/schemas/registerClientSchema",
+              },
+            },
+          },
+        },
+        "responses": Object {
+          "200": Object {
+            "content": Object {
+              "text/plain": Object {
+                "schema": Object {
+                  "example": "ok",
+                  "type": "string",
+                },
+              },
+            },
+            "description": "The request was successful.",
+          },
+          "400": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "example": Object {
+                    "error": "Request validation failed",
+                    "validation": Array [
+                      Object {
+                        "dataPath": ".body",
+                        "keyword": "required",
+                        "message": "should have required property 'appName'",
+                        "params": Object {
+                          "missingProperty": "appName",
+                        },
+                        "schemaPath": "#/components/schemas/registerMetricsSchema/required",
+                      },
+                    ],
+                  },
+                  "properties": Object {
+                    "error": Object {
+                      "type": "string",
+                    },
+                    "validation": Object {
+                      "items": Object {
+                        "type": "object",
+                      },
+                      "type": "array",
+                    },
+                  },
+                  "required": Array [
+                    "error",
+                  ],
+                  "type": "object",
+                },
+              },
+            },
+            "description": "The provided request data is invalid.",
+          },
+          "401": Object {
+            "description": "Authorization information is missing or invalid.",
+          },
+        },
+        "summary": "Register clients with Unleash.",
         "tags": Array [
           "Operational",
           "Server-side client",

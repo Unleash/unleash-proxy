@@ -13,12 +13,14 @@ import { ApiRequestSchema } from './openapi/spec/api-request-schema';
 import { FeaturesSchema } from './openapi/spec/features-schema';
 import { lookupTogglesRequest } from './openapi/spec/lookup-toggles-request';
 import { registerMetricsRequest } from './openapi/spec/register-metrics-request';
+import { registerClientRequest } from './openapi/spec/register-client-request';
 import {
     createDeepObjectRequestParameters,
     createRequestParameters,
 } from './openapi/openapi-helpers';
 import { RegisterMetricsSchema } from './openapi/spec/register-metrics-schema';
 import { LookupTogglesSchema } from './openapi/spec/lookup-toggles-schema';
+import { RegisterClientSchema } from './openapi/spec/register-client-schema';
 
 export default class UnleashProxy {
     private logger: Logger;
@@ -137,6 +139,19 @@ export default class UnleashProxy {
                 tags: ['Operational', 'Server-side client'],
             }),
             this.registerMetrics.bind(this),
+        );
+
+        router.post(
+            '/client/register',
+            openApiService.validPath({
+                requestBody: registerClientRequest,
+                responses: standardResponses(200, 400, 401),
+                description:
+                    "This endpoint lets you register application with Unleash. Accepts either one of the proxy's configured `serverSideTokens` or one of its `clientKeys` for authorization.",
+                summary: 'Register clients with Unleash.',
+                tags: ['Operational', 'Server-side client'],
+            }),
+            this.registerClient.bind(this),
         );
 
         router.get(
@@ -260,6 +275,21 @@ export default class UnleashProxy {
 
         if (token && validTokens.includes(token)) {
             this.client.registerMetrics(req.body);
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(401);
+        }
+    }
+
+    registerClient(
+        req: Request<{}, undefined, RegisterClientSchema>,
+        res: Response<string>,
+    ): void {
+        const token = req.header(this.clientKeysHeaderName);
+        const validTokens = [...this.clientKeys, ...this.serverSideTokens];
+
+        if (token && validTokens.includes(token)) {
+            this.logger.debug('Client registration is not supported yet.');
             res.sendStatus(200);
         } else {
             res.sendStatus(401);
