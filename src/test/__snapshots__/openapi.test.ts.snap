@@ -383,6 +383,7 @@ Object {
           },
           "environment": Object {
             "deprecated": true,
+            "description": "The environment specified in the client config. Note: this is _not_ the same as the Unleash environment.",
             "type": "string",
           },
           "instanceId": Object {
