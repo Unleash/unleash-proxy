@@ -375,6 +375,56 @@ Object {
         },
         "type": "object",
       },
+      "registerClientSchema": Object {
+        "properties": Object {
+          "appName": Object {
+            "description": "Name of the application using Unleash",
+            "type": "string",
+          },
+          "environment": Object {
+            "deprecated": true,
+            "type": "string",
+          },
+          "instanceId": Object {
+            "description": "Instance id for this application (typically hostname, podId or similar)",
+            "type": "string",
+          },
+          "interval": Object {
+            "description": "At which interval, in milliseconds, will this client be expected to send metrics",
+            "type": "number",
+          },
+          "sdkVersion": Object {
+            "description": "Optional field that describes the sdk version (name:version)",
+            "type": "string",
+          },
+          "started": Object {
+            "description": "When this client started. Should be reported as ISO8601 time.",
+            "oneOf": Array [
+              Object {
+                "format": "date-time",
+                "type": "string",
+              },
+              Object {
+                "type": "number",
+              },
+            ],
+          },
+          "strategies": Object {
+            "description": "List of strategies implemented by this application",
+            "items": Object {
+              "type": "string",
+            },
+            "type": "array",
+          },
+        },
+        "required": Array [
+          "appName",
+          "interval",
+          "started",
+          "strategies",
+        ],
+        "type": "object",
+      },
       "registerMetricsSchema": Object {
         "properties": Object {
           "appName": Object {
@@ -846,6 +896,79 @@ Object {
           },
         },
         "summary": "Send usage metrics to Unleash.",
+        "tags": Array [
+          "Operational",
+          "Server-side client",
+        ],
+      },
+    },
+    "/proxy/client/register": Object {
+      "post": Object {
+        "description": "This endpoint lets you register application with Unleash. Accepts either one of the proxy's configured \`serverSideTokens\` or one of its \`clientKeys\` for authorization.",
+        "requestBody": Object {
+          "content": Object {
+            "application/json": Object {
+              "schema": Object {
+                "$ref": "#/components/schemas/registerClientSchema",
+              },
+            },
+          },
+        },
+        "responses": Object {
+          "200": Object {
+            "content": Object {
+              "text/plain": Object {
+                "schema": Object {
+                  "example": "ok",
+                  "type": "string",
+                },
+              },
+            },
+            "description": "The request was successful.",
+          },
+          "400": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "example": Object {
+                    "error": "Request validation failed",
+                    "validation": Array [
+                      Object {
+                        "dataPath": ".body",
+                        "keyword": "required",
+                        "message": "should have required property 'appName'",
+                        "params": Object {
+                          "missingProperty": "appName",
+                        },
+                        "schemaPath": "#/components/schemas/registerMetricsSchema/required",
+                      },
+                    ],
+                  },
+                  "properties": Object {
+                    "error": Object {
+                      "type": "string",
+                    },
+                    "validation": Object {
+                      "items": Object {
+                        "type": "object",
+                      },
+                      "type": "array",
+                    },
+                  },
+                  "required": Array [
+                    "error",
+                  ],
+                  "type": "object",
+                },
+              },
+            },
+            "description": "The provided request data is invalid.",
+          },
+          "401": Object {
+            "description": "Authorization information is missing or invalid.",
+          },
+        },
+        "summary": "Register clients with Unleash.",
         "tags": Array [
           "Operational",
           "Server-side client",
