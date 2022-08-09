@@ -378,21 +378,27 @@ Object {
       "registerClientSchema": Object {
         "properties": Object {
           "appName": Object {
+            "description": "Name of the application using Unleash",
             "type": "string",
           },
           "environment": Object {
+            "deprecated": true,
             "type": "string",
           },
           "instanceId": Object {
+            "description": "Instance id for this application (typically hostname, podId or similar)",
             "type": "string",
           },
           "interval": Object {
+            "description": "At which interval, in milliseconds, will this client be expected to send metrics",
             "type": "number",
           },
           "sdkVersion": Object {
+            "description": "Optional field that describes the sdk version (name:version)",
             "type": "string",
           },
           "started": Object {
+            "description": "When this client started. Should be reported as ISO8601 time.",
             "oneOf": Array [
               Object {
                 "format": "date-time",
@@ -404,6 +410,7 @@ Object {
             ],
           },
           "strategies": Object {
+            "description": "List of strategies implemented by this application",
             "items": Object {
               "type": "string",
             },
