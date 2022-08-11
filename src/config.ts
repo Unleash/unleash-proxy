@@ -5,6 +5,7 @@ import { BootstrapOptions } from 'unleash-client/lib/repository/bootstrap-provid
 import { Logger, LogLevel, SimpleLogger } from './logger';
 import { generateInstanceId } from './util';
 import { HttpOptions } from 'unleash-client/lib/http-options';
+import { ContextEnricher } from './enrich-context';
 
 export interface ServerSideSdkConfig {
     tokens: string[];
@@ -15,6 +16,7 @@ export interface IProxyOption {
     unleashAppName?: string;
     unleashInstanceId?: string;
     customStrategies?: Strategy[];
+    customEnrichers?: ContextEnricher[];
     proxySecrets?: string[];
     clientKeys?: string[];
     preHook?: (app: Application) => void;
@@ -43,6 +45,7 @@ export interface IProxyConfig {
     unleashAppName: string;
     unleashInstanceId: string;
     customStrategies?: Strategy[];
+    customEnrichers?: ContextEnricher[];
     clientKeys: string[];
     proxyBasePath: string;
     refreshInterval: number;
@@ -93,6 +96,15 @@ function loadCustomStrategies(path?: string): Strategy[] | undefined {
         // eslint-disable-next-line
         const strategies = require(path) as Strategy[];
         return strategies;
+    }
+    return undefined;
+}
+
+function loadCustomEnrichers(path?: string): ContextEnricher[] | undefined {
+    if (path) {
+        // eslint-disable-next-line
+        const contextEnrichers = require(path) as ContextEnricher[];
+        return contextEnrichers;
     }
     return undefined;
 }
@@ -208,6 +220,10 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         option.customStrategies ||
         loadCustomStrategies(process.env.UNLEASH_CUSTOM_STRATEGIES_FILE);
 
+    const customEnrichers =
+        option.customEnrichers ||
+        loadCustomEnrichers(process.env.UNLEASH_CUSTOM_ENRICHERS_FILE);
+
     const clientKeys = loadClientKeys(option);
     if (!clientKeys) {
         throw new TypeError(
@@ -236,6 +252,7 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
             'unleash-proxy',
         unleashInstanceId,
         customStrategies,
+        customEnrichers,
         clientKeys,
         proxyBasePath:
             option.proxyBasePath || process.env.PROXY_BASE_PATH || '',

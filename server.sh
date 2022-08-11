@@ -9,4 +9,11 @@ if [ ! -z "$UNLEASH_CUSTOM_STRATEGIES_FILE" ]; then
 	export UNLEASH_CUSTOM_STRATEGIES_FILE="./strategies/$(basename $UNLEASH_CUSTOM_STRATEGIES_FILE)"
 fi
 
+if [ ! -z "$UNLEASH_CUSTOM_ENRICHERS_FILE" ]; then
+	echo "Loading custom enrichers from file $UNLEASH_CUSTOM_ENRICHERS_FILE"
+	mkdir -p ./dist/enrichers
+	cp $UNLEASH_CUSTOM_ENRICHERS_FILE ./dist/enrichers
+	export UNLEASH_CUSTOM_ENRICHERS_FILE="./enrichers/$(basename $UNLEASH_CUSTOM_ENRICHERS_FILE)"
+fi
+
 node dist/start

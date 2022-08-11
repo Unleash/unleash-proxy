@@ -3,6 +3,7 @@ import { Context } from 'unleash-client';
 import { createContext } from './create-context';
 import { IProxyConfig } from './config';
 import { IClient } from './client';
+import { ContextEnricher, enrichContext } from './enrich-context';
 import { Logger } from './logger';
 import { OpenApiService } from './openapi/openapi-service';
 import { featuresResponse } from './openapi/spec/features-response';
@@ -33,6 +34,8 @@ export default class UnleashProxy {
 
     private client: IClient;
 
+    private contextEnrichers: ContextEnricher[];
+
     private ready = false;
 
     public middleware: Router;
@@ -49,6 +52,9 @@ export default class UnleashProxy {
             : [];
         this.clientKeysHeaderName = config.clientKeysHeaderName;
         this.client = client;
+        this.contextEnrichers = config.customEnrichers
+            ? config.customEnrichers
+            : [];
 
         if (client.isReady()) {
             this.setReady();
@@ -216,10 +222,13 @@ export default class UnleashProxy {
         } else {
             const { query } = req;
             query.remoteAddress = query.remoteAddress || req.ip;
-            const context = createContext(query);
-            const toggles = this.client.getEnabledToggles(context);
-            res.set('Cache-control', 'public, max-age=2');
-            res.send({ toggles });
+            enrichContext(this.contextEnrichers, createContext(query)).then(
+                (context) => {
+                    const toggles = this.client.getEnabledToggles(context);
+                    res.set('Cache-control', 'public, max-age=2');
+                    res.send({ toggles });
+                },
+            );
         }
     }
 
