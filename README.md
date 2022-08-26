@@ -6,7 +6,7 @@
 # The Unleash Proxy
 
 The Unleash Proxy simplifies integration with frontend & native applications running in the context of a specific user. The Unleash proxy sits between the proxy SDK and the 
-Unleash API and ensures that you internal feature toggle configuration is not 
+Unleash API and ensures that your internal feature toggle configuration is not 
 exposed to the world. 
 
 The proxy offers:
