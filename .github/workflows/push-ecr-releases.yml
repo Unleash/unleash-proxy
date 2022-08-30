@@ -14,6 +14,8 @@ jobs:
       - name: Login to AWS ECR
         id: login-ecr-public
         uses: aws-actions/amazon-ecr-login@v1
+        with:
+          registry-type: public
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v3
