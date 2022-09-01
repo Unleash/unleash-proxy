@@ -165,8 +165,19 @@ function loadCorsOptions(option: IProxyOption): CorsOptions {
 
     const computedCorsOptions: CorsOptions = {
         origin: process.env.CORS_ORIGIN || '*',
+        methods: process.env.CORS_METHODS,
+        allowedHeaders: process.env.CORS_ALLOWED_HEADERS,
+        exposedHeaders: process.env.CORS_EXPOSED_HEADERS || 'ETag',
+        credentials: safeBoolean(process.env.CORS_CREDENTIALS, false),
         maxAge: safeNumber(process.env.CORS_MAX_AGE, 172800),
-        exposedHeaders: 'ETag',
+        preflightContinue: safeBoolean(
+            process.env.CORS_PREFLIGHT_CONTINUE,
+            false,
+        ),
+        optionsSuccessStatus: safeNumber(
+            process.env.CORS_OPTIONS_SUCCESS_STATUS,
+            204,
+        ),
     };
 
     // if cors origin provided contains "," it means it's a list of urls, transform to array

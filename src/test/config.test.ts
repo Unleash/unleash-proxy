@@ -274,7 +274,13 @@ test('should read bootstrap from env vars', () => {
 
 test('should load cors origin and max age from env', () => {
     process.env.CORS_ORIGIN = 'https://my-custom-domain.com/test';
+    process.env.CORS_METHODS = 'GET, POST';
+    process.env.CORS_ALLOWED_HEADERS = 'X-Custom-Header';
+    process.env.CORS_EXPOSED_HEADERS = 'ETag, X-Custom-Header';
+    process.env.CORS_CREDENTIALS = 'true';
     process.env.CORS_MAX_AGE = '1234567';
+    process.env.CORS_PREFLIGHT_CONTINUE = 'true';
+    process.env.CORS_OPTIONS_SUCCESS_STATUS = '200';
 
     const config = createProxyConfig({
         unleashUrl: 'some',
@@ -283,10 +289,22 @@ test('should load cors origin and max age from env', () => {
     });
 
     expect(config.cors.origin).toBe('https://my-custom-domain.com/test');
+    expect(config.cors.methods).toStrictEqual('GET, POST');
+    expect(config.cors.allowedHeaders).toStrictEqual('X-Custom-Header');
+    expect(config.cors.exposedHeaders).toStrictEqual('ETag, X-Custom-Header');
+    expect(config.cors.credentials).toBe(true);
     expect(config.cors.maxAge).toBe(1234567);
+    expect(config.cors.preflightContinue).toBe(true);
+    expect(config.cors.optionsSuccessStatus).toBe(200);
 
     delete process.env.CORS_ORIGIN;
+    delete process.env.CORS_METHODS;
+    delete process.env.CORS_ALLOWED_HEADERS;
+    delete process.env.CORS_EXPOSED_HEADERS;
+    delete process.env.CORS_CREDENTIALS;
     delete process.env.CORS_MAX_AGE;
+    delete process.env.CORS_PREFLIGHT_CONTINUE;
+    delete process.env.CORS_OPTIONS_SUCCESS_STATUS;
 });
 
 test('should load cors options provided', () => {
@@ -327,7 +345,7 @@ test('should transform comma-separated list of urls from env and set cors origin
     delete process.env.CORS_ORIGIN;
 });
 
-test('should load cors origin, maxAge and exposedHeaders default values', () => {
+test('should set CORS default values', () => {
     const config = createProxyConfig({
         unleashUrl: 'some',
         unleashApiToken: 'some',
@@ -335,8 +353,13 @@ test('should load cors origin, maxAge and exposedHeaders default values', () => 
     });
 
     expect(config.cors.origin).toBe('*');
-    expect(config.cors.maxAge).toBe(172800);
+    expect(config.cors.methods).toBeUndefined();
+    expect(config.cors.allowedHeaders).toBeUndefined();
     expect(config.cors.exposedHeaders).toBe('ETag');
+    expect(config.cors.credentials).toBe(false);
+    expect(config.cors.maxAge).toBe(172800);
+    expect(config.cors.preflightContinue).toBe(false);
+    expect(config.cors.optionsSuccessStatus).toBe(204);
 });
 
 test('should load the passed-in http agent when config.httpOptions is provided', () => {
