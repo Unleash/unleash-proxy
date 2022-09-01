@@ -361,3 +361,14 @@ test('should not set config.httpOptions if no http options are provided at creat
     });
     expect(config.httpOptions).toBeUndefined();
 });
+
+test.each(['/base/path', '/base/path', 'base/path/', 'base/path'])('%s as proxyBasePath should yield /base/path as base path', async (path) => {
+    const config = createProxyConfig({
+        unleashUrl: 'some',
+        unleashApiToken: 'some',
+        clientKeys: ['s1'],
+        proxyBasePath: path
+    });
+
+    expect(config.proxyBasePath).toBe(`/base/path`);
+});

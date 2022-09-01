@@ -227,6 +227,7 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         process.env.UNLEASH_INSTANCE_ID ||
         generateInstanceId();
 
+    let proxyBasePath = sanitizeBasePath(option.proxyBasePath || process.env.PROXY_BASE_PATH);
     return {
         unleashUrl,
         unleashApiToken,
@@ -237,8 +238,7 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         unleashInstanceId,
         customStrategies,
         clientKeys,
-        proxyBasePath:
-            option.proxyBasePath || process.env.PROXY_BASE_PATH || '',
+        proxyBasePath,
         refreshInterval:
             option.refreshInterval ||
             safeNumber(process.env.UNLEASH_FETCH_INTERVAL, 5_000),
@@ -263,4 +263,19 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         cors: loadCorsOptions(option),
         ...(!!option.httpOptions ? { httpOptions: option.httpOptions } : {}),
     };
+}
+
+export function sanitizeBasePath(path?: string): string {
+    if (!path) {
+        return '';
+    }
+    return removeTrailingPath(addLeadingPath(path));
+}
+
+function removeTrailingPath(path: string): string {
+    return path.endsWith('/') ? path.slice(0, -1) : path;
+}
+
+function addLeadingPath(path: string): string {
+    return path.startsWith('/') ? path : `/${path}`;
 }
