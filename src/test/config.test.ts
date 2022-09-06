@@ -368,12 +368,12 @@ test.each([
     'base/path/',
     'base/path',
     '     base/path     ',
-])('%s as proxyBasePath should yield /base/path as base path', async (path) => {
+])('%s as proxyBasePath should yield /base/path as base path', async (p) => {
     const config = createProxyConfig({
         unleashUrl: 'some',
         unleashApiToken: 'some',
         clientKeys: ['s1'],
-        proxyBasePath: path,
+        proxyBasePath: p,
     });
 
     expect(config.proxyBasePath).toBe(`/base/path`);
