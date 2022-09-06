@@ -96,6 +96,20 @@ function loadCustomStrategies(path?: string): Strategy[] | undefined {
     }
     return undefined;
 }
+function removeTrailingPath(path: string): string {
+    return path.endsWith('/') ? path.slice(0, -1) : path;
+}
+
+function addLeadingPath(path: string): string {
+    return path.startsWith('/') ? path : `/${path}`;
+}
+
+export function sanitizeBasePath(path?: string): string {
+    if (path === null || path === undefined || path.trim() === '') {
+        return '';
+    }
+    return removeTrailingPath(addLeadingPath(path.trim()));
+}
 
 function loadTrustProxy(value: string = 'FALSE') {
     const upperValue = value.toUpperCase();
@@ -238,6 +252,9 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         process.env.UNLEASH_INSTANCE_ID ||
         generateInstanceId();
 
+    let proxyBasePath = sanitizeBasePath(
+        option.proxyBasePath || process.env.PROXY_BASE_PATH,
+    );
     return {
         unleashUrl,
         unleashApiToken,
@@ -248,8 +265,7 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         unleashInstanceId,
         customStrategies,
         clientKeys,
-        proxyBasePath:
-            option.proxyBasePath || process.env.PROXY_BASE_PATH || '',
+        proxyBasePath,
         refreshInterval:
             option.refreshInterval ||
             safeNumber(process.env.UNLEASH_FETCH_INTERVAL, 5_000),
