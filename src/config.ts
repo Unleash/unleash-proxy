@@ -111,8 +111,6 @@ export function sanitizeBasePath(path?: string): string {
     return removeTrailingPath(addLeadingPath(path.trim()));
 }
 
-
-
 function loadTrustProxy(value: string = 'FALSE') {
     const upperValue = value.toUpperCase();
     if (upperValue === 'FALSE') {
@@ -243,7 +241,9 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         process.env.UNLEASH_INSTANCE_ID ||
         generateInstanceId();
 
-    let proxyBasePath = sanitizeBasePath(option.proxyBasePath || process.env.PROXY_BASE_PATH);
+    let proxyBasePath = sanitizeBasePath(
+        option.proxyBasePath || process.env.PROXY_BASE_PATH,
+    );
     return {
         unleashUrl,
         unleashApiToken,
