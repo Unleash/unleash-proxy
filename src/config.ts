@@ -96,6 +96,22 @@ function loadCustomStrategies(path?: string): Strategy[] | undefined {
     }
     return undefined;
 }
+function removeTrailingPath(path: string): string {
+    return path.endsWith('/') ? path.slice(0, -1) : path;
+}
+
+function addLeadingPath(path: string): string {
+    return path.startsWith('/') ? path : `/${path}`;
+}
+
+export function sanitizeBasePath(path?: string): string {
+    if (!path) {
+        return '';
+    }
+    return removeTrailingPath(addLeadingPath(path.trim()));
+}
+
+
 
 function loadTrustProxy(value: string = 'FALSE') {
     const upperValue = value.toUpperCase();
@@ -263,19 +279,4 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         cors: loadCorsOptions(option),
         ...(!!option.httpOptions ? { httpOptions: option.httpOptions } : {}),
     };
-}
-
-export function sanitizeBasePath(path?: string): string {
-    if (!path) {
-        return '';
-    }
-    return removeTrailingPath(addLeadingPath(path));
-}
-
-function removeTrailingPath(path: string): string {
-    return path.endsWith('/') ? path.slice(0, -1) : path;
-}
-
-function addLeadingPath(path: string): string {
-    return path.startsWith('/') ? path : `/${path}`;
 }
