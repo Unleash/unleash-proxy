@@ -105,7 +105,7 @@ function addLeadingPath(path: string): string {
 }
 
 export function sanitizeBasePath(path?: string): string {
-    if (!path) {
+    if (path === null || path === undefined || path.trim() === '') {
         return '';
     }
     return removeTrailingPath(addLeadingPath(path.trim()));
