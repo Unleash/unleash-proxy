@@ -120,7 +120,7 @@ export default class UnleashProxy {
                     200: featuresResponse,
                 },
                 description:
-                    'This endpoint returns the list of feature toggles that the proxy evaluates to enabled and disabled for the given context. As such, this endpoint always returns all feature toggles the proxy retrieves from unleash. Context values are provided as query parameters.',
+                    'This endpoint returns the list of feature toggles that the proxy evaluates to enabled and disabled for the given context. As such, this endpoint always returns all feature toggles the proxy retrieves from unleash. Useful if you are migrating to unleash and need to know if the feature flag exists on the unleash server. However, using this endpoint will increase the payload size transmitted to your applications. Context values are provided as query parameters.',
                 summary:
                     'Retrieve enabled feature toggles for the provided context.',
                 tags: ['Proxy client'],
