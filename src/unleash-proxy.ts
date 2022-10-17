@@ -95,6 +95,39 @@ export default class UnleashProxy {
             this.getEnabledToggles.bind(this),
         );
 
+        router.get(
+            '/all',
+            openApiService.validPath({
+                parameters: [
+                    ...createRequestParameters({
+                        appName: "Your application's name",
+                        userId: "The current user's ID",
+                        sessionId: "The current session's ID",
+                        remoteAddress: "Your application's IP address",
+                    }),
+                    ...createDeepObjectRequestParameters({
+                        properties: {
+                            description: 'Additional (custom) context fields',
+                            example: {
+                                region: 'Africa',
+                                betaTester: 'true',
+                            },
+                        },
+                    }),
+                ],
+                responses: {
+                    ...standardResponses(401, 500, 503),
+                    200: featuresResponse,
+                },
+                description:
+                    'This endpoint returns the list of feature toggles that the proxy evaluates to enabled and disabled for the given context. As such, this endpoint always returns all feature toggles the proxy retrieves from unleash. Context values are provided as query parameters.',
+                summary:
+                    'Retrieve enabled feature toggles for the provided context.',
+                tags: ['Proxy client'],
+            }),
+            this.getEnabledToggles.bind(this),
+        );
+
         router.post(
             '',
             openApiService.validPath({

@@ -39,6 +39,8 @@ export interface IClient extends EventEmitter {
         context: Context,
     ) => FeatureToggleStatus[];
 
+    getAllToggles: (context: Context) => FeatureToggleStatus[];
+
     getFeatureToggleDefinitions(): FeatureInterface[];
 
     registerMetrics(metrics: IMetrics): void;
@@ -121,6 +123,22 @@ class Client extends EventEmitter implements IClient {
             return { ...context, environment };
         }
         return context;
+    }
+
+    getAllToggles(inContext: Context): FeatureToggleStatus[] {
+        this.logger.info(
+            'Get all feature toggles for provided context',
+            inContext,
+        );
+        const context = this.fixContext(inContext);
+
+        const definitions = this.unleash.getFeatureToggleDefinitions() || [];
+        return definitions.map((d) => ({
+            name: d.name,
+            enabled: true,
+            variant: this.unleash.forceGetVariant(d.name, context),
+            impressionData: d.impressionData,
+        }));
     }
 
     getEnabledToggles(inContext: Context): FeatureToggleStatus[] {

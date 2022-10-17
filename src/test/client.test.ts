@@ -28,7 +28,6 @@ test('should add environment to isEnabled calls', () => {
     fakeUnleash.toggleDefinitions.push({
         name: 'test',
         enabled: false,
-        type: 'experiment',
         stale: false,
         strategies: [],
         variants: [],
@@ -65,7 +64,6 @@ test('should override environment to isEnabled calls', () => {
     fakeUnleash.toggleDefinitions.push({
         name: 'test',
         enabled: false,
-        type: 'experiment',
         stale: false,
         strategies: [],
         variants: [],
@@ -75,5 +73,50 @@ test('should override environment to isEnabled calls', () => {
     client.getEnabledToggles({ environment: 'some' });
 
     expect(fakeUnleash.contexts[0].environment).toBe('never-change-me');
+    client.destroy();
+});
+
+test('should return all toggles', () => {
+    let unleashSDK: FakeUnleash;
+    const init = (opts: UnleashConfig) => {
+        unleashSDK = new FakeUnleash(opts);
+        return unleashSDK;
+    };
+
+    const config = createProxyConfig({
+        unleashApiToken: '123',
+        unleashUrl: 'http://localhost:4242/api',
+        proxySecrets: ['s1'],
+        environment: 'never-change-me',
+        logLevel: LogLevel.error,
+    });
+
+    config.disableMetrics = true;
+
+    const client = new Client(config, init);
+
+    const fakeUnleash = client.unleash as FakeUnleash;
+
+    fakeUnleash.toggleDefinitions.push({
+        name: 'test',
+        enabled: false,
+        stale: false,
+        strategies: [],
+        variants: [],
+        impressionData: true,
+    });
+
+    fakeUnleash.toggleDefinitions.push({
+        name: 'test-2',
+        enabled: false,
+        stale: false,
+        strategies: [],
+        variants: [],
+        impressionData: true,
+    });
+
+    const result = client.getAllToggles({ environment: 'some' });
+
+    expect(result.length).toBe(2);
     client.destroy();
 });
