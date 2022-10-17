@@ -125,7 +125,7 @@ export default class UnleashProxy {
                     'Retrieve enabled feature toggles for the provided context.',
                 tags: ['Proxy client'],
             }),
-            this.getEnabledToggles.bind(this),
+            this.getAllToggles.bind(this),
         );
 
         router.post(
@@ -234,6 +234,23 @@ export default class UnleashProxy {
 
     setClientKeys(clientKeys: string[]): void {
         this.clientKeys = clientKeys;
+    }
+
+    getAllToggles(req: Request, res: Response<FeaturesSchema | string>): void {
+        const apiToken = req.header(this.clientKeysHeaderName);
+
+        if (!this.ready) {
+            res.status(503).send(NOT_READY_MSG);
+        } else if (!apiToken || !this.clientKeys.includes(apiToken)) {
+            res.sendStatus(401);
+        } else {
+            const { query } = req;
+            query.remoteAddress = query.remoteAddress || req.ip;
+            const context = createContext(query);
+            const toggles = this.client.getAllToggles(context);
+            res.set('Cache-control', 'public, max-age=2');
+            res.send({ toggles });
+        }
     }
 
     getEnabledToggles(

@@ -135,7 +135,7 @@ class Client extends EventEmitter implements IClient {
         const definitions = this.unleash.getFeatureToggleDefinitions() || [];
         return definitions.map((d) => ({
             name: d.name,
-            enabled: true,
+            enabled: this.unleash.isEnabled(d.name, context),
             variant: this.unleash.forceGetVariant(d.name, context),
             impressionData: d.impressionData,
         }));

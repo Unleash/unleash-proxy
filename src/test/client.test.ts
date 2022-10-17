@@ -32,6 +32,7 @@ test('should add environment to isEnabled calls', () => {
         strategies: [],
         variants: [],
         impressionData: true,
+        type: 'experiment'
     });
 
     client.getEnabledToggles({});
@@ -68,6 +69,7 @@ test('should override environment to isEnabled calls', () => {
         strategies: [],
         variants: [],
         impressionData: true,
+        type: 'experiment'
     });
 
     client.getEnabledToggles({ environment: 'some' });
@@ -104,6 +106,7 @@ test('should return all toggles', () => {
         strategies: [],
         variants: [],
         impressionData: true,
+        type: 'experiment'
     });
 
     fakeUnleash.toggleDefinitions.push({
@@ -113,10 +116,21 @@ test('should return all toggles', () => {
         strategies: [],
         variants: [],
         impressionData: true,
+        type: 'experiment'
+    });
+
+    fakeUnleash.toggleDefinitions.push({
+        name: 'test-3',
+        enabled: true,
+        stale: false,
+        strategies: [],
+        variants: [],
+        impressionData: true,
+        type: 'experiment'
     });
 
     const result = client.getAllToggles({ environment: 'some' });
 
-    expect(result.length).toBe(2);
+    expect(result.length).toBe(3);
     client.destroy();
 });
