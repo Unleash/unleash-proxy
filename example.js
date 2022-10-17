@@ -4,8 +4,7 @@ const { createApp } = require('./dist/app');
 
 const app = createApp({
     unleashUrl: 'https://app.unleash-hosted.com/demo/api/',
-    unleashApiToken:
-        '*:development.a113e11e04133c367f5fa7c731f9293c492322cf9d6060812cfe3fea',
+    unleashApiToken: '56907a2fa53c1d16101d509a10b78e36190b0f918d9f122d',
     clientKeys: ['proxy-secret', 'another-proxy-secret', 's1'],
     refreshInterval: 1000,
     logLevel: 'trace',
