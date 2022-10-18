@@ -561,3 +561,26 @@ test('Should register server SDK', async () => {
 
     expect(res.statusCode).toBe(200);
 });
+
+test('Should return all feature toggles', () => {
+    const client = new MockClient([
+        { name: 'a', enabled: true, impressionData: false },
+        { name: 'b', enabled: false, impressionData: false },
+        { name: 'c', enabled: true, impressionData: true },
+    ]);
+
+    const proxySecrets = ['sdf'];
+    const app = createApp(
+        { unleashUrl, unleashApiToken, proxySecrets },
+        client,
+    );
+    client.emit('ready');
+
+    return request(app)
+        .get('/proxy/all')
+        .set('Authorization', 'sdf')
+        .expect(200)
+        .expect((res) => {
+            expect(res.body.toggles.length).toBe(3);
+        });
+});
