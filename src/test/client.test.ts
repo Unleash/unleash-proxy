@@ -187,7 +187,7 @@ test('should return default variant for disabled toggles', () => {
     });
 
     const result = client.getAllToggles({ environment: 'some' });
-    console.log(result);
+
     expect(result.length).toBe(3);
     expect(result[0].variant?.name).toBe('disabled');
     expect(result[0].variant?.enabled).toBe(false);
