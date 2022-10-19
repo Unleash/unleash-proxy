@@ -89,32 +89,32 @@ export class JsonLogger implements Logger {
     }
 
     debug(message: any, ...args: any[]): void {
-        this.log(LogLevel.debug, message, ...args);
+        this.log(LogLevel.debug, message, args);
     }
 
     info(message: any, ...args: any[]): void {
-        this.log(LogLevel.info, message, ...args);
+        this.log(LogLevel.info, message, args);
     }
 
     warn(message: any, ...args: any[]): void {
-        this.log(LogLevel.warn, message, ...args);
+        this.log(LogLevel.warn, message, args);
     }
 
     error(message: any, ...args: any[]): void {
-        this.log(LogLevel.error, message, ...args);
+        this.log(LogLevel.error, message, args);
     }
 
     fatal(message: any, ...args: any[]): void {
-        this.log(LogLevel.fatal, message, ...args);
+        this.log(LogLevel.fatal, message, args);
     }
 
-    log(level: LogLevel, message: any, ...args: any[]): void {
+    log(level: LogLevel, message: any, args: any): void {
         if (resolve(level) >= resolve(this.logLevel)) {
             console.log(
                 JSON.stringify({
                     level: level,
                     message: message,
-                    ...stripEmptyArray(args),
+                    args: stripEmptyArray(args),
                 }),
             );
         }
