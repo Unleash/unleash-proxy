@@ -80,3 +80,43 @@ export class SimpleLogger implements Logger {
         }
     }
 }
+
+export class JsonLogger implements Logger {
+    private logLevel: LogLevel;
+
+    constructor(logLevel: LogLevel = LogLevel.warn) {
+        this.logLevel = logLevel;
+    }
+
+    debug(message: any, ...args: any[]): void {
+        this.log(LogLevel.debug, message, ...args);
+    }
+
+    info(message: any, ...args: any[]): void {
+        this.log(LogLevel.info, message, ...args);
+    }
+
+    warn(message: any, ...args: any[]): void {
+        this.log(LogLevel.warn, message, ...args);
+    }
+
+    error(message: any, ...args: any[]): void {
+        this.log(LogLevel.error, message, ...args);
+    }
+
+    fatal(message: any, ...args: any[]): void {
+        this.log(LogLevel.fatal, message, ...args);
+    }
+
+    log(level: LogLevel, message: any, ...args: any[]): void {
+        if (resolve(level) >= resolve(this.logLevel)) {
+            console.log(
+                JSON.stringify({
+                    level: level,
+                    message: message,
+                    ...stripEmptyArray(args),
+                }),
+            );
+        }
+    }
+}
