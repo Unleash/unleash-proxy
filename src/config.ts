@@ -16,7 +16,6 @@ export interface IProxyOption {
     unleashAppName?: string;
     unleashInstanceId?: string;
     customStrategies?: Strategy[];
-    customEnrichers?: ContextEnricher[];
     proxySecrets?: string[];
     clientKeys?: string[];
     preHook?: (app: Application) => void;
@@ -37,6 +36,7 @@ export interface IProxyOption {
     expBootstrap?: BootstrapOptions;
     expServerSideSdkConfig?: ServerSideSdkConfig;
     httpOptions?: HttpOptions;
+    expCustomEnrichers?: ContextEnricher[];
 }
 
 export interface IProxyConfig {
@@ -45,7 +45,6 @@ export interface IProxyConfig {
     unleashAppName: string;
     unleashInstanceId: string;
     customStrategies?: Strategy[];
-    customEnrichers?: ContextEnricher[];
     clientKeys: string[];
     proxyBasePath: string;
     refreshInterval: number;
@@ -63,6 +62,7 @@ export interface IProxyConfig {
     bootstrap?: BootstrapOptions;
     cors: CorsOptions;
     httpOptions?: HttpOptions;
+    expCustomEnrichers?: ContextEnricher[];
 }
 
 function resolveStringToArray(value?: string): string[] | undefined {
@@ -221,8 +221,8 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         loadCustomStrategies(process.env.UNLEASH_CUSTOM_STRATEGIES_FILE);
 
     const customEnrichers =
-        option.customEnrichers ||
-        loadCustomEnrichers(process.env.UNLEASH_CUSTOM_ENRICHERS_FILE);
+        option.expCustomEnrichers ||
+        loadCustomEnrichers(process.env.EXP_CUSTOM_ENRICHERS_FILE);
 
     const clientKeys = loadClientKeys(option);
     if (!clientKeys) {
@@ -252,7 +252,7 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
             'unleash-proxy',
         unleashInstanceId,
         customStrategies,
-        customEnrichers,
+        expCustomEnrichers: customEnrichers,
         clientKeys,
         proxyBasePath:
             option.proxyBasePath || process.env.PROXY_BASE_PATH || '',

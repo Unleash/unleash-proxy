@@ -52,8 +52,8 @@ export default class UnleashProxy {
             : [];
         this.clientKeysHeaderName = config.clientKeysHeaderName;
         this.client = client;
-        this.contextEnrichers = config.customEnrichers
-            ? config.customEnrichers
+        this.contextEnrichers = config.expCustomEnrichers
+            ? config.expCustomEnrichers
             : [];
 
         if (client.isReady()) {
