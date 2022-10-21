@@ -101,6 +101,39 @@ export default class UnleashProxy {
             this.getEnabledToggles.bind(this),
         );
 
+        router.get(
+            '/all',
+            openApiService.validPath({
+                parameters: [
+                    ...createRequestParameters({
+                        appName: "Your application's name",
+                        userId: "The current user's ID",
+                        sessionId: "The current session's ID",
+                        remoteAddress: "Your application's IP address",
+                    }),
+                    ...createDeepObjectRequestParameters({
+                        properties: {
+                            description: 'Additional (custom) context fields',
+                            example: {
+                                region: 'Africa',
+                                betaTester: 'true',
+                            },
+                        },
+                    }),
+                ],
+                responses: {
+                    ...standardResponses(401, 500, 503),
+                    200: featuresResponse,
+                },
+                description:
+                    'This endpoint returns the list of feature toggles that the proxy evaluates to enabled and disabled for the given context. As such, this endpoint always returns all feature toggles the proxy retrieves from unleash. Useful if you are migrating to unleash and need to know if the feature flag exists on the unleash server. However, using this endpoint will increase the payload size transmitted to your applications. Context values are provided as query parameters.',
+                summary:
+                    'Retrieve enabled feature toggles for the provided context.',
+                tags: ['Proxy client'],
+            }),
+            this.getAllToggles.bind(this),
+        );
+
         router.post(
             '',
             openApiService.validPath({
@@ -207,6 +240,23 @@ export default class UnleashProxy {
 
     setClientKeys(clientKeys: string[]): void {
         this.clientKeys = clientKeys;
+    }
+
+    getAllToggles(req: Request, res: Response<FeaturesSchema | string>): void {
+        const apiToken = req.header(this.clientKeysHeaderName);
+
+        if (!this.ready) {
+            res.status(503).send(NOT_READY_MSG);
+        } else if (!apiToken || !this.clientKeys.includes(apiToken)) {
+            res.sendStatus(401);
+        } else {
+            const { query } = req;
+            query.remoteAddress = query.remoteAddress || req.ip;
+            const context = createContext(query);
+            const toggles = this.client.getAllToggles(context);
+            res.set('Cache-control', 'public, max-age=2');
+            res.send({ toggles });
+        }
     }
 
     getEnabledToggles(

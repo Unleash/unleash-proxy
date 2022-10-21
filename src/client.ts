@@ -3,6 +3,7 @@ import { Context, initialize, Unleash, Variant } from 'unleash-client';
 import { FeatureInterface } from 'unleash-client/lib/feature';
 import Metrics from 'unleash-client/lib/metrics';
 import { defaultStrategies } from 'unleash-client/lib/strategy';
+import { getDefaultVariant } from 'unleash-client/lib/variant';
 import { IProxyConfig } from './config';
 import { Logger } from './logger';
 
@@ -38,6 +39,8 @@ export interface IClient extends EventEmitter {
         toggleNames: string[],
         context: Context,
     ) => FeatureToggleStatus[];
+
+    getAllToggles: (context: Context) => FeatureToggleStatus[];
 
     getFeatureToggleDefinitions(): FeatureInterface[];
 
@@ -121,6 +124,29 @@ class Client extends EventEmitter implements IClient {
             return { ...context, environment };
         }
         return context;
+    }
+
+    getAllToggles(inContext: Context): FeatureToggleStatus[] {
+        this.logger.info(
+            'Get all feature toggles for provided context',
+            inContext,
+        );
+        const context = this.fixContext(inContext);
+
+        const definitions = this.unleash.getFeatureToggleDefinitions() || [];
+        return definitions.map((d) => {
+            const enabled = this.unleash.isEnabled(d.name, context);
+            const variant = enabled
+                ? this.unleash.forceGetVariant(d.name, context)
+                : getDefaultVariant();
+
+            return {
+                name: d.name,
+                enabled: enabled,
+                variant: variant,
+                impressionData: d.impressionData,
+            };
+        });
     }
 
     getEnabledToggles(inContext: Context): FeatureToggleStatus[] {

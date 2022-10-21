@@ -33,14 +33,7 @@ exports[`should serve the OpenAPI UI 1`] = `
       <div id=\\"swagger-ui\\"></div>
       <script src=\\"./swagger-ui-bundle.js\\"></script>
       <script src=\\"./swagger-ui-standalone-preset.js\\"></script>
-      <script>
-        window.onload = function () {
-          window.ui = SwaggerUIBundle({
-            url: \\"/docs/openapi.json\\",
-            dom_id: '#swagger-ui'
-          })
-        }
-      </script>
+      <script src=\\"./swagger-ui-init.js\\"></script>
     
   </body>
 </html>
@@ -789,6 +782,113 @@ Object {
           },
         },
         "summary": "Which of the provided toggles are enabled given the provided context?",
+        "tags": Array [
+          "Proxy client",
+        ],
+      },
+    },
+    "/proxy/all": Object {
+      "get": Object {
+        "description": "This endpoint returns the list of feature toggles that the proxy evaluates to enabled and disabled for the given context. As such, this endpoint always returns all feature toggles the proxy retrieves from unleash. Useful if you are migrating to unleash and need to know if the feature flag exists on the unleash server. However, using this endpoint will increase the payload size transmitted to your applications. Context values are provided as query parameters.",
+        "parameters": Array [
+          Object {
+            "description": "Your application's name",
+            "in": "query",
+            "name": "appName",
+            "schema": Object {
+              "type": "string",
+            },
+          },
+          Object {
+            "description": "The current user's ID",
+            "in": "query",
+            "name": "userId",
+            "schema": Object {
+              "type": "string",
+            },
+          },
+          Object {
+            "description": "The current session's ID",
+            "in": "query",
+            "name": "sessionId",
+            "schema": Object {
+              "type": "string",
+            },
+          },
+          Object {
+            "description": "Your application's IP address",
+            "in": "query",
+            "name": "remoteAddress",
+            "schema": Object {
+              "type": "string",
+            },
+          },
+          Object {
+            "description": "Additional (custom) context fields",
+            "example": Object {
+              "betaTester": "true",
+              "region": "Africa",
+            },
+            "explode": true,
+            "in": "query",
+            "name": "properties",
+            "schema": Object {
+              "additionalProperties": Object {
+                "type": "string",
+              },
+              "type": "object",
+            },
+            "style": "form",
+          },
+        ],
+        "responses": Object {
+          "200": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "$ref": "#/components/schemas/featuresSchema",
+                },
+              },
+            },
+            "description": "The list of enabled toggles for the provided context.",
+          },
+          "401": Object {
+            "description": "Authorization information is missing or invalid.",
+          },
+          "500": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "example": Object {
+                    "error": "Whoops! We dropped the ball on this one (an unexpected error occurred): Cannot read properties of undefined (reading 'includes')",
+                  },
+                  "properties": Object {
+                    "error": Object {
+                      "type": "string",
+                    },
+                  },
+                  "required": Array [
+                    "error",
+                  ],
+                  "type": "object",
+                },
+              },
+            },
+            "description": "Something went wrong on the server side and we were unable to recover. If you have custom strategies loaded, make sure they don't throw errors.",
+          },
+          "503": Object {
+            "content": Object {
+              "text/plain": Object {
+                "schema": Object {
+                  "example": "The Unleash Proxy has not connected to the Unleash API and is not ready to accept requests yet.",
+                  "type": "string",
+                },
+              },
+            },
+            "description": "The proxy isn't ready to accept requests yet.",
+          },
+        },
+        "summary": "Retrieve enabled feature toggles for the provided context.",
         "tags": Array [
           "Proxy client",
         ],

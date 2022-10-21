@@ -99,6 +99,20 @@ function loadCustomStrategies(path?: string): Strategy[] | undefined {
     }
     return undefined;
 }
+function removeTrailingPath(path: string): string {
+    return path.endsWith('/') ? path.slice(0, -1) : path;
+}
+
+function addLeadingPath(path: string): string {
+    return path.startsWith('/') ? path : `/${path}`;
+}
+
+export function sanitizeBasePath(path?: string): string {
+    if (path === null || path === undefined || path.trim() === '') {
+        return '';
+    }
+    return removeTrailingPath(addLeadingPath(path.trim()));
+}
 
 function loadCustomEnrichers(path?: string): ContextEnricher[] | undefined {
     if (path) {
@@ -177,8 +191,19 @@ function loadCorsOptions(option: IProxyOption): CorsOptions {
 
     const computedCorsOptions: CorsOptions = {
         origin: process.env.CORS_ORIGIN || '*',
+        methods: process.env.CORS_METHODS,
+        allowedHeaders: process.env.CORS_ALLOWED_HEADERS,
+        exposedHeaders: process.env.CORS_EXPOSED_HEADERS || 'ETag',
+        credentials: safeBoolean(process.env.CORS_CREDENTIALS, false),
         maxAge: safeNumber(process.env.CORS_MAX_AGE, 172800),
-        exposedHeaders: 'ETag',
+        preflightContinue: safeBoolean(
+            process.env.CORS_PREFLIGHT_CONTINUE,
+            false,
+        ),
+        optionsSuccessStatus: safeNumber(
+            process.env.CORS_OPTIONS_SUCCESS_STATUS,
+            204,
+        ),
     };
 
     // if cors origin provided contains "," it means it's a list of urls, transform to array
@@ -243,6 +268,9 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         process.env.UNLEASH_INSTANCE_ID ||
         generateInstanceId();
 
+    let proxyBasePath = sanitizeBasePath(
+        option.proxyBasePath || process.env.PROXY_BASE_PATH,
+    );
     return {
         unleashUrl,
         unleashApiToken,
@@ -254,8 +282,7 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         customStrategies,
         expCustomEnrichers: customEnrichers,
         clientKeys,
-        proxyBasePath:
-            option.proxyBasePath || process.env.PROXY_BASE_PATH || '',
+        proxyBasePath,
         refreshInterval:
             option.refreshInterval ||
             safeNumber(process.env.UNLEASH_FETCH_INTERVAL, 5_000),

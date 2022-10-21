@@ -30,6 +30,11 @@ class MockClient extends EventEmitter implements IClient {
         this.apiToken = apiToken;
     }
 
+    getAllToggles(context: Context): FeatureToggleStatus[] {
+        this.queriedContexts.push(context);
+        return this.toggles;
+    }
+
     getEnabledToggles(context: Context): FeatureToggleStatus[] {
         this.queriedContexts.push(context);
         return this.toggles;
