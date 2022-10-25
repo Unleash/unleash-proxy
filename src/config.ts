@@ -2,7 +2,7 @@ import { CorsOptions } from 'cors';
 import { Application } from 'express';
 import { Strategy, TagFilter } from 'unleash-client';
 import { BootstrapOptions } from 'unleash-client/lib/repository/bootstrap-provider';
-import { Logger, LogLevel, SimpleLogger, JsonLogger } from './logger';
+import { Logger, LogLevel, SimpleLogger } from './logger';
 import { generateInstanceId } from './util';
 import { HttpOptions } from 'unleash-client/lib/http-options';
 
@@ -222,7 +222,7 @@ function chooseLogger(option: IProxyOption): Logger {
     }
 
     if (option.useJsonLogger || process.env.JSON_LOGGER) {
-        return new JsonLogger(logLevel);
+        return new SimpleLogger(logLevel, true);
     }
 
     return new SimpleLogger(logLevel);

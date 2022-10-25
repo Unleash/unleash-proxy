@@ -42,50 +42,15 @@ export interface Logger {
 export class SimpleLogger implements Logger {
     private logLevel: LogLevel;
 
-    constructor(logLevel: LogLevel = LogLevel.warn) {
+    private useJson: boolean;
+
+    constructor(logLevel: LogLevel = LogLevel.warn, useJson: boolean = false) {
         this.logLevel = logLevel;
+        this.useJson = useJson;
     }
 
     shouldLog(desired: LogLevel) {
         return resolve(desired) >= resolve(this.logLevel);
-    }
-
-    debug(message: any, ...args: any[]): void {
-        if (this.shouldLog(LogLevel.debug)) {
-            console.log(`DEBUG: ${message}`, stripEmptyArray(args));
-        }
-    }
-
-    info(message: any, ...args: any[]): void {
-        if (this.shouldLog(LogLevel.info)) {
-            console.log(`INFO: ${message}`, stripEmptyArray(args));
-        }
-    }
-
-    warn(message: any, ...args: any[]): void {
-        if (this.shouldLog(LogLevel.warn)) {
-            console.log(`WARN: ${message}`, stripEmptyArray(args));
-        }
-    }
-
-    error(message: any, ...args: any[]): void {
-        if (this.shouldLog(LogLevel.error)) {
-            console.log(`ERROR: ${message}`, stripEmptyArray(args));
-        }
-    }
-
-    fatal(message: any, ...args: any[]): void {
-        if (this.shouldLog(LogLevel.fatal)) {
-            console.log(`FATAL: ${message}`, stripEmptyArray(args));
-        }
-    }
-}
-
-export class JsonLogger implements Logger {
-    private logLevel: LogLevel;
-
-    constructor(logLevel: LogLevel = LogLevel.warn) {
-        this.logLevel = logLevel;
     }
 
     debug(message: any, ...args: any[]): void {
@@ -108,15 +73,16 @@ export class JsonLogger implements Logger {
         this.log(LogLevel.fatal, message, args);
     }
 
-    log(level: LogLevel, message: any, args: any): void {
-        if (resolve(level) >= resolve(this.logLevel)) {
-            console.log(
-                JSON.stringify({
-                    level: level,
-                    message: message,
-                    args: stripEmptyArray(args),
-                }),
-            );
+    log(level: LogLevel, message: any, args: any[]) {
+        if (this.shouldLog(level)) {
+            if (this.useJson) {
+                console.log(JSON.stringify({ level, message, args }));
+            } else {
+                console.log(
+                    `${level.toString().toUpperCase()}: ${message}`,
+                    stripEmptyArray(args),
+                );
+            }
         }
     }
 }
