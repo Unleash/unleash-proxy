@@ -32,8 +32,8 @@ export interface IProxyOption {
     clientKeysHeaderName?: string;
     enableOAS?: boolean;
     cors?: CorsOptions;
-    // experimental options
     enableAllEndpoint?: boolean;
+    // experimental options
     expBootstrap?: BootstrapOptions;
     expServerSideSdkConfig?: ServerSideSdkConfig;
     httpOptions?: HttpOptions;
