@@ -33,6 +33,7 @@ export interface IProxyOption {
     enableOAS?: boolean;
     cors?: CorsOptions;
     // experimental options
+    enableAllEndpoint?: boolean;
     expBootstrap?: BootstrapOptions;
     expServerSideSdkConfig?: ServerSideSdkConfig;
     httpOptions?: HttpOptions;
@@ -56,6 +57,7 @@ export interface IProxyConfig {
     namePrefix?: string;
     tags?: Array<TagFilter>;
     enableOAS: boolean;
+    enableAllEndpoint?: boolean;
     clientKeysHeaderName: string;
     serverSideSdkConfig?: ServerSideSdkConfig;
     bootstrap?: BootstrapOptions;
@@ -298,6 +300,9 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
             'authorization',
         serverSideSdkConfig: loadServerSideSdkConfig(option),
         bootstrap: loadBootstrapOptions(option),
+        enableAllEndpoint:
+            option.enableAllEndpoint ||
+            safeBoolean(process.env.ENABLE_ALL_ENDPOINT, false),
         enableOAS:
             option.enableOAS || safeBoolean(process.env.ENABLE_OAS, false),
         cors: loadCorsOptions(option),

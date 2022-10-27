@@ -10,7 +10,13 @@ let app: Application;
 
 beforeEach(() => {
     app = createApp(
-        { proxySecrets, unleashUrl, unleashApiToken, enableOAS: true },
+        {
+            proxySecrets,
+            unleashUrl,
+            unleashApiToken,
+            enableOAS: true,
+            enableAllEndpoint: true,
+        },
         new MockClient([]),
     );
 });
