@@ -202,3 +202,6 @@ The spec and UI can then be found at `<base url>/docs/openapi.json` and `<base u
 
 ## Return enabled and disabled toggles
 
+By default, the proxy only returns enabled toggles. However, in certain use cases, you might want it to return **all** toggles, regardless of whether they're enabled or disabled. The `/proxy/all` endpoint does this.
+
+Because returning all toggles regardless of their state is a potential security vulnerability, the endpoint has to be explicitly enabled. To enable it, set the `enableAllEndpoint` configuration option or the `ENABLE_ALL_ENDPOINT` environment variable to `true`.
