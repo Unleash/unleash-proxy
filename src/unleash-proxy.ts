@@ -244,7 +244,7 @@ export default class UnleashProxy {
 
         if (!this.enableAllEndpoint) {
             res.status(501).send(
-                '/all endpoint is disabled. Please, check the configuration options of the server.',
+                'The /proxy/all endpoint is disabled. Please check your server configuration. To enable it, set the `enableAllEndpoint` configuration option or `ENABLE_ALL_ENDPOINT` environment variable to `true`.'
             );
         } else if (!this.ready) {
             res.status(503).send(NOT_READY_MSG);
