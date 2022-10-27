@@ -885,6 +885,7 @@ Object {
                   },
                   "properties": Object {
                     "error": Object {
+                      "description": "A description of the error that occurred.",
                       "type": "string",
                     },
                   },
