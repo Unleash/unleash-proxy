@@ -98,7 +98,11 @@ export const notImplementedError: OpenAPIV3.ResponseObject = {
                 type: 'object',
                 required: ['error'],
                 properties: {
-                    error: { type: 'string', description: 'A description of the error that occurred.' },
+                    error: {
+                        type: 'string',
+                        description:
+                            'A description of the error that occurred.',
+                    },
                 },
                 example: {
                     error: 'This functionality is not implemented by the server',

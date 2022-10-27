@@ -199,3 +199,6 @@ The proxy can optionally expose a runtime-generated OpenAPI JSON spec and a corr
 To enable the JSON spec and UI, set `ENABLE_OAS` (environment variable) or `enableOAS` (in-code configuration variable) to `true`.
 
 The spec and UI can then be found at `<base url>/docs/openapi.json` and `<base url>/docs/openapi` respectively.
+
+## Return enabled and disabled toggles
+
