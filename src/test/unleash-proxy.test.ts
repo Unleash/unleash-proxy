@@ -585,7 +585,7 @@ test('Should return all feature toggles', () => {
         });
 });
 
-test('Should return 404 when all feature toggles is not enabled', () => {
+test('Should return 501 when all feature toggles is not enabled', () => {
     const client = new MockClient([
         { name: 'a', enabled: true, impressionData: false },
     ]);
