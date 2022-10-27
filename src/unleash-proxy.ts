@@ -37,6 +37,8 @@ export default class UnleashProxy {
 
     public middleware: Router;
 
+    private enableAllEndpoint = false;
+
     constructor(
         client: IClient,
         config: IProxyConfig,
@@ -49,6 +51,7 @@ export default class UnleashProxy {
             : [];
         this.clientKeysHeaderName = config.clientKeysHeaderName;
         this.client = client;
+        this.enableAllEndpoint = config.enableAllEndpoint || false;
 
         if (client.isReady()) {
             this.setReady();
@@ -95,41 +98,38 @@ export default class UnleashProxy {
             this.getEnabledToggles.bind(this),
         );
 
-        if (config.enableAllEndpoint) {
-            router.get(
-                '/all',
-                openApiService.validPath({
-                    parameters: [
-                        ...createRequestParameters({
-                            appName: "Your application's name",
-                            userId: "The current user's ID",
-                            sessionId: "The current session's ID",
-                            remoteAddress: "Your application's IP address",
-                        }),
-                        ...createDeepObjectRequestParameters({
-                            properties: {
-                                description:
-                                    'Additional (custom) context fields',
-                                example: {
-                                    region: 'Africa',
-                                    betaTester: 'true',
-                                },
+        router.get(
+            '/all',
+            openApiService.validPath({
+                parameters: [
+                    ...createRequestParameters({
+                        appName: "Your application's name",
+                        userId: "The current user's ID",
+                        sessionId: "The current session's ID",
+                        remoteAddress: "Your application's IP address",
+                    }),
+                    ...createDeepObjectRequestParameters({
+                        properties: {
+                            description: 'Additional (custom) context fields',
+                            example: {
+                                region: 'Africa',
+                                betaTester: 'true',
                             },
-                        }),
-                    ],
-                    responses: {
-                        ...standardResponses(401, 500, 503),
-                        200: featuresResponse,
-                    },
-                    description:
-                        'This endpoint returns the list of feature toggles that the proxy evaluates to enabled and disabled for the given context. As such, this endpoint always returns all feature toggles the proxy retrieves from unleash. Useful if you are migrating to unleash and need to know if the feature flag exists on the unleash server. However, using this endpoint will increase the payload size transmitted to your applications. Context values are provided as query parameters.',
-                    summary:
-                        'Retrieve enabled feature toggles for the provided context.',
-                    tags: ['Proxy client'],
-                }),
-                this.getAllToggles.bind(this),
-            );
-        }
+                        },
+                    }),
+                ],
+                responses: {
+                    ...standardResponses(401, 500, 501, 503),
+                    200: featuresResponse,
+                },
+                description:
+                    'This endpoint returns the list of feature toggles that the proxy evaluates to enabled and disabled for the given context. As such, this endpoint always returns all feature toggles the proxy retrieves from unleash. Useful if you are migrating to unleash and need to know if the feature flag exists on the unleash server. However, using this endpoint will increase the payload size transmitted to your applications. Context values are provided as query parameters.',
+                summary:
+                    'Retrieve enabled feature toggles for the provided context.',
+                tags: ['Proxy client'],
+            }),
+            this.getAllToggles.bind(this),
+        );
 
         router.post(
             '',
@@ -242,7 +242,11 @@ export default class UnleashProxy {
     getAllToggles(req: Request, res: Response<FeaturesSchema | string>): void {
         const apiToken = req.header(this.clientKeysHeaderName);
 
-        if (!this.ready) {
+        if (!this.enableAllEndpoint) {
+            res.status(501).send(
+                '/all endpoint is disabled. Please, check the configuration options of the server.',
+            );
+        } else if (!this.ready) {
             res.status(503).send(NOT_READY_MSG);
         } else if (!apiToken || !this.clientKeys.includes(apiToken)) {
             res.sendStatus(401);

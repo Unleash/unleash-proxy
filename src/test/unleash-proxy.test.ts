@@ -600,5 +600,5 @@ test('Should return 404 when all feature toggles is not enabled', () => {
     return request(app)
         .get('/proxy/all')
         .set('Authorization', 'sdf')
-        .expect(404);
+        .expect(501);
 });

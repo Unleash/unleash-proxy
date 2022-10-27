@@ -876,6 +876,27 @@ Object {
             },
             "description": "Something went wrong on the server side and we were unable to recover. If you have custom strategies loaded, make sure they don't throw errors.",
           },
+          "501": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "example": Object {
+                    "error": "This functionality is not implemented by the server",
+                  },
+                  "properties": Object {
+                    "error": Object {
+                      "type": "string",
+                    },
+                  },
+                  "required": Array [
+                    "error",
+                  ],
+                  "type": "object",
+                },
+              },
+            },
+            "description": "The functionality you are requesting is not implemented by the server. This could be due to a misconfiguration when starting the server.",
+          },
           "503": Object {
             "content": Object {
               "text/plain": Object {
