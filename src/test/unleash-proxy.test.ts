@@ -571,7 +571,7 @@ test('Should return all feature toggles', () => {
 
     const proxySecrets = ['sdf'];
     const app = createApp(
-        { unleashUrl, unleashApiToken, proxySecrets },
+        { unleashUrl, unleashApiToken, proxySecrets, enableAllEndpoint: true },
         client,
     );
     client.emit('ready');
@@ -583,4 +583,22 @@ test('Should return all feature toggles', () => {
         .expect((res) => {
             expect(res.body.toggles.length).toBe(3);
         });
+});
+
+test('Should return 501 when all feature toggles is not enabled', () => {
+    const client = new MockClient([
+        { name: 'a', enabled: true, impressionData: false },
+    ]);
+
+    const proxySecrets = ['sdf'];
+    const app = createApp(
+        { unleashUrl, unleashApiToken, proxySecrets },
+        client,
+    );
+    client.emit('ready');
+
+    return request(app)
+        .get('/proxy/all')
+        .set('Authorization', 'sdf')
+        .expect(501);
 });
