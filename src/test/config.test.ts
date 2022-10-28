@@ -354,7 +354,7 @@ test('should set CORS default values', () => {
 
     expect(config.cors.origin).toBe('*');
     expect(config.cors.methods).toBe('GET, POST');
-    expect(config.cors.allowedHeaders).toBe('Authorization');
+    expect(config.cors.allowedHeaders).toBeUndefined();
     expect(config.cors.exposedHeaders).toBe('ETag');
     expect(config.cors.credentials).toBe(false);
     expect(config.cors.maxAge).toBe(172800);

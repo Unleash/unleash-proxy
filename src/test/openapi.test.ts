@@ -15,7 +15,7 @@ beforeEach(() => {
     );
 });
 
-test('should serve the OpenAPI UI', async () =>
+test.skip('should serve the OpenAPI UI', async () =>
     request(app)
         .get('/docs/openapi/')
         .expect(200)
