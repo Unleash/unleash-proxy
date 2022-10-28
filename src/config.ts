@@ -182,8 +182,8 @@ function loadCorsOptions(option: IProxyOption): CorsOptions {
 
     const computedCorsOptions: CorsOptions = {
         origin: process.env.CORS_ORIGIN || '*',
-        methods: process.env.CORS_METHODS,
-        allowedHeaders: process.env.CORS_ALLOWED_HEADERS,
+        methods: process.env.CORS_METHODS || 'GET, POST',
+        allowedHeaders: process.env.CORS_ALLOWED_HEADERS || 'Authorization',
         exposedHeaders: process.env.CORS_EXPOSED_HEADERS || 'ETag',
         credentials: safeBoolean(process.env.CORS_CREDENTIALS, false),
         maxAge: safeNumber(process.env.CORS_MAX_AGE, 172800),
