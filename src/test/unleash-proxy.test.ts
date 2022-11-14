@@ -91,7 +91,7 @@ test('Should handle POST with empty/nonsensical body', async () => {
                 .expect(200)
                 .expect('Content-Type', /json/)
                 .then((response) => {
-                    expect(response.body.toggles).toHaveLength(0);
+                    expect(response.body.toggles).toHaveLength(2);
                 }),
         ),
     );
@@ -582,6 +582,28 @@ test('Should return all feature toggles', () => {
         .expect(200)
         .expect((res) => {
             expect(res.body.toggles.length).toBe(3);
+        });
+});
+
+test('Should return all enabled feature toggles when POST-ing', () => {
+    const client = new MockClient([
+        { name: 'a', enabled: true, impressionData: false },
+        { name: 'c', enabled: true, impressionData: true },
+    ]);
+
+    const proxySecrets = ['sdf'];
+    const app = createApp(
+        { unleashUrl, unleashApiToken, proxySecrets, enableAllEndpoint: true },
+        client,
+    );
+    client.emit('ready');
+
+    return request(app)
+        .post('/proxy')
+        .set('Authorization', 'sdf')
+        .expect(200)
+        .expect((res) => {
+            expect(res.body.toggles.length).toBe(2);
         });
 });
 
