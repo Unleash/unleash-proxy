@@ -1,10 +1,11 @@
 import { CorsOptions } from 'cors';
 import { Application } from 'express';
-import { Strategy, TagFilter } from 'unleash-client';
+import { ClientFeaturesResponse, Strategy, TagFilter } from 'unleash-client';
 import { BootstrapOptions } from 'unleash-client/lib/repository/bootstrap-provider';
 import { Logger, LogLevel, SimpleLogger } from './logger';
 import { generateInstanceId } from './util';
 import { HttpOptions } from 'unleash-client/lib/http-options';
+import { StorageProvider } from 'unleash-client/lib/repository/storage-provider';
 
 export interface ServerSideSdkConfig {
     tokens: string[];
@@ -33,6 +34,7 @@ export interface IProxyOption {
     enableOAS?: boolean;
     cors?: CorsOptions;
     enableAllEndpoint?: boolean;
+    storageProvider?: StorageProvider<ClientFeaturesResponse>;
     // experimental options
     expBootstrap?: BootstrapOptions;
     expServerSideSdkConfig?: ServerSideSdkConfig;
@@ -63,6 +65,7 @@ export interface IProxyConfig {
     bootstrap?: BootstrapOptions;
     cors: CorsOptions;
     httpOptions?: HttpOptions;
+    storageProvider?: StorageProvider<ClientFeaturesResponse>;
 }
 
 function resolveStringToArray(value?: string): string[] | undefined {
@@ -290,6 +293,7 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         environment: option.environment || process.env.UNLEASH_ENVIRONMENT,
         projectName: option.projectName || process.env.UNLEASH_PROJECT_NAME,
         namePrefix: option.namePrefix || process.env.UNLEASH_NAME_PREFIX,
+        storageProvider: option.storageProvider,
         disableMetrics: false,
         logger: chooseLogger(option),
         trustProxy,

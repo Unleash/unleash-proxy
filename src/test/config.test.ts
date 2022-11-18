@@ -1,7 +1,8 @@
 import * as path from 'path';
-import { Strategy } from 'unleash-client';
+import { ClientFeaturesResponse, Strategy } from 'unleash-client';
 import { createProxyConfig } from '../config';
 import * as https from 'https';
+import { StorageProvider } from 'unleash-client/lib/repository/storage-provider';
 
 test('should require "unleashUrl', () => {
     const t = () => createProxyConfig({});
@@ -190,6 +191,38 @@ test('should set namePrefix via env', () => {
     expect(config.namePrefix).toBe('prefixViaEnv');
 
     delete process.env.UNLEASH_CUSTOM_STRATEGIES_FILE;
+});
+
+test('should set storageProvider via options', () => {
+    class FakeStorage implements StorageProvider<ClientFeaturesResponse> {
+        async set(k: string, v: ClientFeaturesResponse): Promise<void> {
+            return void 0;
+        }
+        async get(k: string): Promise<ClientFeaturesResponse> {
+            return void 0 as unknown as ClientFeaturesResponse;
+        }
+    }
+
+    const fakeStorage = new FakeStorage();
+
+    const config = createProxyConfig({
+        unleashUrl: 'some',
+        unleashApiToken: 'some',
+        storageProvider: fakeStorage,
+        clientKeys: ['s1'],
+    });
+
+    expect(config.storageProvider).toBe(fakeStorage);
+});
+
+test('should not set a storageProvider if none is in config', () => {
+    const config = createProxyConfig({
+        unleashUrl: 'some',
+        unleashApiToken: 'some',
+        clientKeys: ['s1'],
+    });
+
+    expect(config.storageProvider).toBeUndefined();
 });
 
 test('should not set tags', () => {
