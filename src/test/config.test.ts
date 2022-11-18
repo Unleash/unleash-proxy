@@ -195,10 +195,11 @@ test('should set namePrefix via env', () => {
 
 test('should set storageProvider via options', () => {
     class FakeStorage implements StorageProvider<ClientFeaturesResponse> {
-        async set(k: string, v: ClientFeaturesResponse): Promise<void> {
+        async set(): Promise<void> {
             return void 0;
         }
-        async get(k: string): Promise<ClientFeaturesResponse> {
+
+        async get(): Promise<ClientFeaturesResponse> {
             return void 0 as unknown as ClientFeaturesResponse;
         }
     }
