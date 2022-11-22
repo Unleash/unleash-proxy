@@ -1,2 +1,15 @@
+.git/
+.github/
+dist/
 node_modules/
+scripts/
+src/examples/
 src/test/
+.dockerignore
+.gitignore
+.nvmrc
+CHANGELOG.md
+Dockerfile
+example.js
+jest.config.js
+README.md
