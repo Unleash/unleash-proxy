@@ -25,6 +25,7 @@ export interface IProxyOption {
     environment?: string;
     projectName?: string;
     logger?: Logger;
+    useJsonLogger?: boolean;
     logLevel?: LogLevel;
     trustProxy?: boolean | string | number;
     namePrefix?: string;
@@ -32,6 +33,7 @@ export interface IProxyOption {
     clientKeysHeaderName?: string;
     enableOAS?: boolean;
     cors?: CorsOptions;
+    enableAllEndpoint?: boolean;
     // experimental options
     expBootstrap?: BootstrapOptions;
     expServerSideSdkConfig?: ServerSideSdkConfig;
@@ -57,6 +59,7 @@ export interface IProxyConfig {
     namePrefix?: string;
     tags?: Array<TagFilter>;
     enableOAS: boolean;
+    enableAllEndpoint?: boolean;
     clientKeysHeaderName: string;
     serverSideSdkConfig?: ServerSideSdkConfig;
     bootstrap?: BootstrapOptions;
@@ -191,7 +194,7 @@ function loadCorsOptions(option: IProxyOption): CorsOptions {
 
     const computedCorsOptions: CorsOptions = {
         origin: process.env.CORS_ORIGIN || '*',
-        methods: process.env.CORS_METHODS,
+        methods: process.env.CORS_METHODS || 'GET, POST',
         allowedHeaders: process.env.CORS_ALLOWED_HEADERS,
         exposedHeaders: process.env.CORS_EXPOSED_HEADERS || 'ETag',
         credentials: safeBoolean(process.env.CORS_CREDENTIALS, false),
@@ -225,6 +228,20 @@ function loadCorsOptions(option: IProxyOption): CorsOptions {
     return computedCorsOptions;
 }
 
+function chooseLogger(option: IProxyOption): Logger {
+    const logLevel = option.logLevel || (process.env.LOG_LEVEL as LogLevel);
+
+    if (option.logger) {
+        return option.logger;
+    }
+
+    if (option.useJsonLogger || process.env.JSON_LOGGER) {
+        return new SimpleLogger(logLevel, true);
+    }
+
+    return new SimpleLogger(logLevel);
+}
+
 export function createProxyConfig(option: IProxyOption): IProxyConfig {
     const unleashUrl = option.unleashUrl || process.env.UNLEASH_URL;
     if (!unleashUrl) {
@@ -255,8 +272,6 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
             'You must specify the clientKeys option (UNLEASH_PROXY_CLIENT_KEYS)',
         );
     }
-
-    const logLevel = option.logLevel || (process.env.LOG_LEVEL as LogLevel);
 
     const trustProxy =
         option.trustProxy || loadTrustProxy(process.env.TRUST_PROXY);
@@ -293,7 +308,7 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         projectName: option.projectName || process.env.UNLEASH_PROJECT_NAME,
         namePrefix: option.namePrefix || process.env.UNLEASH_NAME_PREFIX,
         disableMetrics: false,
-        logger: option.logger || new SimpleLogger(logLevel),
+        logger: chooseLogger(option),
         trustProxy,
         tags,
         clientKeysHeaderName:
@@ -302,6 +317,9 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
             'authorization',
         serverSideSdkConfig: loadServerSideSdkConfig(option),
         bootstrap: loadBootstrapOptions(option),
+        enableAllEndpoint:
+            option.enableAllEndpoint ||
+            safeBoolean(process.env.ENABLE_ALL_ENDPOINT, false),
         enableOAS:
             option.enableOAS || safeBoolean(process.env.ENABLE_OAS, false),
         cors: loadCorsOptions(option),

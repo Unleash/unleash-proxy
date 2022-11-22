@@ -33,7 +33,14 @@ exports[`should serve the OpenAPI UI 1`] = `
       <div id=\\"swagger-ui\\"></div>
       <script src=\\"./swagger-ui-bundle.js\\"></script>
       <script src=\\"./swagger-ui-standalone-preset.js\\"></script>
-      <script src=\\"./swagger-ui-init.js\\"></script>
+      <script>
+        window.onload = function () {
+          window.ui = SwaggerUIBundle({
+            url: \\"/docs/openapi.json\\",
+            dom_id: '#swagger-ui'
+          })
+        }
+      </script>
     
   </body>
 </html>
@@ -875,6 +882,28 @@ Object {
               },
             },
             "description": "Something went wrong on the server side and we were unable to recover. If you have custom strategies loaded, make sure they don't throw errors.",
+          },
+          "501": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "example": Object {
+                    "error": "This functionality is not implemented by the server",
+                  },
+                  "properties": Object {
+                    "error": Object {
+                      "description": "A description of the error that occurred.",
+                      "type": "string",
+                    },
+                  },
+                  "required": Array [
+                    "error",
+                  ],
+                  "type": "object",
+                },
+              },
+            },
+            "description": "The functionality you are requesting is not implemented by the server. This could be due to a misconfiguration when starting the server.",
           },
           "503": Object {
             "content": Object {

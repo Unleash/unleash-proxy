@@ -42,8 +42,11 @@ export interface Logger {
 export class SimpleLogger implements Logger {
     private logLevel: LogLevel;
 
-    constructor(logLevel: LogLevel = LogLevel.warn) {
+    private useJson: boolean;
+
+    constructor(logLevel: LogLevel = LogLevel.warn, useJson: boolean = false) {
         this.logLevel = logLevel;
+        this.useJson = useJson;
     }
 
     shouldLog(desired: LogLevel) {
@@ -51,32 +54,35 @@ export class SimpleLogger implements Logger {
     }
 
     debug(message: any, ...args: any[]): void {
-        if (this.shouldLog(LogLevel.debug)) {
-            console.log(`DEBUG: ${message}`, stripEmptyArray(args));
-        }
+        this.log(LogLevel.debug, message, args);
     }
 
     info(message: any, ...args: any[]): void {
-        if (this.shouldLog(LogLevel.info)) {
-            console.log(`INFO: ${message}`, stripEmptyArray(args));
-        }
+        this.log(LogLevel.info, message, args);
     }
 
     warn(message: any, ...args: any[]): void {
-        if (this.shouldLog(LogLevel.warn)) {
-            console.log(`WARN: ${message}`, stripEmptyArray(args));
-        }
+        this.log(LogLevel.warn, message, args);
     }
 
     error(message: any, ...args: any[]): void {
-        if (this.shouldLog(LogLevel.error)) {
-            console.log(`ERROR: ${message}`, stripEmptyArray(args));
-        }
+        this.log(LogLevel.error, message, args);
     }
 
     fatal(message: any, ...args: any[]): void {
-        if (this.shouldLog(LogLevel.fatal)) {
-            console.log(`FATAL: ${message}`, stripEmptyArray(args));
+        this.log(LogLevel.fatal, message, args);
+    }
+
+    log(level: LogLevel, message: any, args: any[]) {
+        if (this.shouldLog(level)) {
+            if (this.useJson) {
+                console.log(JSON.stringify({ level, message, args }));
+            } else {
+                console.log(
+                    `${level.toString().toUpperCase()}: ${message}`,
+                    stripEmptyArray(args),
+                );
+            }
         }
     }
 }

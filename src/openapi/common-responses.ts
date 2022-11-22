@@ -89,11 +89,35 @@ export const internalServerErrorResponse: OpenAPIV3.ResponseObject = {
     },
 };
 
+export const notImplementedError: OpenAPIV3.ResponseObject = {
+    description:
+        'The functionality you are requesting is not implemented by the server. This could be due to a misconfiguration when starting the server.',
+    content: {
+        'application/json': {
+            schema: {
+                type: 'object',
+                required: ['error'],
+                properties: {
+                    error: {
+                        type: 'string',
+                        description:
+                            'A description of the error that occurred.',
+                    },
+                },
+                example: {
+                    error: 'This functionality is not implemented by the server',
+                },
+            },
+        },
+    },
+};
+
 const commonResponses = {
     200: emptySuccessResponse,
     400: badRequestResponse,
     401: unauthorizedResponse,
     500: internalServerErrorResponse,
+    501: notImplementedError,
     503: notReadyResponse,
 } as const;
 

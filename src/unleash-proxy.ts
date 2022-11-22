@@ -40,6 +40,8 @@ export default class UnleashProxy {
 
     public middleware: Router;
 
+    private enableAllEndpoint = false;
+
     constructor(
         client: IClient,
         config: IProxyConfig,
@@ -52,6 +54,7 @@ export default class UnleashProxy {
             : [];
         this.clientKeysHeaderName = config.clientKeysHeaderName;
         this.client = client;
+        this.enableAllEndpoint = config.enableAllEndpoint || false;
         this.contextEnrichers = config.expCustomEnrichers
             ? config.expCustomEnrichers
             : [];
@@ -122,7 +125,7 @@ export default class UnleashProxy {
                     }),
                 ],
                 responses: {
-                    ...standardResponses(401, 500, 503),
+                    ...standardResponses(401, 500, 501, 503),
                     200: featuresResponse,
                 },
                 description:
@@ -245,7 +248,11 @@ export default class UnleashProxy {
     getAllToggles(req: Request, res: Response<FeaturesSchema | string>): void {
         const apiToken = req.header(this.clientKeysHeaderName);
 
-        if (!this.ready) {
+        if (!this.enableAllEndpoint) {
+            res.status(501).send(
+                'The /proxy/all endpoint is disabled. Please check your server configuration. To enable it, set the `enableAllEndpoint` configuration option or `ENABLE_ALL_ENDPOINT` environment variable to `true`.',
+            );
+        } else if (!this.ready) {
             res.status(503).send(NOT_READY_MSG);
         } else if (!apiToken || !this.clientKeys.includes(apiToken)) {
             res.sendStatus(401);

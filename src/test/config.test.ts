@@ -353,7 +353,7 @@ test('should set CORS default values', () => {
     });
 
     expect(config.cors.origin).toBe('*');
-    expect(config.cors.methods).toBeUndefined();
+    expect(config.cors.methods).toBe('GET, POST');
     expect(config.cors.allowedHeaders).toBeUndefined();
     expect(config.cors.exposedHeaders).toBe('ETag');
     expect(config.cors.credentials).toBe(false);
