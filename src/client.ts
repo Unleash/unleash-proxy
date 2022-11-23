@@ -86,6 +86,7 @@ class Client extends EventEmitter implements IClient {
             tags: config.tags,
             customHeadersFunction,
             bootstrap: config.bootstrap,
+            storageProvider: config.storageProvider,
             ...(!!config.httpOptions
                 ? { httpOptions: config.httpOptions }
                 : {}),
