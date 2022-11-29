@@ -419,6 +419,20 @@ test('should not set config.httpOptions if no http options are provided at creat
     expect(config.httpOptions).toBeUndefined();
 });
 
+test('should load config.httpOptions.rejectUnauthorized from env', () => {
+    process.env.HTTP_OPTIONS_REJECT_UNAUTHORIZED = 'true';
+
+    const config = createProxyConfig({
+        unleashUrl: 'some',
+        unleashApiToken: 'some',
+        clientKeys: ['s1'],
+    });
+
+    expect(config.httpOptions?.rejectUnauthorized).toBe(true);
+    
+    delete process.env.HTTP_OPTIONS_REJECT_UNAUTHORIZED;
+});
+
 test.each([
     '/base/path',
     '/base/path',
