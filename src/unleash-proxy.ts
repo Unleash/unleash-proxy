@@ -291,20 +291,19 @@ export default class UnleashProxy {
         } else if (!clientToken || !this.clientKeys.includes(clientToken)) {
             res.sendStatus(401);
         } else {
+            res.set('Cache-control', 'public, max-age=2');
             const { context = {}, toggles: toggleNames = [] } = req.body;
+            const actualContext = createContext(context);
 
             if (toggleNames.length > 0) {
                 const toggles = this.client.getDefinedToggles(
                     toggleNames,
-                    context as Context,
+                    actualContext,
                 );
-                res.set('Cache-control', 'public, max-age=2');
                 res.send({ toggles });
             } else {
                 context.remoteAddress = context.remoteAddress || req.ip;
-                const actualContext = createContext(context);
                 const toggles = this.client.getEnabledToggles(actualContext);
-                res.set('Cache-control', 'public, max-age=2');
                 res.send({ toggles });
             }
         }
