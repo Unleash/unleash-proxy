@@ -205,3 +205,137 @@ The spec and UI can then be found at `<base url>/docs/openapi.json` and `<base u
 By default, the proxy only returns enabled toggles. However, in certain use cases, you might want it to return **all** toggles, regardless of whether they're enabled or disabled. The `/proxy/all` endpoint does this.
 
 Because returning all toggles regardless of their state is a potential security vulnerability, the endpoint has to be explicitly enabled. To enable it, set the `enableAllEndpoint` configuration option or the `ENABLE_ALL_ENDPOINT` environment variable to `true`.
+
+## POST API
+The proxy also offers a POST API used to evaluate toggles This can be used to evaluate a list of know toggle names or to retrieve all _enabled_ toggles for a given context. 
+
+### a) Evaluate list of known toggles
+
+This method will allow you to send a list of toggle names together with an Unleash Context and evaluate them accordingly. It will return enablement of all provided toggles. 
+
+**URL**: `POST https://proxy-host.server/proxy`
+
+**Content Type**: `application/json`
+
+**Body:**
+
+```json
+{
+	"toggles": ["demoApp.step1"],
+	"context": {
+		"appName": "someApp",
+		"sessionId": "233312AFF22",
+	}
+}
+```
+Result:
+
+```
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: ETag
+Cache-control: public, max-age=2
+Connection: keep-alive
+Content-Length: 122
+Content-Type: application/json; charset=utf-8
+Date: Wed, 30 Nov 2022 14:46:48 GMT
+ETag: W/"7a-RMKUyY0BWIhjahpVPWnNdXyDw6I"
+Keep-Alive: timeout=5
+Vary: Accept-Encoding
+
+{
+    "toggles": [
+        {
+            "enabled": false,
+            "impressionData": true,
+            "name": "demoApp.step1",
+            "variant": {
+                "enabled": false,
+                "name": "disabled"
+            }
+        }
+    ]
+}
+
+```
+
+
+### a) Evaluate all enabled toggles
+
+This method will allow you to get all enabled toggles for a given context. 
+
+**URL**: `POST https://proxy-host.server/proxy`
+
+**Content Type**: `application/json`
+
+**Body:**
+
+```json
+{
+	"context": {
+		"appName": "someApp",
+		"sessionId": "233312AFF22",
+	}
+}
+```
+Result:
+
+```
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: ETag
+Cache-control: public, max-age=2
+Connection: keep-alive
+Content-Length: 465
+Content-Type: application/json; charset=utf-8
+Date: Wed, 30 Nov 2022 14:48:55 GMT
+ETag: W/"1d1-dm6tkvMpkx42mZmojNSNKmHid1M"
+Keep-Alive: timeout=5
+Vary: Accept-Encoding
+
+{
+    "toggles": [
+        {
+            "enabled": true,
+            "impressionData": false,
+            "name": "demoApp.step2",
+            "variant": {
+                "enabled": true,
+                "name": "userWithId",
+                "payload": {
+                    "type": "string",
+                    "value": "90732934"
+                }
+            }
+        },
+        {
+            "enabled": true,
+            "impressionData": false,
+            "name": "demoApp.step3",
+            "variant": {
+                "enabled": true,
+                "name": "C",
+                "payload": {
+                    "type": "string",
+                    "value": "hello"
+                }
+            }
+        },
+        {
+            "enabled": true,
+            "impressionData": true,
+            "name": "demoApp.step4",
+            "variant": {
+                "enabled": true,
+                "name": "Orange",
+                "payload": {
+                    "type": "string",
+                    "value": "orange"
+                }
+            }
+        }
+    ]
+}
+
+
+```
