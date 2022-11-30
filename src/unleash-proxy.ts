@@ -1,5 +1,4 @@
 import { Request, Response, Router } from 'express';
-import { Context } from 'unleash-client';
 import { createContext } from './create-context';
 import { IProxyConfig } from './config';
 import { IClient } from './client';
