@@ -243,7 +243,7 @@ function loadHttpOptions(option: IProxyOption): IProxyOption {
             httpOptions: {
                 rejectUnauthorized: safeBoolean(
                     process.env.HTTP_OPTIONS_REJECT_UNAUTHORIZED,
-                    false,
+                    true,
                 ),
             },
         };
