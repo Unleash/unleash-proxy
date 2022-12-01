@@ -231,18 +231,25 @@ function loadCorsOptions(option: IProxyOption): CorsOptions {
     return computedCorsOptions;
 }
 
-function loadHttpOptions(option: IProxyOption): HttpOptions {
+function loadHttpOptions(option: IProxyOption): IProxyOption {
     if (option.httpOptions) {
-        return option.httpOptions;
+        return {
+            httpOptions: option.httpOptions,
+        };
     }
 
     if (process.env.HTTP_OPTIONS_REJECT_UNAUTHORIZED) {
         return {
-            rejectUnauthorized: safeBoolean(process.env.HTTP_OPTIONS_REJECT_UNAUTHORIZED, false)
+            httpOptions: {
+                rejectUnauthorized: safeBoolean(
+                    process.env.HTTP_OPTIONS_REJECT_UNAUTHORIZED,
+                    false,
+                ),
+            },
         };
     }
-    
-    return {}; 
+
+    return {};
 }
 
 function chooseLogger(option: IProxyOption): Logger {
@@ -341,6 +348,6 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         enableOAS:
             option.enableOAS || safeBoolean(process.env.ENABLE_OAS, false),
         cors: loadCorsOptions(option),
-        ...((option.httpOptions || process.env.HTTP_OPTIONS_REJECT_UNAUTHORIZED) ? { httpOptions: loadHttpOptions(option) } : {}),
+        ...loadHttpOptions(option),
     };
 }

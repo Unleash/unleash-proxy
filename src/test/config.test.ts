@@ -429,7 +429,7 @@ test('should load config.httpOptions.rejectUnauthorized from env', () => {
     });
 
     expect(config.httpOptions?.rejectUnauthorized).toBe(true);
-    
+
     delete process.env.HTTP_OPTIONS_REJECT_UNAUTHORIZED;
 });
 
