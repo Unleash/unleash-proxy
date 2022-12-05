@@ -1,5 +1,4 @@
 import { Request, Response, Router } from 'express';
-import { Context } from 'unleash-client';
 import { createContext } from './create-context';
 import { IProxyConfig } from './config';
 import { IClient } from './client';
@@ -300,14 +299,21 @@ export default class UnleashProxy {
         } else if (!clientToken || !this.clientKeys.includes(clientToken)) {
             res.sendStatus(401);
         } else {
+            res.set('Cache-control', 'public, max-age=2');
             const { context = {}, toggles: toggleNames = [] } = req.body;
+            const actualContext = createContext(context);
 
-            const toggles = this.client.getDefinedToggles(
-                toggleNames,
-                context as Context,
-            );
-
-            res.send({ toggles });
+            if (toggleNames.length > 0) {
+                const toggles = this.client.getDefinedToggles(
+                    toggleNames,
+                    actualContext,
+                );
+                res.send({ toggles });
+            } else {
+                context.remoteAddress = context.remoteAddress || req.ip;
+                const toggles = this.client.getEnabledToggles(actualContext);
+                res.send({ toggles });
+            }
         }
     }
 
