@@ -922,6 +922,91 @@ Object {
           "Proxy client",
         ],
       },
+      "post": Object {
+        "description": "This endpoint returns the list of feature toggles that the proxy evaluates to enabled and disabled for the given context. As such, this endpoint always returns all feature toggles the proxy retrieves from unleash. Useful if you are migrating to unleash and need to know if the feature flag exists on the unleash server. However, using this endpoint will increase the payload size transmitted to your applications. Context values are provided as query parameters.",
+        "requestBody": Object {
+          "content": Object {
+            "application/json": Object {
+              "schema": Object {
+                "$ref": "#/components/schemas/lookupTogglesSchema",
+              },
+            },
+          },
+        },
+        "responses": Object {
+          "200": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "$ref": "#/components/schemas/featuresSchema",
+                },
+              },
+            },
+            "description": "The list of enabled toggles for the provided context.",
+          },
+          "401": Object {
+            "description": "Authorization information is missing or invalid.",
+          },
+          "500": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "example": Object {
+                    "error": "Whoops! We dropped the ball on this one (an unexpected error occurred): Cannot read properties of undefined (reading 'includes')",
+                  },
+                  "properties": Object {
+                    "error": Object {
+                      "type": "string",
+                    },
+                  },
+                  "required": Array [
+                    "error",
+                  ],
+                  "type": "object",
+                },
+              },
+            },
+            "description": "Something went wrong on the server side and we were unable to recover. If you have custom strategies loaded, make sure they don't throw errors.",
+          },
+          "501": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "example": Object {
+                    "error": "This functionality is not implemented by the server",
+                  },
+                  "properties": Object {
+                    "error": Object {
+                      "description": "A description of the error that occurred.",
+                      "type": "string",
+                    },
+                  },
+                  "required": Array [
+                    "error",
+                  ],
+                  "type": "object",
+                },
+              },
+            },
+            "description": "The functionality you are requesting is not implemented by the server. This could be due to a misconfiguration when starting the server.",
+          },
+          "503": Object {
+            "content": Object {
+              "text/plain": Object {
+                "schema": Object {
+                  "example": "The Unleash Proxy has not connected to the Unleash API and is not ready to accept requests yet.",
+                  "type": "string",
+                },
+              },
+            },
+            "description": "The proxy isn't ready to accept requests yet.",
+          },
+        },
+        "summary": "Retrieve enabled feature toggles for the provided context.",
+        "tags": Array [
+          "Proxy client",
+        ],
+      },
     },
     "/proxy/client/features": Object {
       "get": Object {

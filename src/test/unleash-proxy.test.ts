@@ -585,6 +585,66 @@ test('Should return all feature toggles', () => {
         });
 });
 
+test('Should return all feature toggles via POST', () => {
+    const client = new MockClient([
+        { name: 'a', enabled: true, impressionData: false },
+        { name: 'b', enabled: false, impressionData: false },
+        { name: 'c', enabled: true, impressionData: true },
+    ]);
+
+    const proxySecrets = ['sdf'];
+    const app = createApp(
+        { unleashUrl, unleashApiToken, proxySecrets, enableAllEndpoint: true },
+        client,
+    );
+    client.emit('ready');
+
+    return request(app)
+        .post('/proxy/all')
+        .send({
+            context: {
+                customProperty: 'string',
+                properties: { otherCustomProperty: 24 },
+            },
+        })
+        .set('Authorization', 'sdf')
+        .expect(200)
+        .expect((res) => {
+            expect(res.body.toggles.length).toBe(3);
+        });
+});
+
+test('Should return all named feature toggles via POST', () => {
+    const client = new MockClient([
+        { name: 'a', enabled: true, impressionData: false },
+        { name: 'b', enabled: false, impressionData: false },
+        { name: 'c', enabled: true, impressionData: true },
+    ]);
+
+    const proxySecrets = ['sdf'];
+    const app = createApp(
+        { unleashUrl, unleashApiToken, proxySecrets, enableAllEndpoint: true },
+        client,
+    );
+    client.emit('ready');
+
+    return request(app)
+        .post('/proxy/all')
+        .send({
+            toggles: ['a'],
+            context: {
+                customProperty: 'string',
+                properties: { otherCustomProperty: 24 },
+            },
+        })
+        .set('Authorization', 'sdf')
+        .expect(200)
+        .expect((res) => {
+            expect(res.body.toggles.length).toBe(1);
+            expect(res.body.toggles[0].name).toBe('a');
+        });
+});
+
 test('Should return all enabled feature toggles when POST-ing', () => {
     const client = new MockClient([
         { name: 'a', enabled: true, impressionData: false },

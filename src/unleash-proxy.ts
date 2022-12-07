@@ -137,6 +137,23 @@ export default class UnleashProxy {
         );
 
         router.post(
+            '/all',
+            openApiService.validPath({
+                requestBody: lookupTogglesRequest,
+                responses: {
+                    ...standardResponses(401, 500, 501, 503),
+                    200: featuresResponse,
+                },
+                description:
+                    'This endpoint returns the list of feature toggles that the proxy evaluates to enabled and disabled for the given context. As such, this endpoint always returns all feature toggles the proxy retrieves from unleash. Useful if you are migrating to unleash and need to know if the feature flag exists on the unleash server. However, using this endpoint will increase the payload size transmitted to your applications. Context values are provided as query parameters.',
+                summary:
+                    'Retrieve enabled feature toggles for the provided context.',
+                tags: ['Proxy client'],
+            }),
+            this.getAllTogglesPOST.bind(this),
+        );
+
+        router.post(
             '',
             openApiService.validPath({
                 requestBody: lookupTogglesRequest,
@@ -262,6 +279,39 @@ export default class UnleashProxy {
             const toggles = this.client.getAllToggles(context);
             res.set('Cache-control', 'public, max-age=2');
             res.send({ toggles });
+        }
+    }
+
+    getAllTogglesPOST(
+        req: Request,
+        res: Response<FeaturesSchema | string>,
+    ): void {
+        const apiToken = req.header(this.clientKeysHeaderName);
+
+        if (!this.enableAllEndpoint) {
+            res.status(501).send(
+                'The /proxy/all endpoint is disabled. Please check your server configuration. To enable it, set the `enableAllEndpoint` configuration option or `ENABLE_ALL_ENDPOINT` environment variable to `true`.',
+            );
+        } else if (!this.ready) {
+            res.status(503).send(NOT_READY_MSG);
+        } else if (!apiToken || !this.clientKeys.includes(apiToken)) {
+            res.sendStatus(401);
+        } else {
+            res.set('Cache-control', 'public, max-age=2');
+            const { context = {}, toggles: toggleNames = [] } = req.body;
+            const actualContext = createContext(context);
+
+            if (toggleNames.length > 0) {
+                const toggles = this.client.getDefinedToggles(
+                    toggleNames,
+                    actualContext,
+                );
+                res.send({ toggles });
+            } else {
+                context.remoteAddress = context.remoteAddress || req.ip;
+                const toggles = this.client.getAllToggles(actualContext);
+                res.send({ toggles });
+            }
         }
     }
 
