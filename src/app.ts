@@ -13,6 +13,8 @@ export function createApp(
     app: Application = express(),
 ): Application {
     const config = createProxyConfig(options);
+    const { logger } = config;
+    logger.debug('Configuration:', config);
     const client = unleashClient || new Client(config);
 
     const openApiService = new OpenApiService(config);
@@ -27,7 +29,7 @@ export function createApp(
     try {
         app.set('trust proxy', config.trustProxy);
     } catch (err) {
-        config.logger.error(
+        logger.error(
             `The provided "trustProxy" option was not valid ("${config.trustProxy}")`,
             err,
         );

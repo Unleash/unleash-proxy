@@ -20,7 +20,7 @@ const app = createApp({
         },
     },
     // unleashInstanceId: '1337',
-    // logLevel: 'info',
+    logLevel: 'debug',
     // projectName: 'order-team', // optional
     // environment: 'development',
 });
