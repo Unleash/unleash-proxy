@@ -231,6 +231,27 @@ function loadCorsOptions(option: IProxyOption): CorsOptions {
     return computedCorsOptions;
 }
 
+function loadHttpOptions(option: IProxyOption): IProxyOption {
+    if (option.httpOptions) {
+        return {
+            httpOptions: option.httpOptions,
+        };
+    }
+
+    if (process.env.HTTP_OPTIONS_REJECT_UNAUTHORIZED) {
+        return {
+            httpOptions: {
+                rejectUnauthorized: safeBoolean(
+                    process.env.HTTP_OPTIONS_REJECT_UNAUTHORIZED,
+                    true,
+                ),
+            },
+        };
+    }
+
+    return {};
+}
+
 function chooseLogger(option: IProxyOption): Logger {
     const logLevel = option.logLevel || (process.env.LOG_LEVEL as LogLevel);
 
@@ -327,6 +348,6 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         enableOAS:
             option.enableOAS || safeBoolean(process.env.ENABLE_OAS, false),
         cors: loadCorsOptions(option),
-        ...(!!option.httpOptions ? { httpOptions: option.httpOptions } : {}),
+        ...loadHttpOptions(option),
     };
 }
