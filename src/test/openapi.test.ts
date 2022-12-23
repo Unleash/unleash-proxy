@@ -1,5 +1,6 @@
 import request from 'supertest';
 import { Application } from 'express';
+import SwaggerParser from '@apidevtools/swagger-parser';
 import { createApp } from '../app';
 import MockClient from './client.mock';
 
@@ -15,11 +16,16 @@ beforeEach(() => {
     );
 });
 
-test.skip('should serve the OpenAPI UI', async () =>
-    request(app)
-        .get('/docs/openapi/')
-        .expect(200)
-        .then((response) => expect(response.text).toMatchSnapshot()));
+test('should serve the OpenAPI UI', async () => {
+    const res = await request(app).get('/docs/openapi/').expect(200);
+    const body = res.text;
+    expect(body).toMatchSnapshot();
+});
+
+test('validate open api response', async () => {
+    const res = await request(app).get('/docs/openapi.json').expect(200);
+    await SwaggerParser.validate(res.body);
+});
 
 test('should serve the OpenAPI spec', async () =>
     request(app)
