@@ -23,7 +23,6 @@ export const createDeepObjectRequestParameters = (
         in: 'query',
         schema: {
             type: 'object',
-            additionalProperties: { type: 'string' },
         },
         style: 'form',
         explode: true,

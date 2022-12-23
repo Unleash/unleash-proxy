@@ -11,7 +11,7 @@ export const schema = {
         properties: {
             type: 'object',
             additionalProperties: {
-                anyOf: [{ type: 'string' }, { type: 'number' }],
+                type: 'string',
             },
             example: {
                 region: 'Africa',
