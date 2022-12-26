@@ -279,7 +279,6 @@ export default class UnleashProxy {
         } else if (!apiToken || !this.clientKeys.includes(apiToken)) {
             res.sendStatus(401);
         } else {
-            console.log('next!');
             next();
         }
     }
