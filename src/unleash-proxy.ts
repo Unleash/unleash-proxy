@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import { createContext } from './create-context';
 import { IProxyConfig } from './config';
 import { IClient } from './client';
-import { ContextEnricher, enrichContext } from './enrich-context';
+import { ContextEnricher } from './enrich-context';
 import { Logger } from './logger';
 import { OpenApiService } from './openapi/openapi-service';
 import { featuresResponse } from './openapi/spec/features-response';
@@ -21,7 +20,6 @@ import {
 import { RegisterMetricsSchema } from './openapi/spec/register-metrics-schema';
 import { LookupTogglesSchema } from './openapi/spec/lookup-toggles-schema';
 import { RegisterClientSchema } from './openapi/spec/register-client-schema';
-import { Context } from 'unleash-client';
 import { createContexMiddleware } from './context-middleware';
 
 export default class UnleashProxy {
