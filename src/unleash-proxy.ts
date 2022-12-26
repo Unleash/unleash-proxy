@@ -287,7 +287,6 @@ If you don't provide the \`toggles\` property, then this operation functions exa
         } else if (!apiToken || !this.clientKeys.includes(apiToken)) {
             res.sendStatus(401);
         } else {
-            console.log('next!');
             next();
         }
     }
