@@ -111,7 +111,12 @@ class Client extends EventEmitter implements IClient {
         this.unleash.on('ready', () => {
             this.emit('ready');
             this.ready = true;
-            this.metrics.start();
+            if (config.metricsStartJitter) {
+                const delay = Math.floor(Math.random() * config.metricsStartJitter)
+                setTimeout(() => this.metrics.start(), delay)
+            } else {
+                this.metrics.start();
+            }
         });
     }
 

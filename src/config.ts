@@ -23,6 +23,7 @@ export interface IProxyOption {
     proxyBasePath?: string;
     refreshInterval?: number;
     metricsInterval?: number;
+    metricsStartJitter?: number;
     environment?: string;
     projectName?: string;
     logger?: Logger;
@@ -53,6 +54,7 @@ export interface IProxyConfig {
     proxyBasePath: string;
     refreshInterval: number;
     metricsInterval: number;
+    metricsStartJitter: number;
     environment?: string;
     projectName?: string;
     logger: Logger;
@@ -328,6 +330,9 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         metricsInterval:
             option.metricsInterval ||
             safeNumber(process.env.UNLEASH_METRICS_INTERVAL, 30_000),
+        metricsStartJitter:
+            option.metricsStartJitter ||
+            safeNumber(process.env.UNLEASH_METRICS_START_JITTER, 0),
         environment: option.environment || process.env.UNLEASH_ENVIRONMENT,
         projectName: option.projectName || process.env.UNLEASH_PROJECT_NAME,
         namePrefix: option.namePrefix || process.env.UNLEASH_NAME_PREFIX,
