@@ -99,6 +99,7 @@ class Client extends EventEmitter implements IClient {
             instanceId: config.unleashInstanceId,
             strategies: defaultStrategies.map((s) => s.name),
             metricsInterval: config.metricsInterval,
+            metricsJitter: config.metricsJitter,
             url: config.unleashUrl,
             customHeadersFunction,
             ...(!!config.httpOptions

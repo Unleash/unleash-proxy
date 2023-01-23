@@ -2611,6 +2611,11 @@ ip@^1.1.5:
   resolved "https://registry.yarnpkg.com/ip/-/ip-1.1.5.tgz#bdded70114290828c0a039e72ef25f5aaec4354a"
   integrity sha1-vd7XARQpCCjAoDnnLvJfWq7ENUo=
 
+ip@^1.1.8:
+  version "1.1.8"
+  resolved "https://registry.yarnpkg.com/ip/-/ip-1.1.8.tgz#ae05948f6b075435ed3307acce04629da8cdbf48"
+  integrity sha512-PuExPYUiu6qMBQb4l06ecm6T6ujzhmh+MeJcW9wa89PoAz5pvd4zPgN5WJV104mb6S2T1AwNIAaB70JNrLQWhg==
+
 ipaddr.js@1.9.1:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.9.1.tgz#bff38543eeb8984825079ff3a2a8e6cbd46781b3"
@@ -3375,10 +3380,10 @@ make-error@1.x, make-error@^1.1.1:
   resolved "https://registry.yarnpkg.com/make-error/-/make-error-1.3.6.tgz#2eb2e37ea9b67c4891f684a1394799af484cf7a2"
   integrity sha512-s8UhlNe7vPKomQhC1qFelMokr/Sc3AgNbso3n74mVPA5LTZwkB9NlXf4XPamLxJE8h0gh73rM94xvwRT2CVInw==
 
-make-fetch-happen@^10.0.0:
-  version "10.1.8"
-  resolved "https://registry.yarnpkg.com/make-fetch-happen/-/make-fetch-happen-10.1.8.tgz#3b6e93dd8d8fdb76c0d7bf32e617f37c3108435a"
-  integrity sha512-0ASJbG12Au6+N5I84W+8FhGS6iM8MyzvZady+zaQAu+6IOaESFzCLLD0AR1sAFF3Jufi8bxm586ABN6hWd3k7g==
+make-fetch-happen@^10.2.1:
+  version "10.2.1"
+  resolved "https://registry.yarnpkg.com/make-fetch-happen/-/make-fetch-happen-10.2.1.tgz#f5e3835c5e9817b617f2770870d9492d28678164"
+  integrity sha512-NgOPbRiaQM10DYXvN3/hhGVI2M5MtITFryzBGxHM5p4wnFxsVCbxkrBrDsk+EZ5OB4jEOT7AjDxtdF+KVEFT7w==
   dependencies:
     agentkeepalive "^4.2.1"
     cacache "^16.1.0"
@@ -4085,6 +4090,13 @@ semver@^7.3.7:
   dependencies:
     lru-cache "^6.0.0"
 
+semver@^7.3.8:
+  version "7.3.8"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.8.tgz#07a78feafb3f7b32347d725e33de7e2a2df67798"
+  integrity sha512-NB1ctGL5rlHrPJtFDVIVzTyQylMLu9N9VICA6HSFJo8MCGVTMW6gfpicwKmmK/dAjTOrqu5l63JJOpDSrAis3A==
+  dependencies:
+    lru-cache "^6.0.0"
+
 send@0.18.0:
   version "0.18.0"
   resolved "https://registry.yarnpkg.com/send/-/send-0.18.0.tgz#670167cc654b05f5aa4a767f9113bb371bc706be"
@@ -4596,15 +4608,15 @@ unique-slug@^2.0.0:
   dependencies:
     imurmurhash "^0.1.4"
 
-unleash-client@^3.15.0:
-  version "3.15.0"
-  resolved "https://registry.yarnpkg.com/unleash-client/-/unleash-client-3.15.0.tgz#6ba4d917a0d8d628e73267ae8114d261d210a1a9"
-  integrity sha512-pNfzJa7QWhtSMTGNhmanpgqjg3xIJK4gJgQiZdkJlUY6GPDXit8p4fGs94jC8zM/xzpa1ji9+sSx6GC9YDeCiQ==
+unleash-client@^3.18.0-beta.0:
+  version "3.18.0-beta.0"
+  resolved "https://registry.yarnpkg.com/unleash-client/-/unleash-client-3.18.0-beta.0.tgz#5a04b6b3d393edf116c95af73debf027c04e8db2"
+  integrity sha512-ooxp+qjuqR/xtbsPOIDMNy8FBnGztyyhQ3YZdOcXXHdNtnWb6HiaAIwOFXLycUHkdCsfIxpK5cIwD4RNjC9C5Q==
   dependencies:
-    ip "^1.1.5"
-    make-fetch-happen "^10.0.0"
+    ip "^1.1.8"
+    make-fetch-happen "^10.2.1"
     murmurhash3js "^3.0.1"
-    semver "^7.3.5"
+    semver "^7.3.8"
 
 unpipe@1.0.0, unpipe@~1.0.0:
   version "1.0.0"

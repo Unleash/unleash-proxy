@@ -33,6 +33,7 @@ test('should add environment to isEnabled calls', () => {
         variants: [],
         impressionData: true,
         type: 'experiment',
+        project: 'default',
     });
 
     client.getEnabledToggles({});
@@ -70,6 +71,7 @@ test('should override environment to isEnabled calls', () => {
         variants: [],
         impressionData: true,
         type: 'experiment',
+        project: 'default',
     });
 
     client.getEnabledToggles({ environment: 'some' });
@@ -107,6 +109,7 @@ test('should return all toggles', () => {
         variants: [],
         impressionData: true,
         type: 'experiment',
+        project: 'default',
     });
 
     fakeUnleash.toggleDefinitions.push({
@@ -117,6 +120,7 @@ test('should return all toggles', () => {
         variants: [],
         impressionData: true,
         type: 'experiment',
+        project: 'default',
     });
 
     fakeUnleash.toggleDefinitions.push({
@@ -127,6 +131,7 @@ test('should return all toggles', () => {
         variants: [],
         impressionData: true,
         type: 'experiment',
+        project: 'default',
     });
 
     const result = client.getAllToggles({ environment: 'some' });
@@ -164,6 +169,7 @@ test('should return default variant for disabled toggles', () => {
         variants: [],
         impressionData: true,
         type: 'experiment',
+        project: 'default',
     });
 
     fakeUnleash.toggleDefinitions.push({
@@ -174,6 +180,7 @@ test('should return default variant for disabled toggles', () => {
         variants: [],
         impressionData: true,
         type: 'experiment',
+        project: 'default',
     });
 
     fakeUnleash.toggleDefinitions.push({
@@ -184,6 +191,7 @@ test('should return default variant for disabled toggles', () => {
         variants: [],
         impressionData: true,
         type: 'experiment',
+        project: 'default',
     });
 
     const result = client.getAllToggles({ environment: 'some' });
