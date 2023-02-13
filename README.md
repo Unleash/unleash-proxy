@@ -5,27 +5,33 @@
 
 # The Unleash Proxy
 
-The Unleash Proxy simplifies integration with frontend & native applications running in the context of a specific user. The Unleash proxy sits between the proxy SDK and the 
-Unleash API and ensures that your internal feature toggle configuration is not 
-exposed to the world. 
+The Unleash proxy offers a way to use Unleash in client-side applications, such as single-page and native apps.
 
-The proxy offers:
+The Unleash proxy sits between the Unleash API and your client-side SDK and does the evaluation of feature toggles for your client-side SDK. This way, you can keep your configuration private and secure, while still allowing your client-side apps to use Unleash's features.
 
-- **High performance** - a single proxy instance can handle thousands req/s, and can be horizontally scaled. 
-- **Privacy for end-users** - Your end users are not exposed to the unleash API and can be hosted by you This ensures no user data (userId, IPs, etc) is shared. 
-- **Secure** - It is controlled by you, and can hosted on your domain. In addition no feature toggle configuration is shared with the user, only evaluated toggles. 
+The proxy offers three important features:
 
+- **Performance**: The caches all features in memory and can run close to your end-users. A single instance can able to handle thousands of requests per second, and you can easily scale it by adding additional instances.
+- **Security**: The proxy evaluates the features for the user on the server-side and by default only exposes results for features that are **enabled** for the specific user. No feature toggle configuration is ever shared with the user.
+- **Privacy**: If you run the proxy yourself, Unleash will never get any data on your end-users: no user ids, no IPs, no nothing.
 
-You can read more about [the proxy in our documentation](https://docs.getunleash.io/sdks/unleash-proxy)
+---
+
+💡 **Why would you not want to expose your Unleash configuration**
+
+The way Unleash works, you can add all kinds of data to feature strategies and constraints. For instance, you might show a feature only to a specific subset of user IDs; or you might have a brand new and unannounced new feature with a revealing name.
+
+If you just sent the regular Unleash client payload to your client-side apps, all of this — the user IDs and the new feature names — would be exposed to your users.
+
+---
 
 ## Run The Unleash Proxy
 
-The Unleash proxy is a small stateless HTTP application you run. The only requirement is that it needs to be able to talk with the Unleash API (either Unleash OSS or Unleash Hosted). 
-
+The Unleash proxy is a small stateless HTTP application you run. The only requirement is that it needs to be able to talk with the Unleash API (either Unleash OSS or Unleash Hosted).
 
 ### Run with Docker
 
-The easies way to run Unleash is via Docker. We have published a [docker image on docker hub](https://hub.docker.com/r/unleashorg/unleash-proxy/). 
+The easies way to run Unleash is via Docker. We have published a [docker image on docker hub](https://hub.docker.com/r/unleashorg/unleash-proxy/).
 
 **Step 1: Pull**
 
