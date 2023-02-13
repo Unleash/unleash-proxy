@@ -314,6 +314,28 @@ Because returning all toggles regardless of their state is a potential security 
 
 The response payload follows the same format as the [`GET /proxy` response payload](#payload).
 
+### `GET /proxy/health`: Health endpoint
+
+The proxy will try to synchronize with the Unleash API at startup, until it has successfully done that the proxy will return `HTTP 503 - Not Ready` for all request. You can use the health endpoint to validate that the proxy is ready to receive requests:
+
+```bash
+curl http://localhost:3000/proxy/health -I
+```
+
+If the proxy is ready, the response should look a little something like this:
+
+```bash
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: ETag
+Content-Type: text/html; charset=utf-8
+Content-Length: 2
+ETag: W/"2-eoX0dku9ba8cNUXvu/DyeabcC+s"
+Date: Fri, 04 Jun 2021 10:38:27 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+```
+
 ## Configuration options
 
 The Proxy has a large number of configuration options that you can use to adjust it to your specific use case. The following table lists all the available options.
@@ -513,10 +535,44 @@ To make the integration simple we have developed proxy client SDKs. You can find
 - [Android Proxy SDK](https://github.com/Unleash/unleash-android-proxy-sdk)
 - [iOS Proxy SDK](https://github.com/Unleash/unleash-proxy-client-swift)
 
-## OpenAPI
+## Custom activation strategies
 
-The proxy can optionally expose a runtime-generated OpenAPI JSON spec and a corresponding OpenAPI UI for its API. The OpenAPI UI page is an interactive page where you can discover and test the API endpoints the proxy exposes. The JSON spec can be used to generate an OpenAPI client with OpenAPI tooling such as the [OpenAPI generator](https://openapi-generator.tech/).
+---
 
-To enable the JSON spec and UI, set `ENABLE_OAS` (environment variable) or `enableOAS` (in-code configuration variable) to `true`.
+ℹ️ **Limitations for hosted proxies**
 
-The spec and UI can then be found at `<base url>/docs/openapi.json` and `<base url>/docs/openapi` respectively.
+Custom activation strategies can **not** be used with the Unleash-hosted proxy available to Pro and Enterprise customers.
+
+---
+
+The Unleash Proxy can load [custom activation strategies](https://docs.getunleash.io/reference/custom-activation-strategies) for [client-side SDKs](https://docs.getunleash.io/reference/sdks#client-side-sdks). For a step-by-step guide, refer to the [_how to use custom strategies_ guide](https://docs.getunleash.io/how-to/how-to-use-custom-strategies#step-3-b).
+
+To load custom strategies, use either of these two options:
+
+- the **`customStrategies`** option: use this if you're running the Unleash Proxy via Node directly.
+- the **`UNLEASH_CUSTOM_STRATEGIES_FILE`** environment variable: use this if you're running the proxy as a container.
+
+Both options take a list of file paths to JavaScript files that export custom strategy implementations.
+
+### Custom activation strategy files format
+
+Each strategy file must export a list of instantiated strategies. A file can export as many strategies as you'd like.
+
+Here's an example file that exports two custom strategies:
+
+```js
+const { Strategy } = require('unleash-client');
+
+class MyCustomStrategy extends Strategy {
+  // ... strategy implementation
+}
+
+class MyOtherCustomStrategy extends Strategy {
+  // ... strategy implementation
+}
+
+// export strategies
+module.exports = [new MyCustomStrategy(), new MyOtherCustomStrategy()];
+```
+
+Refer the [custom activation strategy documentation](https://docs.getunleash.io/reference/custom-activation-strategies#implementation) for more details on how to implement a custom activation strategy.
