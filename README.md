@@ -14,7 +14,7 @@ The proxy offers three important features:
 
 <figure>
     <img src="./.github/img/connection-overview.svg" />
-    <figcaption>Client-side apps connect to the Unleash proxy, which in turn connects to the Unleash API. The proxy itself uses the Unleash Node.js SDK to evaluate features.</figcaption>
+    <figcaption>Client-side apps connect to the Unleash proxy, which in turn connects to the Unleash API. The proxy itself uses the Unleash Node.js SDK to evaluate features. The SDK syncs with Unleash in the background. Local evaluation on the proxy provides privacy.</figcaption>
 </figure>
 
 ## A note on privacy and the proxy
