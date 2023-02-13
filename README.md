@@ -25,6 +25,11 @@ If you just sent the regular Unleash client payload to your client-side apps, al
 
 ---
 
+<figure>
+    <img src="./.github/img/setup-diagram.png" />
+    <figcaption>Client-side apps connect to the Unleash proxy, which in turn connects to the Unleash API. The proxy itself uses the Unleash Node.js SDK to evaluate features.</figcaption>
+</figure>
+
 ## Run The Unleash Proxy
 
 The Unleash proxy is a small stateless HTTP application you run. The only requirement is that it needs to be able to talk with the Unleash API (either Unleash OSS or Unleash Hosted).
