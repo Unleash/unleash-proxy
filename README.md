@@ -412,6 +412,12 @@ Some functionality is under validation and introduced as experimental. This allo
 | expServerSideSdkConfig.tokens | `EXP_SERVER_SIDE_SDK_CONFIG_TOKENS` | n/a | no | API tokens that can be used by Server SDKs (and proxies) to read feature toggle configuration from this Proxy instance. |
 | expCustomEnrichers | `EXP_CUSTOM_ENRICHERS_FILE` | [] | no | Use this option to inject implementation of custom context enrichers. If you are using `EXP_CUSTOM_ENRICHERS_FILE` you need to provide a valid path to a javascript file which exports an array of custom context enrichers and the SDK will automatically load these |
 
+## Internal SDK capabilities
+
+The proxy uses the [Node.js SDK](https://github.com/Unleash/unleash-client-node) internally. When you start the proxy it initializes a client for you using any configuration option you provided on startup. You can also provide your own client.
+
+The client that the proxy uses supports all the SDK features that the Node.js SDK supports, as listed in the [Unleash server-side compatibility overview](https://docs.getunleash.io/reference/sdks#server-side-sdk-compatibility-table). The proxy has supported advanced [strategy constraints](https://docs.getunleash.io/reference/strategy-constraints) since version 0.8. Because the proxy uses the Node SDK internally,
+
 ## Run The Unleash Proxy
 
 The Unleash proxy is a small stateless HTTP application you run. The only requirement is that it needs to be able to talk with the Unleash API (either Unleash OSS or Unleash Hosted).
