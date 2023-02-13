@@ -104,11 +104,13 @@ The data for a toggle without [variants](../reference/feature-toggle-variants.md
 - **`enabled`**: whether the toggle is enabled or not. Will always be `true`.
 - **`variant`**: describes whether the toggle has variants and, if it does, what variant is active for this user. If a toggle doesn't have any variants, it will always be `{"name": "disabled", "enabled": false}`.
 
-:::note The "disabled" variant
+---
+
+ℹ️ **The "disabled" variant**
 
 Unleash uses a fallback variant called "disabled" to indicate that a toggle has no variants. However, you are free to create a variant called "disabled" yourself. In that case you can tell them apart by checking the variant's `enabled` property: if the toggle has no variants, `enabled` will be `false`. If the toggle is the "disabled" variant that you created, it will have `enabled` set to `true`.
 
-:::
+---
 
 If a toggle has variants, then the variant object can also contain an optional `payload` property. The `payload` will contain data about the variant's payload: what type it is, and what the content is. To learn more about variants and their payloads, check [the feature toggle variants documentation](../reference/feature-toggle-variants.md).
 
