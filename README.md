@@ -13,7 +13,7 @@ The proxy offers three important features:
 - **Privacy**: If you run the proxy yourself, Unleash will never get any data on your end-users: no user ids, no IPs, no nothing.
 
 <figure>
-    <img src="./.github/img/setup-diagram.png" />
+    <img src="./.github/img/connection-overview.svg" />
     <figcaption>Client-side apps connect to the Unleash proxy, which in turn connects to the Unleash API. The proxy itself uses the Unleash Node.js SDK to evaluate features.</figcaption>
 </figure>
 
