@@ -12,20 +12,20 @@ The proxy offers three important features:
 - **Security**: The proxy evaluates the features for the user on the server-side and by default only exposes results for features that are **enabled** for the specific user. No feature toggle configuration is ever shared with the user.
 - **Privacy**: If you run the proxy yourself, Unleash will never get any data on your end-users: no user ids, no IPs, no nothing.
 
----
+<figure>
+    <img src="./.github/img/setup-diagram.png" />
+    <figcaption>Client-side apps connect to the Unleash proxy, which in turn connects to the Unleash API. The proxy itself uses the Unleash Node.js SDK to evaluate features.</figcaption>
+</figure>
 
-💡 **Why would you not want to expose your Unleash configuration**
+## A note on privacy and the proxy
+
+Why would you not want to expose your Unleash configuration to your end-users?
 
 The way Unleash works, you can add all kinds of data to feature strategies and constraints. For instance, you might show a feature only to a specific subset of user IDs; or you might have a brand new and unannounced new feature with a revealing name.
 
 If you just sent the regular Unleash client payload to your client-side apps, all of this — the user IDs and the new feature names — would be exposed to your users.
 
----
-
-<figure>
-    <img src="./.github/img/setup-diagram.png" />
-    <figcaption>Client-side apps connect to the Unleash proxy, which in turn connects to the Unleash API. The proxy itself uses the Unleash Node.js SDK to evaluate features.</figcaption>
-</figure>
+Single page apps work in the context of a specific user. The proxy allows you to only provide data that relates to that one user: **The proxy will default to only returning the evaluated toggles that should be enabled for that _specific_ user in that _specific_ context.**
 
 ## API
 
@@ -439,36 +439,38 @@ You should see the following output:
 
 ```bash
 Unleash-proxy is listening on port 3000!
-````
-
+```
 
 **Step 3: verify**
 
 In order to verify the proxy you can use curl and see that you get a few evaluated feature toggles back:
 
 ```bash
-curl http://localhost:3000/proxy -H "Authorization: some-secret"  
+curl http://localhost:3000/proxy -H "Authorization: some-secret"
 ```
 
 Expected output would be something like:
 
 ```json
 {
-	"toggles": [{
-		"name": "demo",
-		"enabled": true,
-		"variant": {
-			"name": "disabled",
-			"enabled": false
-		}
-	}, {
-		"name": "demoApp.step1",
-		"enabled": true,
-		"variant": {
-			"name": "disabled",
-			"enabled": false
-		}
-	}]
+  "toggles": [
+    {
+      "name": "demo",
+      "enabled": true,
+      "variant": {
+        "name": "disabled",
+        "enabled": false
+      }
+    },
+    {
+      "name": "demoApp.step1",
+      "enabled": true,
+      "variant": {
+        "name": "disabled",
+        "enabled": false
+      }
+    }
+  ]
 }
 ```
 
@@ -478,7 +480,7 @@ The proxy will try to synchronize with the Unleash API at startup, until it has 
 
 ```bash
 curl http://localhost:3000/proxy/health -I
-``` 
+```
 
 ```bash
 HTTP/1.1 200 OK
@@ -500,40 +502,36 @@ Keep-Alive: timeout=5
 npm install @unleash/proxy
 ```
 
-
 **STEP 2: use in your code**
 
 ```js
 const port = 3000;
 
-const { createApp } = require('@unleash/proxy');
-
+const { createApp } = require('@unleash/proxy');
 
 const app = createApp({
-    unleashUrl: 'https://app.unleash-hosted.com/demo/api/',
-    unleashApiToken: '56907a2fa53c1d16101d509a10b78e36190b0f918d9f122d',
-    clientKeys: ['proxy-secret', 'another-proxy-secret', 's1'],
-    refreshInterval: 1000,
-    // logLevel: 'info',
-    // projectName: 'order-team',
-    // environment: 'development',
+  unleashUrl: 'https://app.unleash-hosted.com/demo/api/',
+  unleashApiToken: '56907a2fa53c1d16101d509a10b78e36190b0f918d9f122d',
+  clientKeys: ['proxy-secret', 'another-proxy-secret', 's1'],
+  refreshInterval: 1000,
+  // logLevel: 'info',
+  // projectName: 'order-team',
+  // environment: 'development',
 });
 
 app.listen(port, () =>
-    // eslint-disable-next-line no-console
-    console.log(`Unleash Proxy listening on http://localhost:${port}/proxy`),
+  // eslint-disable-next-line no-console
+  console.log(`Unleash Proxy listening on http://localhost:${port}/proxy`),
 );
-
 ```
 
+## How to connect to the Proxy?
 
-## Proxy clients
-To make the integration simple we have developed proxy client SDKs. You can find them all in our [documentation](https://docs.getunleash.io/sdks/unleash-proxy#how-to-connect-to-the-proxy):
+Unleash offers several different [client-side SDKs](https://docs.getunleash.io/reference/sdks#client-side-sdks) for a number of use cases, and the community has created even more. These SDKs connect to the proxy and integrate with well with their designated language/framework. They also sync with the proxy at periodic intervals and post usage metrics back to Unleash via the proxy.
 
+For applications where there is no appropriate client-side SDK or where you simply want to avoid the dependency, you could also get away with using a simple HTTP-client if you just want to get the list of active features.
 
-- [JavaScript Proxy SDK (browser)](https://github.com/unleash-hosted/unleash-proxy-client-js)
-- [Android Proxy SDK](https://github.com/Unleash/unleash-android-proxy-sdk)
-- [iOS Proxy SDK](https://github.com/Unleash/unleash-proxy-client-swift)
+The proxy is also ideal fit for serverless functions such as AWS Lambda. In that scenario the proxy can run on a small container near the serverless function, preferably in the same VPC, giving the lambda extremely fast access to feature flags, at a predictable cost.
 
 ## Custom activation strategies
 
