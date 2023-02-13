@@ -29,7 +29,290 @@ If you just sent the regular Unleash client payload to your client-side apps, al
 
 ## API
 
+The Unleash proxy exposes a simple API for consumption by client-side SDKs.
+
 ### OpenAPI integration
+
+---
+
+ℹ️ **Availability**
+
+The OpenAPI integration is available in versions 0.9 and later of the Unleash proxy.
+
+---
+
+The proxy can expose a runtime-generated OpenAPI JSON spec and a corresponding OpenAPI UI for its API. The OpenAPI UI page is an interactive page where you can discover and test the API endpoints the proxy exposes. The JSON spec can be used to generate an OpenAPI client with OpenAPI tooling such as the [OpenAPI generator](https://openapi-generator.tech/).
+
+To enable the JSON spec and UI, set `ENABLE_OAS` (environment variable) or `enableOAS` (in-code configuration variable) to `true`.
+
+The spec and UI can then be found at `<base url>/docs/openapi.json` and `<base url>/docs/openapi` respectively.
+
+You can refer to the [how to enable the OpenAPI spec](https://docs.getunleash.io/how-to/how-to-enable-openapi) guide for more detailed information on how to configure it.
+
+### `GET /proxy`
+
+The primary proxy API operation. This endpoint accepts an Unleash context encoded as query parameters, and will return all toggles that are evaluated as true for the provided context.
+
+<figure>
+    <img src="./.github/img/get-request.png" />
+    <figcaption>When sending GET requests to the Unleash proxy's /proxy endpoint, the request should contain the current Unleash context as query parameters. The proxy will return all enabled toggles for the provided context.</figcaption>
+</figure>
+
+### Payload
+
+The `GET /proxy` operation returns information about toggles enabled for the current user. The payload is a JSON object with a `toggles` property, which contains a list of toggles.
+
+```json
+{
+  "toggles": [
+    {
+      "name": "demo",
+      "enabled": true,
+      "variant": {
+        "name": "disabled",
+        "enabled": false
+      }
+    },
+    {
+      "name": "demoApp.step1",
+      "enabled": true,
+      "variant": {
+        "name": "disabled",
+        "enabled": false
+      }
+    }
+  ]
+}
+```
+
+#### Toggle data
+
+The data for a toggle without [variants](../reference/feature-toggle-variants.md) looks like this:
+
+```json
+{
+  "name": "basic-toggle",
+  "enabled": true,
+  "variant": {
+    "name": "disabled",
+    "enabled": false
+  }
+}
+```
+
+- **`name`**: the name of the feature.
+- **`enabled`**: whether the toggle is enabled or not. Will always be `true`.
+- **`variant`**: describes whether the toggle has variants and, if it does, what variant is active for this user. If a toggle doesn't have any variants, it will always be `{"name": "disabled", "enabled": false}`.
+
+:::note The "disabled" variant
+
+Unleash uses a fallback variant called "disabled" to indicate that a toggle has no variants. However, you are free to create a variant called "disabled" yourself. In that case you can tell them apart by checking the variant's `enabled` property: if the toggle has no variants, `enabled` will be `false`. If the toggle is the "disabled" variant that you created, it will have `enabled` set to `true`.
+
+:::
+
+If a toggle has variants, then the variant object can also contain an optional `payload` property. The `payload` will contain data about the variant's payload: what type it is, and what the content is. To learn more about variants and their payloads, check [the feature toggle variants documentation](../reference/feature-toggle-variants.md).
+
+Variant toggles without payloads look will have their name listed and the `enabled` property set to `true`:
+
+```json
+{
+  "name": "toggle-with-variants",
+  "enabled": true,
+  "variant": {
+    "name": "simple",
+    "enabled": true
+  }
+}
+```
+
+If the variant has a payload, the optional `payload` property will list the payload's type and it's content in a stringified form:
+
+```json
+{
+  "name": "toggle-with-variants",
+  "enabled": true,
+  "variant": {
+    "name": "with-payload-string",
+    "payload": {
+      "type": "string",
+      "value": "this string is the variant's payload"
+    },
+    "enabled": true
+  }
+}
+```
+
+For the `variant` property:
+
+- **`name`**: is the name of the variant, as shown in the Admin UI.
+- **`enabled`**: indicates whether the variant is enabled or not. If the toggle has variants, this is always `true`.
+- **`payload`** (optional): Only present if the variant has a payload. Describes the payload's type and content.
+
+If the variant has a payload, the `payload` object contains:
+
+- **`type`**: the type of the variant's payload
+- **`value`**: the value of the variant's payload
+
+The `value` will always be the payload's content as a string, escaped as necessary. For instance, a variant with a JSON payload would look like this:
+
+```json
+{
+  "name": "toggle-with-variants",
+  "enabled": true,
+  "variant": {
+    "name": "with-payload-json",
+    "payload": {
+      "type": "json",
+      "value": "{\"description\": \"this is data delivered as a json string\"}"
+    },
+    "enabled": true
+  }
+}
+```
+
+### `POST /proxy`
+
+The proxy also offers a POST API used to evaluate toggles This can be used to evaluate a list of know toggle names or to retrieve all _enabled_ toggles for a given context.
+
+#### Evaluate list of known toggles
+
+This method will allow you to send a list of toggle names together with an Unleash Context and evaluate them accordingly. It will return enablement of all provided toggles.
+
+**URL**: `POST https://proxy-host.server/proxy`
+
+**Content Type**: `application/json`
+
+**Body:**
+
+```json
+{
+  "toggles": ["demoApp.step1"],
+  "context": {
+    "appName": "someApp",
+    "sessionId": "233312AFF22"
+  }
+}
+```
+
+Result:
+
+```
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: ETag
+Cache-control: public, max-age=2
+Connection: keep-alive
+Content-Length: 122
+Content-Type: application/json; charset=utf-8
+Date: Wed, 30 Nov 2022 14:46:48 GMT
+ETag: W/"7a-RMKUyY0BWIhjahpVPWnNdXyDw6I"
+Keep-Alive: timeout=5
+Vary: Accept-Encoding
+
+{
+    "toggles": [
+        {
+            "enabled": false,
+            "impressionData": true,
+            "name": "demoApp.step1",
+            "variant": {
+                "enabled": false,
+                "name": "disabled"
+            }
+        }
+    ]
+}
+
+```
+
+#### Evaluate all enabled toggles
+
+This method will allow you to get all enabled toggles for a given context.
+
+**URL**: `POST https://proxy-host.server/proxy`
+
+**Content Type**: `application/json`
+
+**Body:**
+
+```json
+{
+  "context": {
+    "appName": "someApp",
+    "sessionId": "233312AFF22"
+  }
+}
+```
+
+Result:
+
+```
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: ETag
+Cache-control: public, max-age=2
+Connection: keep-alive
+Content-Length: 465
+Content-Type: application/json; charset=utf-8
+Date: Wed, 30 Nov 2022 14:48:55 GMT
+ETag: W/"1d1-dm6tkvMpkx42mZmojNSNKmHid1M"
+Keep-Alive: timeout=5
+Vary: Accept-Encoding
+
+{
+    "toggles": [
+        {
+            "enabled": true,
+            "impressionData": false,
+            "name": "demoApp.step2",
+            "variant": {
+                "enabled": true,
+                "name": "userWithId",
+                "payload": {
+                    "type": "string",
+                    "value": "90732934"
+                }
+            }
+        },
+        {
+            "enabled": true,
+            "impressionData": false,
+            "name": "demoApp.step3",
+            "variant": {
+                "enabled": true,
+                "name": "C",
+                "payload": {
+                    "type": "string",
+                    "value": "hello"
+                }
+            }
+        },
+        {
+            "enabled": true,
+            "impressionData": true,
+            "name": "demoApp.step4",
+            "variant": {
+                "enabled": true,
+                "name": "Orange",
+                "payload": {
+                    "type": "string",
+                    "value": "orange"
+                }
+            }
+        }
+    ]
+}
+
+
+```
+
+### `GET /proxy/all` Return enabled **and** disabled toggles:
+
+By default, the proxy only returns enabled toggles. However, in certain use cases, you might want it to return **all** toggles, regardless of whether they're enabled or disabled. The `/proxy/all` endpoint does this.
+
+Because returning all toggles regardless of their state is a potential security vulnerability, the endpoint has to be explicitly enabled. To enable it, set the `enableAllEndpoint` configuration option or the `ENABLE_ALL_ENDPOINT` environment variable to `true`.
+
+The response payload follows the same format as the [`GET /proxy` response payload](#payload).
 
 ## Configuration options
 
@@ -237,143 +520,3 @@ The proxy can optionally expose a runtime-generated OpenAPI JSON spec and a corr
 To enable the JSON spec and UI, set `ENABLE_OAS` (environment variable) or `enableOAS` (in-code configuration variable) to `true`.
 
 The spec and UI can then be found at `<base url>/docs/openapi.json` and `<base url>/docs/openapi` respectively.
-
-## Return enabled and disabled toggles
-
-By default, the proxy only returns enabled toggles. However, in certain use cases, you might want it to return **all** toggles, regardless of whether they're enabled or disabled. The `/proxy/all` endpoint does this.
-
-Because returning all toggles regardless of their state is a potential security vulnerability, the endpoint has to be explicitly enabled. To enable it, set the `enableAllEndpoint` configuration option or the `ENABLE_ALL_ENDPOINT` environment variable to `true`.
-
-## POST API
-The proxy also offers a POST API used to evaluate toggles This can be used to evaluate a list of know toggle names or to retrieve all _enabled_ toggles for a given context. 
-
-### a) Evaluate list of known toggles
-
-This method will allow you to send a list of toggle names together with an Unleash Context and evaluate them accordingly. It will return enablement of all provided toggles. 
-
-**URL**: `POST https://proxy-host.server/proxy`
-
-**Content Type**: `application/json`
-
-**Body:**
-
-```json
-{
-	"toggles": ["demoApp.step1"],
-	"context": {
-		"appName": "someApp",
-		"sessionId": "233312AFF22",
-	}
-}
-```
-Result:
-
-```
-HTTP/1.1 200 OK
-Access-Control-Allow-Origin: *
-Access-Control-Expose-Headers: ETag
-Cache-control: public, max-age=2
-Connection: keep-alive
-Content-Length: 122
-Content-Type: application/json; charset=utf-8
-Date: Wed, 30 Nov 2022 14:46:48 GMT
-ETag: W/"7a-RMKUyY0BWIhjahpVPWnNdXyDw6I"
-Keep-Alive: timeout=5
-Vary: Accept-Encoding
-
-{
-    "toggles": [
-        {
-            "enabled": false,
-            "impressionData": true,
-            "name": "demoApp.step1",
-            "variant": {
-                "enabled": false,
-                "name": "disabled"
-            }
-        }
-    ]
-}
-
-```
-
-
-### a) Evaluate all enabled toggles
-
-This method will allow you to get all enabled toggles for a given context. 
-
-**URL**: `POST https://proxy-host.server/proxy`
-
-**Content Type**: `application/json`
-
-**Body:**
-
-```json
-{
-	"context": {
-		"appName": "someApp",
-		"sessionId": "233312AFF22",
-	}
-}
-```
-Result:
-
-```
-HTTP/1.1 200 OK
-Access-Control-Allow-Origin: *
-Access-Control-Expose-Headers: ETag
-Cache-control: public, max-age=2
-Connection: keep-alive
-Content-Length: 465
-Content-Type: application/json; charset=utf-8
-Date: Wed, 30 Nov 2022 14:48:55 GMT
-ETag: W/"1d1-dm6tkvMpkx42mZmojNSNKmHid1M"
-Keep-Alive: timeout=5
-Vary: Accept-Encoding
-
-{
-    "toggles": [
-        {
-            "enabled": true,
-            "impressionData": false,
-            "name": "demoApp.step2",
-            "variant": {
-                "enabled": true,
-                "name": "userWithId",
-                "payload": {
-                    "type": "string",
-                    "value": "90732934"
-                }
-            }
-        },
-        {
-            "enabled": true,
-            "impressionData": false,
-            "name": "demoApp.step3",
-            "variant": {
-                "enabled": true,
-                "name": "C",
-                "payload": {
-                    "type": "string",
-                    "value": "hello"
-                }
-            }
-        },
-        {
-            "enabled": true,
-            "impressionData": true,
-            "name": "demoApp.step4",
-            "variant": {
-                "enabled": true,
-                "name": "Orange",
-                "payload": {
-                    "type": "string",
-                    "value": "orange"
-                }
-            }
-        }
-    ]
-}
-
-
-```
