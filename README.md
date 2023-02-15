@@ -87,7 +87,7 @@ The `GET /proxy` operation returns information about toggles enabled for the cur
 
 #### Toggle data
 
-The data for a toggle without [variants](../reference/feature-toggle-variants.md) looks like this:
+The data for a toggle without [variants](https://docs.getunleash.io/reference/feature-toggle-variants) looks like this:
 
 ```json
 {
@@ -112,7 +112,7 @@ Unleash uses a fallback variant called "disabled" to indicate that a toggle has 
 
 ---
 
-If a toggle has variants, then the variant object can also contain an optional `payload` property. The `payload` will contain data about the variant's payload: what type it is, and what the content is. To learn more about variants and their payloads, check [the feature toggle variants documentation](../reference/feature-toggle-variants.md).
+If a toggle has variants, then the variant object can also contain an optional `payload` property. The `payload` will contain data about the variant's payload: what type it is, and what the content is. To learn more about variants and their payloads, check [the feature toggle variants documentation](https://docs.getunleash.io/reference/feature-toggle-variants).
 
 Variant toggles without payloads look will have their name listed and the `enabled` property set to `true`:
 
