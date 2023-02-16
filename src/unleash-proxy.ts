@@ -162,7 +162,7 @@ export default class UnleashProxy {
                     200: featuresResponse,
                 },
                 description:
-                    'This endpoint accepts a JSON object with `context` and `toggles` properties. The Proxy will use the provided context values and evaluate the toggles provided in the `toggle` property. It returns the toggles that evaluate to false. As such, the list it returns is always a subset of the toggles you provide it.',
+                    'This endpoint accepts a JSON object with `context` and `toggles` properties. The Proxy will use the provided context values and evaluate the toggles provided in the `toggles` property. The list it returns always contains all the toggles you provide it with.',
                 summary:
                     'Which of the provided toggles are enabled given the provided context?',
                 tags: ['Proxy client'],
