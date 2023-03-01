@@ -684,3 +684,60 @@ test('Should return 501 when all feature toggles is not enabled', () => {
         .set('Authorization', 'sdf')
         .expect(501);
 });
+
+describe('Request content-types', () => {
+    test.each(['/proxy', '/proxy/all'])(
+        'Should return a 415 if no content-type is provided for POST requests to %s',
+        async (endpoint) => {
+            const client = new MockClient();
+            const context = {
+                context: { appName: 'my-app' },
+            };
+
+            const proxySecrets = ['sdf'];
+            const app = createApp(
+                {
+                    unleashUrl,
+                    unleashApiToken,
+                    proxySecrets,
+                    enableAllEndpoint: true,
+                },
+                client,
+            );
+            client.emit('ready');
+
+            await request(app)
+                .post(endpoint)
+                .set('Authorization', 'sdf')
+                .set('Content-Type', '')
+                .send()
+                .expect(415);
+        },
+    );
+
+    test.each(['/proxy', '/proxy/all'])(
+        'Should reject non-"content-type: application/json" for POST requests to %s',
+        (endpoint) => {
+            const client = new MockClient();
+
+            const proxySecrets = ['sdf'];
+            const app = createApp(
+                {
+                    unleashUrl,
+                    unleashApiToken,
+                    proxySecrets,
+                    enableAllEndpoint: true,
+                },
+                client,
+            );
+            client.emit('ready');
+
+            return request(app)
+                .post(endpoint)
+                .set('Authorization', 'sdf')
+                .set('Content-Type', 'application/html')
+                .send('<em>reject me!</em>')
+                .expect(415)
+        },
+    );
+});
