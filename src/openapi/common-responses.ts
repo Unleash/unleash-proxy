@@ -68,6 +68,19 @@ export const emptySuccessResponse: OpenAPIV3.ResponseObject = {
     },
 };
 
+export const unsupportedMediaTypeResponse: OpenAPIV3.ResponseObject = {
+    description:
+        'The operation does not support request payloads of the provided type.',
+    content: {
+        'text/plain': {
+            schema: {
+                type: 'string',
+                example: 'Unsupported media type',
+            },
+        },
+    },
+};
+
 export const internalServerErrorResponse: OpenAPIV3.ResponseObject = {
     description:
         "Something went wrong on the server side and we were unable to recover. If you have custom strategies loaded, make sure they don't throw errors.",
@@ -116,6 +129,7 @@ const commonResponses = {
     200: emptySuccessResponse,
     400: badRequestResponse,
     401: unauthorizedResponse,
+    415: unsupportedMediaTypeResponse,
     500: internalServerErrorResponse,
     501: notImplementedError,
     503: notReadyResponse,
