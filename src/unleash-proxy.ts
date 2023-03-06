@@ -127,10 +127,12 @@ export default class UnleashProxy {
                     ...standardResponses(401, 500, 501, 503),
                     200: featuresResponse,
                 },
-                description:
-                    'This endpoint returns the list of feature toggles that the proxy evaluates to enabled and disabled for the given context. As such, this endpoint always returns all feature toggles the proxy retrieves from unleash. Useful if you are migrating to unleash and need to know if the feature flag exists on the unleash server. However, using this endpoint will increase the payload size transmitted to your applications. Context values are provided as query parameters.',
-                summary:
-                    'Retrieve enabled feature toggles for the provided context.',
+                description: `This endpoint returns the list of feature toggles that the proxy evaluates to enabled and disabled for the given context. As such, this endpoint always returns all feature toggles the proxy retrieves from Unleash.
+
+Useful if you are migrating to unleash and need to know if the feature flag exists on the Unleash server.
+
+However, using this endpoint will increase the payload size transmitted to your applications. Context values are provided as query parameters.`,
+                summary: 'Retrieve all feature toggles from the proxy.',
                 tags: ['Proxy client'],
             }),
             this.getAllToggles.bind(this),
@@ -144,10 +146,13 @@ export default class UnleashProxy {
                     ...standardResponses(401, 500, 501, 503),
                     200: featuresResponse,
                 },
-                description:
-                    'This endpoint returns the list of feature toggles that the proxy evaluates to enabled and disabled for the given context. As such, this endpoint always returns all feature toggles the proxy retrieves from unleash. Useful if you are migrating to unleash and need to know if the feature flag exists on the unleash server. However, using this endpoint will increase the payload size transmitted to your applications. Context values are provided as query parameters.',
+                description: `This endpoint accepts a JSON object with a \`context\` property and an optional \`toggles\` property.
+
+If you provide the \`toggles\` property, the proxy will use the provided context value to evaluate each of the toggles you sent in. The proxy returns a list with all the toggles you provided in their fully evaluated states.
+
+If you don't provide the \`toggles\` property, then this operation functions exactly the same as the GET operation on this endpoint, except that it uses the \`context\` property instead of query parameters. The proxy will evaluate all its toggles against the context you provide and return a list of all known feature toggles and their evaluated state.`,
                 summary:
-                    'Retrieve enabled feature toggles for the provided context.',
+                    'Evaluate some or all toggles against the provided context.',
                 tags: ['Proxy client'],
             }),
             this.getAllTogglesPOST.bind(this),
@@ -161,10 +166,13 @@ export default class UnleashProxy {
                     ...standardResponses(400, 401, 500, 503),
                     200: featuresResponse,
                 },
-                description:
-                    'This endpoint accepts a JSON object with `context` and `toggles` properties. The Proxy will use the provided context values and evaluate the toggles provided in the `toggles` property. The list it returns always contains all the toggles you provide it with.',
+                description: `This endpoint accepts a JSON object with a \`context\` property and an optional \`toggles\` property.
+
+If you provide the \`toggles\` property, the proxy will use the provided context value to evaluate each of the toggles you sent in. The proxy returns a list with all the toggles you provided in their fully evaluated states.
+
+If you don't provide the \`toggles\` property, then this operation functions exactly the same as the GET operation on this endpoint, except that it uses the \`context\` property instead of query parameters. The proxy will evaluate all its toggles against the context you provide and return a list of enabled toggles.`,
                 summary:
-                    'Which of the provided toggles are enabled given the provided context?',
+                    'Evaluate specific toggles against the provided context.',
                 tags: ['Proxy client'],
             }),
             this.lookupToggles.bind(this),
