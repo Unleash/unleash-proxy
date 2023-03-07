@@ -103,6 +103,7 @@ export default class UnleashProxy {
                 tags: ['Proxy client'],
             }),
             this.readyMiddleware.bind(this),
+            this.tokenMiddleware.bind(this),
             contextMiddleware,
             this.getEnabledToggles.bind(this),
         );
@@ -140,6 +141,7 @@ However, using this endpoint will increase the payload size transmitted to your 
                 tags: ['Proxy client'],
             }),
             this.readyMiddleware.bind(this),
+            this.tokenMiddleware.bind(this),
             contextMiddleware,
             this.getAllToggles.bind(this),
         );
@@ -162,6 +164,7 @@ If you don't provide the \`toggles\` property, then this operation functions exa
                 tags: ['Proxy client'],
             }),
             this.readyMiddleware.bind(this),
+            this.tokenMiddleware.bind(this),
             contextMiddleware,
             this.getAllTogglesPOST.bind(this),
         );
@@ -184,6 +187,7 @@ If you don't provide the \`toggles\` property, then this operation functions exa
                 tags: ['Proxy client'],
             }),
             this.readyMiddleware.bind(this),
+            this.tokenMiddleware.bind(this),
             contextMiddleware,
             this.lookupToggles.bind(this),
         );
@@ -201,6 +205,8 @@ If you don't provide the \`toggles\` property, then this operation functions exa
                     "Retrieve the proxy's current toggle configuration (as consumed by the internal client).",
                 tags: ['Server-side client'],
             }),
+            this.readyMiddleware.bind(this),
+            this.tokenMiddleware.bind(this),
             this.unleashApi.bind(this),
         );
 
@@ -243,6 +249,7 @@ If you don't provide the \`toggles\` property, then this operation functions exa
                     'Check whether the proxy is ready to serve requests yet.',
                 tags: ['Operational'],
             }),
+            this.readyMiddleware.bind(this),
             this.health.bind(this),
         );
 
@@ -259,6 +266,7 @@ If you don't provide the \`toggles\` property, then this operation functions exa
                 summary: 'Check whether the proxy is up and running',
                 tags: ['Operational'],
             }),
+            this.readyMiddleware.bind(this),
             this.prometheus.bind(this),
         );
     }
@@ -280,11 +288,16 @@ If you don't provide the \`toggles\` property, then this operation functions exa
     }
 
     private readyMiddleware(req: Request, res: Response, next: NextFunction) {
-        const apiToken = req.header(this.clientKeysHeaderName);
-
         if (!this.ready) {
             res.status(503).send(NOT_READY_MSG);
-        } else if (!apiToken || !this.clientKeys.includes(apiToken)) {
+        } else {
+            next();
+        }
+    }
+
+    private tokenMiddleware(req: Request, res: Response, next: NextFunction) {
+        const apiToken = req.header(this.clientKeysHeaderName);
+        if (!apiToken || !this.clientKeys.includes(apiToken)) {
             res.sendStatus(401);
         } else {
             next();
@@ -360,24 +373,16 @@ If you don't provide the \`toggles\` property, then this operation functions exa
     }
 
     health(_: Request, res: Response<string>): void {
-        if (!this.ready) {
-            res.status(503).send(NOT_READY_MSG);
-        } else {
-            res.send('ok');
-        }
+        res.send('ok');
     }
 
     prometheus(_: Request, res: Response<string>): void {
-        if (!this.ready) {
-            res.status(503).send(NOT_READY_MSG);
-        } else {
-            const prometheusResponse =
-                '# HELP unleash_proxy_up Indication that the service is up. \n' +
-                '# TYPE unleash_proxy_up counter\n' +
-                'unleash_proxy_up 1\n';
-            res.set('Content-type', 'text/plain');
-            res.send(prometheusResponse);
-        }
+        const prometheusResponse =
+            '# HELP unleash_proxy_up Indication that the service is up. \n' +
+            '# TYPE unleash_proxy_up counter\n' +
+            'unleash_proxy_up 1\n';
+        res.set('Content-type', 'text/plain');
+        res.send(prometheusResponse);
     }
 
     registerMetrics(
@@ -411,15 +416,8 @@ If you don't provide the \`toggles\` property, then this operation functions exa
     }
 
     unleashApi(req: Request, res: Response<string | ApiRequestSchema>): void {
-        const apiToken = req.header(this.clientKeysHeaderName);
-        if (!this.ready) {
-            res.status(503).send(NOT_READY_MSG);
-        } else if (apiToken && this.serverSideTokens.includes(apiToken)) {
-            const features = this.client.getFeatureToggleDefinitions();
-            res.set('Cache-control', 'public, max-age=2');
-            res.send({ version: 2, features });
-        } else {
-            res.sendStatus(401);
-        }
+        const features = this.client.getFeatureToggleDefinitions();
+        res.set('Cache-control', 'public, max-age=2');
+        res.send({ version: 2, features });
     }
 }
