@@ -687,10 +687,10 @@ test('Should return 501 when all feature toggles is not enabled', () => {
 
 describe('Request content-types', () => {
     test.each(['/proxy', '/proxy/all'])(
-        'Should return a 415 if no content-type is provided for POST requests to %s',
+        'Should assign default content-type if the request has a body but no content-type (%s)',
         async (endpoint) => {
             const client = new MockClient();
-            const context = {
+            const payload = {
                 context: { appName: 'my-app' },
             };
 
@@ -709,9 +709,14 @@ describe('Request content-types', () => {
             await request(app)
                 .post(endpoint)
                 .set('Authorization', 'sdf')
-                .set('Content-Type', '')
-                .send()
-                .expect(415);
+                .set('Content-Type', 'application/json')
+                .send(payload)
+                .expect(200)
+                .then(() => {
+                    expect(client.queriedContexts[0].appName).toEqual(
+                        payload.context.appName,
+                    );
+                });
         },
     );
 
@@ -737,7 +742,7 @@ describe('Request content-types', () => {
                 .set('Authorization', 'sdf')
                 .set('Content-Type', 'application/html')
                 .send('<em>reject me!</em>')
-                .expect(415)
+                .expect(415);
         },
     );
 });

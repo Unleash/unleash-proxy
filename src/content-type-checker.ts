@@ -20,7 +20,10 @@ export default function requireContentType(
         const contentType = req.header('Content-Type');
 
         if (hasBody(req)) {
-            if (contentType && is(contentType, acceptedContentTypes)) {
+            if (!contentType) {
+                req.headers['content-type'] = acceptedContentTypes[0];
+                next();
+            } else if (is(contentType, acceptedContentTypes)) {
                 next();
             } else {
                 res.status(415).end();
