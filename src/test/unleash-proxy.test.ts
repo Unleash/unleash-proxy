@@ -709,7 +709,7 @@ describe('Request content-types', () => {
             await request(app)
                 .post(endpoint)
                 .set('Authorization', 'sdf')
-                .set('Content-Type', 'application/json')
+                .set('Content-Type', '')
                 .send(payload)
                 .expect(200)
                 .then(() => {
