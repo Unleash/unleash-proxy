@@ -103,7 +103,7 @@ export default class UnleashProxy {
                 tags: ['Proxy client'],
             }),
             this.readyMiddleware.bind(this),
-            this.tokenMiddleware.bind(this),
+            this.clientTokenMiddleware.bind(this),
             contextMiddleware,
             this.getEnabledToggles.bind(this),
         );
@@ -141,7 +141,7 @@ However, using this endpoint will increase the payload size transmitted to your 
                 tags: ['Proxy client'],
             }),
             this.readyMiddleware.bind(this),
-            this.tokenMiddleware.bind(this),
+            this.clientTokenMiddleware.bind(this),
             contextMiddleware,
             this.getAllToggles.bind(this),
         );
@@ -164,7 +164,7 @@ If you don't provide the \`toggles\` property, then this operation functions exa
                 tags: ['Proxy client'],
             }),
             this.readyMiddleware.bind(this),
-            this.tokenMiddleware.bind(this),
+            this.clientTokenMiddleware.bind(this),
             contextMiddleware,
             this.getAllTogglesPOST.bind(this),
         );
@@ -187,7 +187,7 @@ If you don't provide the \`toggles\` property, then this operation functions exa
                 tags: ['Proxy client'],
             }),
             this.readyMiddleware.bind(this),
-            this.tokenMiddleware.bind(this),
+            this.clientTokenMiddleware.bind(this),
             contextMiddleware,
             this.lookupToggles.bind(this),
         );
@@ -206,7 +206,7 @@ If you don't provide the \`toggles\` property, then this operation functions exa
                 tags: ['Server-side client'],
             }),
             this.readyMiddleware.bind(this),
-            this.tokenMiddleware.bind(this),
+            this.clientTokenMiddleware.bind(this),
             this.unleashApi.bind(this),
         );
 
@@ -295,7 +295,11 @@ If you don't provide the \`toggles\` property, then this operation functions exa
         }
     }
 
-    private tokenMiddleware(req: Request, res: Response, next: NextFunction) {
+    private clientTokenMiddleware(
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ) {
         const apiToken = req.header(this.clientKeysHeaderName);
         if (!apiToken || !this.clientKeys.includes(apiToken)) {
             res.sendStatus(401);
