@@ -177,5 +177,18 @@ describe('Content-type checker middleware', () => {
             expect(t).toHaveBeenCalledTimes(1);
             expect(request.header('content-type')).toEqual('application/yaml');
         });
+
+        test('does not change the content-type if the request already has one', () => {
+            const middleware = requireContentType(
+                'application/json',
+                'application/yaml',
+            );
+            const request = mockRequestWithBody('application/yaml');
+            const t = jest.fn();
+            const fail = jest.fn();
+            middleware(request, expectNoCall(fail), t);
+            expect(t).toHaveBeenCalledTimes(1);
+            expect(request.header('content-type')).toEqual('application/yaml');
+        });
     });
 });
