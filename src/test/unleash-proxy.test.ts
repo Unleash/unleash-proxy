@@ -684,3 +684,65 @@ test('Should return 501 when all feature toggles is not enabled', () => {
         .set('Authorization', 'sdf')
         .expect(501);
 });
+
+describe('Request content-types', () => {
+    test.each(['/proxy', '/proxy/all'])(
+        'Should assign default content-type if the request has a body but no content-type (%s)',
+        async (endpoint) => {
+            const client = new MockClient();
+            const payload = {
+                context: { appName: 'my-app' },
+            };
+
+            const proxySecrets = ['sdf'];
+            const app = createApp(
+                {
+                    unleashUrl,
+                    unleashApiToken,
+                    proxySecrets,
+                    enableAllEndpoint: true,
+                },
+                client,
+            );
+            client.emit('ready');
+
+            await request(app)
+                .post(endpoint)
+                .set('Authorization', 'sdf')
+                .set('Content-Type', '')
+                .send(payload)
+                .expect(200)
+                .then(() => {
+                    expect(client.queriedContexts[0].appName).toEqual(
+                        payload.context.appName,
+                    );
+                });
+        },
+    );
+
+    test.each(['/proxy', '/proxy/all'])(
+        'Should reject non-"content-type: application/json" for POST requests to %s',
+        (endpoint) => {
+            const client = new MockClient();
+
+            const proxySecrets = ['sdf'];
+            const app = createApp(
+                {
+                    unleashUrl,
+                    unleashApiToken,
+                    proxySecrets,
+                    enableAllEndpoint: true,
+                },
+                client,
+            );
+            client.emit('ready');
+
+            return request(app)
+                .post(endpoint)
+                .set('Authorization', 'sdf')
+                .set('Content-Type', 'application/html')
+                .send('<em>reject me!</em>')
+                .expect(415);
+        },
+    );
+});

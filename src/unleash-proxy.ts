@@ -143,7 +143,7 @@ However, using this endpoint will increase the payload size transmitted to your 
             openApiService.validPath({
                 requestBody: lookupTogglesRequest,
                 responses: {
-                    ...standardResponses(401, 500, 501, 503),
+                    ...standardResponses(401, 415, 500, 501, 503),
                     200: featuresResponse,
                 },
                 description: `This endpoint accepts a JSON object with a \`context\` property and an optional \`toggles\` property.
@@ -163,7 +163,7 @@ If you don't provide the \`toggles\` property, then this operation functions exa
             openApiService.validPath({
                 requestBody: lookupTogglesRequest,
                 responses: {
-                    ...standardResponses(400, 401, 500, 503),
+                    ...standardResponses(400, 401, 415, 500, 503),
                     200: featuresResponse,
                 },
                 description: `This endpoint accepts a JSON object with a \`context\` property and an optional \`toggles\` property.

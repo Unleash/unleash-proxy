@@ -6,6 +6,7 @@ import { createProxyConfig, IProxyOption } from './config';
 
 import UnleashProxy from './unleash-proxy';
 import { OpenApiService } from './openapi/openapi-service';
+import requireContentType from './content-type-checker';
 
 export function createApp(
     options: IProxyOption,
@@ -43,6 +44,8 @@ export function createApp(
     app.use(cors(corsOptions));
 
     app.use(compression());
+
+    app.use(requireContentType());
 
     app.use(
         `${config.proxyBasePath}/proxy`,
