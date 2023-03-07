@@ -731,6 +731,17 @@ Object {
           "401": Object {
             "description": "Authorization information is missing or invalid.",
           },
+          "415": Object {
+            "content": Object {
+              "text/plain": Object {
+                "schema": Object {
+                  "example": "Unsupported media type",
+                  "type": "string",
+                },
+              },
+            },
+            "description": "The operation does not support request payloads of the provided type.",
+          },
           "500": Object {
             "content": Object {
               "application/json": Object {
@@ -919,6 +930,17 @@ Object {
           },
           "401": Object {
             "description": "Authorization information is missing or invalid.",
+          },
+          "415": Object {
+            "content": Object {
+              "text/plain": Object {
+                "schema": Object {
+                  "example": "Unsupported media type",
+                  "type": "string",
+                },
+              },
+            },
+            "description": "The operation does not support request payloads of the provided type.",
           },
           "500": Object {
             "content": Object {
