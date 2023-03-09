@@ -15,10 +15,14 @@ export const createContexMiddleware: Function =
             context = req.body.context || {};
         }
         context.remoteAddress = context.remoteAddress || req.ip;
-        res.locals.context = await enrichContext(
-            contextEnrichers,
-            createContext(context),
-        );
-        next();
+        try {
+            res.locals.context = await enrichContext(
+                contextEnrichers,
+                createContext(context),
+            );
+            next();
+        } catch (err) {
+            next(err); // or res.status(500).send("Failed to process the context");
+        }
         return;
     };
