@@ -127,7 +127,7 @@ export default class UnleashProxy {
                     ...standardResponses(401, 500, 501, 503),
                     200: featuresResponse,
                 },
-                description: `This endpoint returns the list of feature toggles that the proxy evaluates to enabled and disabled for the given context. As such, this endpoint always returns all feature toggles the proxy retrieves from Unleash.
+                description: `This endpoint returns all feature toggles known to the proxy, along with whether they are enabled or disabled for the provided context. This endpoint always returns **all** feature toggles the proxy retrieves from Unleash, in contrast to the \`/proxy\` endpoints that only return enabled toggles.
 
 Useful if you are migrating to unleash and need to know if the feature flag exists on the Unleash server.
 
@@ -150,7 +150,7 @@ However, using this endpoint will increase the payload size transmitted to your 
 
 If you provide the \`toggles\` property, the proxy will use the provided context value to evaluate each of the toggles you sent in. The proxy returns a list with all the toggles you provided in their fully evaluated states.
 
-If you don't provide the \`toggles\` property, then this operation functions exactly the same as the GET operation on this endpoint, except that it uses the \`context\` property instead of query parameters. The proxy will evaluate all its toggles against the context you provide and return a list of all known feature toggles and their evaluated state.`,
+If you don't provide the \`toggles\` property, then this operation functions exactly the same as the GET operation on this endpoint, except that it uses the \`context\` property instead of query parameters: The proxy will evaluate all its toggles against the context you provide and return a list of all known feature toggles and their evaluated state.`,
                 summary:
                     'Evaluate some or all toggles against the provided context.',
                 tags: ['Proxy client'],
@@ -170,7 +170,7 @@ If you don't provide the \`toggles\` property, then this operation functions exa
 
 If you provide the \`toggles\` property, the proxy will use the provided context value to evaluate each of the toggles you sent in. The proxy returns a list with all the toggles you provided in their fully evaluated states.
 
-If you don't provide the \`toggles\` property, then this operation functions exactly the same as the GET operation on this endpoint, except that it uses the \`context\` property instead of query parameters. The proxy will evaluate all its toggles against the context you provide and return a list of enabled toggles.`,
+If you don't provide the \`toggles\` property, then this operation functions exactly the same as the GET operation on this endpoint, except that it uses the \`context\` property instead of query parameters: The proxy will evaluate all its toggles against the context you provide and return a list of enabled toggles.`,
                 summary:
                     'Evaluate specific toggles against the provided context.',
                 tags: ['Proxy client'],
