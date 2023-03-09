@@ -397,46 +397,84 @@ test('Should return errors as JSON', () => {
         .expect('Content-Type', /json/);
 });
 
-test('Should return not ready', () => {
-    const client = new MockClient();
+describe.each([
+    '',
+    '/all',
+    '/health',
+    '/client/features',
+    '/internal-backstage/prometheus',
+])('GET should return not ready', (url) => {
+    test(`for ${url}`, () => {
+        const client = new MockClient();
 
-    const proxySecrets = ['sdf'];
-    const app = createApp(
-        { unleashUrl, unleashApiToken, proxySecrets },
-        client,
-    );
+        const proxySecrets = ['sdf'];
+        const app = createApp(
+            { unleashUrl, unleashApiToken, proxySecrets },
+            client,
+        );
 
-    return request(app).get('/proxy/health').expect(503);
+        return request(app).get(`/proxy${url}`).expect(503);
+    });
 });
 
-test('Should return ready', () => {
-    const client = new MockClient();
+describe.each(['', '/all', '/client/features'])(
+    'Requires valid token',
+    (url) => {
+        test(`Should return 401 if invalid api token for ${url}`, () => {
+            const client = new MockClient();
 
-    const proxySecrets = ['sdf'];
-    const app = createApp(
-        { unleashUrl, unleashApiToken, proxySecrets },
-        client,
-    );
-    client.emit('ready');
+            const proxySecrets = ['secret'];
+            const app = createApp(
+                { proxySecrets, unleashUrl, unleashApiToken },
+                client,
+            );
+            client.emit('ready');
 
-    return request(app)
-        .get('/proxy/health')
-        .expect(200)
-        .then((response) => {
-            expect(response.text).toEqual('ok');
+            return request(app)
+                .get(`/proxy${url}`)
+                .set('Authorization', 'I do not know your secret')
+                .expect(401);
         });
-});
 
-test('Should return 503 for /health', () => {
-    const client = new MockClient();
+        test(`Should return 401 if no api token for ${url}`, () => {
+            const client = new MockClient();
 
-    const proxySecrets = ['sdf'];
-    const app = createApp(
-        { unleashUrl, unleashApiToken, proxySecrets },
-        client,
-    );
+            const proxySecrets = ['secret'];
+            const app = createApp(
+                { proxySecrets, unleashUrl, unleashApiToken },
+                client,
+            );
+            client.emit('ready');
 
-    return request(app).get('/proxy/health').expect(503);
+            return request(app).get(`/proxy${url}`).expect(401);
+        });
+    },
+);
+
+describe.each([
+    { url: '/health', responseBody: 'ok' },
+    {
+        url: '/internal-backstage/prometheus',
+        responseBody: 'unleash_proxy_up 1',
+    },
+])('Do not require valid token', ({ url, responseBody }) => {
+    test(`Should not require a token for ${url}`, () => {
+        const client = new MockClient();
+
+        const proxySecrets = ['sdf'];
+        const app = createApp(
+            { unleashUrl, unleashApiToken, proxySecrets },
+            client,
+        );
+        client.emit('ready');
+
+        return request(app)
+            .get(`/proxy${url}`)
+            .expect(200)
+            .then((response) => {
+                expect(response.text).toMatch(responseBody);
+            });
+    });
 });
 
 test('Should return 504 for proxy', () => {

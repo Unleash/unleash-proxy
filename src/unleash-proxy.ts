@@ -1,8 +1,7 @@
-import { Request, Response, Router } from 'express';
-import { createContext } from './create-context';
+import { NextFunction, Request, Response, Router } from 'express';
 import { IProxyConfig } from './config';
 import { IClient } from './client';
-import { ContextEnricher, enrichContext } from './enrich-context';
+import { ContextEnricher } from './enrich-context';
 import { Logger } from './logger';
 import { OpenApiService } from './openapi/openapi-service';
 import { featuresResponse } from './openapi/spec/features-response';
@@ -21,6 +20,7 @@ import {
 import { RegisterMetricsSchema } from './openapi/spec/register-metrics-schema';
 import { LookupTogglesSchema } from './openapi/spec/lookup-toggles-schema';
 import { RegisterClientSchema } from './openapi/spec/register-client-schema';
+import { createContexMiddleware } from './context-middleware';
 
 export default class UnleashProxy {
     private logger: Logger;
@@ -57,6 +57,8 @@ export default class UnleashProxy {
         this.contextEnrichers = config.expCustomEnrichers
             ? config.expCustomEnrichers
             : [];
+
+        const contextMiddleware = createContexMiddleware(this.contextEnrichers);
 
         if (client.isReady()) {
             this.setReady();
@@ -100,6 +102,9 @@ export default class UnleashProxy {
                     'Retrieve enabled feature toggles for the provided context.',
                 tags: ['Proxy client'],
             }),
+            this.readyMiddleware.bind(this),
+            this.clientTokenMiddleware.bind(this),
+            contextMiddleware,
             this.getEnabledToggles.bind(this),
         );
 
@@ -135,6 +140,9 @@ However, using this endpoint will increase the payload size transmitted to your 
                 summary: 'Retrieve all feature toggles from the proxy.',
                 tags: ['Proxy client'],
             }),
+            this.readyMiddleware.bind(this),
+            this.clientTokenMiddleware.bind(this),
+            contextMiddleware,
             this.getAllToggles.bind(this),
         );
 
@@ -155,6 +163,9 @@ If you don't provide the \`toggles\` property, then this operation functions exa
                     'Evaluate some or all toggles against the provided context.',
                 tags: ['Proxy client'],
             }),
+            this.readyMiddleware.bind(this),
+            this.clientTokenMiddleware.bind(this),
+            contextMiddleware,
             this.getAllTogglesPOST.bind(this),
         );
 
@@ -175,6 +186,9 @@ If you don't provide the \`toggles\` property, then this operation functions exa
                     'Evaluate specific toggles against the provided context.',
                 tags: ['Proxy client'],
             }),
+            this.readyMiddleware.bind(this),
+            this.clientTokenMiddleware.bind(this),
+            contextMiddleware,
             this.lookupToggles.bind(this),
         );
 
@@ -191,6 +205,8 @@ If you don't provide the \`toggles\` property, then this operation functions exa
                     "Retrieve the proxy's current toggle configuration (as consumed by the internal client).",
                 tags: ['Server-side client'],
             }),
+            this.readyMiddleware.bind(this),
+            this.clientTokenMiddleware.bind(this),
             this.unleashApi.bind(this),
         );
 
@@ -233,6 +249,7 @@ If you don't provide the \`toggles\` property, then this operation functions exa
                     'Check whether the proxy is ready to serve requests yet.',
                 tags: ['Operational'],
             }),
+            this.readyMiddleware.bind(this),
             this.health.bind(this),
         );
 
@@ -249,6 +266,7 @@ If you don't provide the \`toggles\` property, then this operation functions exa
                 summary: 'Check whether the proxy is up and running',
                 tags: ['Operational'],
             }),
+            this.readyMiddleware.bind(this),
             this.prometheus.bind(this),
         );
     }
@@ -269,131 +287,106 @@ If you don't provide the \`toggles\` property, then this operation functions exa
         this.clientKeys = clientKeys;
     }
 
-    getAllToggles(req: Request, res: Response<FeaturesSchema | string>): void {
-        const apiToken = req.header(this.clientKeysHeaderName);
+    private readyMiddleware(req: Request, res: Response, next: NextFunction) {
+        if (!this.ready) {
+            res.status(503).send(NOT_READY_MSG);
+        } else {
+            next();
+        }
+    }
 
+    private clientTokenMiddleware(
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ) {
+        const apiToken = req.header(this.clientKeysHeaderName);
+        if (!apiToken || !this.clientKeys.includes(apiToken)) {
+            res.sendStatus(401);
+        } else {
+            next();
+        }
+    }
+
+    async getAllToggles(
+        req: Request,
+        res: Response<FeaturesSchema | string>,
+    ): Promise<void> {
         if (!this.enableAllEndpoint) {
             res.status(501).send(
                 'The /proxy/all endpoint is disabled. Please check your server configuration. To enable it, set the `enableAllEndpoint` configuration option or `ENABLE_ALL_ENDPOINT` environment variable to `true`.',
             );
-        } else if (!this.ready) {
-            res.status(503).send(NOT_READY_MSG);
-        } else if (!apiToken || !this.clientKeys.includes(apiToken)) {
-            res.sendStatus(401);
+            return;
+        }
+
+        const { context } = res.locals;
+        const toggles = this.client.getAllToggles(context);
+        res.set('Cache-control', 'public, max-age=2');
+        res.send({ toggles });
+    }
+
+    async getAllTogglesPOST(
+        req: Request,
+        res: Response<FeaturesSchema | string>,
+    ): Promise<void> {
+        if (!this.enableAllEndpoint) {
+            res.status(501).send(
+                'The /proxy/all endpoint is disabled. Please check your server configuration. To enable it, set the `enableAllEndpoint` configuration option or `ENABLE_ALL_ENDPOINT` environment variable to `true`.',
+            );
+            return;
+        }
+
+        res.set('Cache-control', 'public, max-age=2');
+        const { toggles: toggleNames = [] } = req.body;
+        const { context } = res.locals;
+
+        if (toggleNames.length > 0) {
+            const toggles = this.client.getDefinedToggles(toggleNames, context);
+            res.send({ toggles });
         } else {
-            const { query } = req;
-            query.remoteAddress = query.remoteAddress || req.ip;
-            const context = createContext(query);
             const toggles = this.client.getAllToggles(context);
-            res.set('Cache-control', 'public, max-age=2');
             res.send({ toggles });
         }
     }
 
-    getAllTogglesPOST(
+    async getEnabledToggles(
         req: Request,
         res: Response<FeaturesSchema | string>,
-    ): void {
-        const apiToken = req.header(this.clientKeysHeaderName);
-
-        if (!this.enableAllEndpoint) {
-            res.status(501).send(
-                'The /proxy/all endpoint is disabled. Please check your server configuration. To enable it, set the `enableAllEndpoint` configuration option or `ENABLE_ALL_ENDPOINT` environment variable to `true`.',
-            );
-        } else if (!this.ready) {
-            res.status(503).send(NOT_READY_MSG);
-        } else if (!apiToken || !this.clientKeys.includes(apiToken)) {
-            res.sendStatus(401);
-        } else {
-            res.set('Cache-control', 'public, max-age=2');
-            const { context = {}, toggles: toggleNames = [] } = req.body;
-            const actualContext = createContext(context);
-
-            if (toggleNames.length > 0) {
-                const toggles = this.client.getDefinedToggles(
-                    toggleNames,
-                    actualContext,
-                );
-                res.send({ toggles });
-            } else {
-                context.remoteAddress = context.remoteAddress || req.ip;
-                const toggles = this.client.getAllToggles(actualContext);
-                res.send({ toggles });
-            }
-        }
+    ): Promise<void> {
+        const { context } = res.locals;
+        const toggles = this.client.getEnabledToggles(context);
+        res.set('Cache-control', 'public, max-age=2');
+        res.send({ toggles });
     }
 
-    getEnabledToggles(
-        req: Request,
-        res: Response<FeaturesSchema | string>,
-    ): void {
-        const apiToken = req.header(this.clientKeysHeaderName);
-
-        if (!this.ready) {
-            res.status(503).send(NOT_READY_MSG);
-        } else if (!apiToken || !this.clientKeys.includes(apiToken)) {
-            res.sendStatus(401);
-        } else {
-            const { query } = req;
-            query.remoteAddress = query.remoteAddress || req.ip;
-            enrichContext(this.contextEnrichers, createContext(query)).then(
-                (context) => {
-                    const toggles = this.client.getEnabledToggles(context);
-                    res.set('Cache-control', 'public, max-age=2');
-                    res.send({ toggles });
-                },
-            );
-        }
-    }
-
-    lookupToggles(
+    async lookupToggles(
         req: Request<any, any, LookupTogglesSchema>,
         res: Response<FeaturesSchema | string>,
-    ): void {
-        const clientToken = req.header(this.clientKeysHeaderName);
+    ): Promise<void> {
+        res.set('Cache-control', 'public, max-age=2');
+        const { toggles: toggleNames = [] } = req.body;
+        const { context } = res.locals;
 
-        if (!this.ready) {
-            res.status(503).send(NOT_READY_MSG);
-        } else if (!clientToken || !this.clientKeys.includes(clientToken)) {
-            res.sendStatus(401);
+        if (toggleNames.length > 0) {
+            const toggles = this.client.getDefinedToggles(toggleNames, context);
+            res.send({ toggles });
         } else {
-            res.set('Cache-control', 'public, max-age=2');
-            const { context = {}, toggles: toggleNames = [] } = req.body;
-            const actualContext = createContext(context);
-
-            if (toggleNames.length > 0) {
-                const toggles = this.client.getDefinedToggles(
-                    toggleNames,
-                    actualContext,
-                );
-                res.send({ toggles });
-            } else {
-                context.remoteAddress = context.remoteAddress || req.ip;
-                const toggles = this.client.getEnabledToggles(actualContext);
-                res.send({ toggles });
-            }
+            const toggles = this.client.getEnabledToggles(context);
+            res.send({ toggles });
         }
     }
 
     health(_: Request, res: Response<string>): void {
-        if (!this.ready) {
-            res.status(503).send(NOT_READY_MSG);
-        } else {
-            res.send('ok');
-        }
+        res.send('ok');
     }
 
     prometheus(_: Request, res: Response<string>): void {
-        if (!this.ready) {
-            res.status(503).send(NOT_READY_MSG);
-        } else {
-            const prometheusResponse =
-                '# HELP unleash_proxy_up Indication that the service is up. \n' +
-                '# TYPE unleash_proxy_up counter\n' +
-                'unleash_proxy_up 1\n';
-            res.set('Content-type', 'text/plain');
-            res.send(prometheusResponse);
-        }
+        const prometheusResponse =
+            '# HELP unleash_proxy_up Indication that the service is up. \n' +
+            '# TYPE unleash_proxy_up counter\n' +
+            'unleash_proxy_up 1\n';
+        res.set('Content-type', 'text/plain');
+        res.send(prometheusResponse);
     }
 
     registerMetrics(
@@ -427,15 +420,8 @@ If you don't provide the \`toggles\` property, then this operation functions exa
     }
 
     unleashApi(req: Request, res: Response<string | ApiRequestSchema>): void {
-        const apiToken = req.header(this.clientKeysHeaderName);
-        if (!this.ready) {
-            res.status(503).send(NOT_READY_MSG);
-        } else if (apiToken && this.serverSideTokens.includes(apiToken)) {
-            const features = this.client.getFeatureToggleDefinitions();
-            res.set('Cache-control', 'public, max-age=2');
-            res.send({ version: 2, features });
-        } else {
-            res.sendStatus(401);
-        }
+        const features = this.client.getFeatureToggleDefinitions();
+        res.set('Cache-control', 'public, max-age=2');
+        res.send({ version: 2, features });
     }
 }
