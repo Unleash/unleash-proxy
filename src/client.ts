@@ -129,7 +129,7 @@ class Client extends EventEmitter implements IClient {
     }
 
     getAllToggles(inContext: Context): FeatureToggleStatus[] {
-        this.logger.info(
+        this.logger.debug(
             'Get all feature toggles for provided context',
             inContext,
         );
@@ -152,7 +152,7 @@ class Client extends EventEmitter implements IClient {
     }
 
     getEnabledToggles(inContext: Context): FeatureToggleStatus[] {
-        this.logger.info(
+        this.logger.debug(
             'Get enabled feature toggles for provided context',
             inContext,
         );
