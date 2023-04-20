@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - 'v*'
+    branches:
+      - main
 
 permissions:
   id-token: write
@@ -38,7 +40,7 @@ jobs:
           REPOSITORY: unleash-proxy
         with:
           images: |
-            $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY
+            ${{ steps.login-ecr-public.outputs.registry }}/unleashorg/unleash-proxy
           tags: |
             type=ref,event=tag
             type=semver,pattern={{version}}
