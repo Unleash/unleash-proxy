@@ -59,11 +59,7 @@ jobs:
           images: |
             ${{ steps.login-ecr-public.outputs.registry }}/unleashorg/unleash-proxy
           tags: |
-            type=ref,event=tag
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
-            type=sha
+            ${{ github.event.inputs.version }}
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
