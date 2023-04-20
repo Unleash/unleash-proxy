@@ -48,8 +48,26 @@ jobs:
           registry-type: public
         env:
           AWS_DEFAULT_REGION: 'us-east-1'
-      - name: Push image to ECR
-        run: |
-          docker buildx imagetools create \
-            --tag ${{ steps.login-ecr-public.outputs.registry }}/unleashorg/unleash-proxy:${{ github.event.inputs.version }}
-            unleashorg/unleash-proxy:${{ github.event.inputs.version }}
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        env:
+          REGISTRY: ${{ steps.login-ecr-public-outputs.registry }}
+          REGISTRY_ALIAS: unleashorg
+          REPOSITORY: unleash-proxy
+        with:
+          images: |
+            ${{ steps.login-ecr-public.outputs.registry }}/unleashorg/unleash-proxy
+          tags: |
+            type=ref,event=tag
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          platforms: linux/arm64,linux/amd64
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}          
