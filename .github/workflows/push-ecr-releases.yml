@@ -5,6 +5,10 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   docker:
     runs-on: ubuntu-latest
@@ -15,7 +19,9 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: arn:aws:iam::726824350591:role/oidc-github-actions
+          role-session-name: actions-push-to-ecr-public
           aws-region: us-east-1
+
       - name: Login to AWS ECR
         id: login-ecr-public
         uses: aws-actions/amazon-ecr-login@v1
