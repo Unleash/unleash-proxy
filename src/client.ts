@@ -200,14 +200,25 @@ class Client extends EventEmitter implements IClient {
         const { toggles } = metrics.bucket;
 
         Object.keys(toggles).forEach((toggleName) => {
-            const yesCount: number = toggles[toggleName].yes ?? 0;
-            const noCount: number = toggles[toggleName].no ?? 0;
+            const toggle = toggles[toggleName];
+            const yesCount: number = toggle.yes ?? 0;
+            const noCount: number = toggle.no ?? 0;
             [...Array(yesCount)].forEach(() =>
                 this.metrics.count(toggleName, true),
             );
             [...Array(noCount)].forEach(() =>
                 this.metrics.count(toggleName, false),
             );
+            const variants = toggle.variants;
+            if (variants) {
+                Object.entries(variants).forEach(
+                    ([variantName, variantCount]) => {
+                        [...Array(variantCount)].forEach(() =>
+                            this.metrics.countVariant(toggleName, variantName),
+                        );
+                    },
+                );
+            }
         });
     }
 
