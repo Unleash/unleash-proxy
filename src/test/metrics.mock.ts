@@ -1,17 +1,23 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import Metrics from 'unleash-client/lib/metrics';
 
 class FakeMetrics extends Metrics {
+    recordedCount: [string, boolean][] = [];
+
+    recordedCountVariant: [string, string][] = [];
+
     start() {}
 
-    count(name: string, enabled: boolean) {}
+    count(name: string, enabled: boolean) {
+        this.recordedCount.push([name, enabled]);
+    }
 
-    countVariant(name: string, variantName: string) {}
+    countVariant(name: string, variantName: string) {
+        this.recordedCountVariant.push([name, variantName]);
+    }
 
-    on(eventName: string | symbol, listener: (...args: any[]) => void): this {
+    on(): this {
         return this;
     }
 }
