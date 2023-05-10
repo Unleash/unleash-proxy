@@ -1,8 +1,7 @@
 import EventEmitter from 'events';
-import { Context, initialize, Unleash, Variant } from 'unleash-client';
+import { Context, Unleash, Variant } from 'unleash-client';
 import { FeatureInterface } from 'unleash-client/lib/feature';
 import Metrics from 'unleash-client/lib/metrics';
-import { defaultStrategies } from 'unleash-client/lib/strategy';
 import { getDefaultVariant } from 'unleash-client/lib/variant';
 import { IProxyConfig } from './config';
 import { Logger } from './logger';
@@ -62,50 +61,14 @@ class Client extends EventEmitter implements IClient {
 
     private ready: boolean = false;
 
-    constructor(config: IProxyConfig, init: Function = initialize) {
+    constructor(config: IProxyConfig, unleash: Unleash, metrics: Metrics) {
         super();
         this.unleashApiToken = config.unleashApiToken;
         this.environment = config.environment;
         this.logger = config.logger;
 
-        const customHeadersFunction = async () => ({
-            Authorization: this.unleashApiToken,
-        });
-
-        // Unleash Client instance.
-        this.unleash = init({
-            url: config.unleashUrl,
-            appName: config.unleashAppName,
-            instanceId: config.unleashInstanceId,
-            environment: this.environment,
-            refreshInterval: config.refreshInterval,
-            projectName: config.projectName,
-            strategies: config.customStrategies,
-            disableMetrics: true,
-            namePrefix: config.namePrefix,
-            tags: config.tags,
-            customHeadersFunction,
-            bootstrap: config.bootstrap,
-            storageProvider: config.storageProvider,
-            ...(!!config.httpOptions
-                ? { httpOptions: config.httpOptions }
-                : {}),
-        });
-
-        // Custom metrics Instance
-        this.metrics = new Metrics({
-            disableMetrics: config.disableMetrics,
-            appName: config.unleashAppName,
-            instanceId: config.unleashInstanceId,
-            strategies: defaultStrategies.map((s) => s.name),
-            metricsInterval: config.metricsInterval,
-            metricsJitter: config.metricsJitter,
-            url: config.unleashUrl,
-            customHeadersFunction,
-            ...(!!config.httpOptions
-                ? { httpOptions: config.httpOptions }
-                : {}),
-        });
+        this.unleash = unleash;
+        this.metrics = metrics;
 
         this.metrics.on('error', (msg) => this.logger.error(`metrics: ${msg}`));
         this.unleash.on('error', (msg) => this.logger.error(msg));
