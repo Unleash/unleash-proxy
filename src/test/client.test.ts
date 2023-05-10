@@ -1,16 +1,9 @@
-import { UnleashConfig } from 'unleash-client/lib/unleash';
-import Client from '../client';
 import { createProxyConfig } from '../config';
 import { LogLevel } from '../logger';
 import FakeUnleash from './unleash.mock';
+import { createFakeClient } from './create-fake-client';
 
 test('should add environment to isEnabled calls', () => {
-    let unleashSDK: FakeUnleash;
-    const init = (opts: UnleashConfig) => {
-        unleashSDK = new FakeUnleash(opts);
-        return unleashSDK;
-    };
-
     const config = createProxyConfig({
         unleashApiToken: '123',
         unleashUrl: 'http://localhost:4242/api',
@@ -21,7 +14,7 @@ test('should add environment to isEnabled calls', () => {
 
     config.disableMetrics = true;
 
-    const client = new Client(config, init);
+    const client = createFakeClient(config);
 
     const fakeUnleash = client.unleash as FakeUnleash;
 
@@ -43,12 +36,6 @@ test('should add environment to isEnabled calls', () => {
 });
 
 test('should override environment to isEnabled calls', () => {
-    let unleashSDK: FakeUnleash;
-    const init = (opts: UnleashConfig) => {
-        unleashSDK = new FakeUnleash(opts);
-        return unleashSDK;
-    };
-
     const config = createProxyConfig({
         unleashApiToken: '123',
         unleashUrl: 'http://localhost:4242/api',
@@ -59,7 +46,7 @@ test('should override environment to isEnabled calls', () => {
 
     config.disableMetrics = true;
 
-    const client = new Client(config, init);
+    const client = createFakeClient(config);
 
     const fakeUnleash = client.unleash as FakeUnleash;
 
@@ -81,12 +68,6 @@ test('should override environment to isEnabled calls', () => {
 });
 
 test('should return all toggles', () => {
-    let unleashSDK: FakeUnleash;
-    const init = (opts: UnleashConfig) => {
-        unleashSDK = new FakeUnleash(opts);
-        return unleashSDK;
-    };
-
     const config = createProxyConfig({
         unleashApiToken: '123',
         unleashUrl: 'http://localhost:4242/api',
@@ -97,7 +78,7 @@ test('should return all toggles', () => {
 
     config.disableMetrics = true;
 
-    const client = new Client(config, init);
+    const client = createFakeClient(config);
 
     const fakeUnleash = client.unleash as FakeUnleash;
 
@@ -141,12 +122,6 @@ test('should return all toggles', () => {
 });
 
 test('should return default variant for disabled toggles', () => {
-    let unleashSDK: FakeUnleash;
-    const init = (opts: UnleashConfig) => {
-        unleashSDK = new FakeUnleash(opts);
-        return unleashSDK;
-    };
-
     const config = createProxyConfig({
         unleashApiToken: '123',
         unleashUrl: 'http://localhost:4242/api',
@@ -157,7 +132,7 @@ test('should return default variant for disabled toggles', () => {
 
     config.disableMetrics = true;
 
-    const client = new Client(config, init);
+    const client = createFakeClient(config);
 
     const fakeUnleash = client.unleash as FakeUnleash;
 

@@ -1,12 +1,13 @@
 import compression from 'compression';
 import express, { Application } from 'express';
 import cors from 'cors';
-import Client, { IClient } from './client';
+import { IClient } from './client';
 import { createProxyConfig, IProxyOption } from './config';
 
 import UnleashProxy from './unleash-proxy';
 import { OpenApiService } from './openapi/openapi-service';
 import requireContentType from './content-type-checker';
+import { createClient } from './create-client';
 
 export function createApp(
     options: IProxyOption,
@@ -16,7 +17,7 @@ export function createApp(
     const config = createProxyConfig(options);
     const { logger } = config;
     logger.debug('Configuration:', config);
-    const client = unleashClient || new Client(config);
+    const client = unleashClient || createClient(config);
 
     const openApiService = new OpenApiService(config);
 
