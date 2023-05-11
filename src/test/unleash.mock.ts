@@ -15,6 +15,7 @@ class FakeUnleash extends Unleash {
     // fix constructor
     constructor(unleashConfig: UnleashConfig) {
         super(unleashConfig);
+        super.destroy(); // prevent parent constructor initialization
         this.unleashConfig = unleashConfig;
     }
 
