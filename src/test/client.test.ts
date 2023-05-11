@@ -12,8 +12,6 @@ test('should add environment to isEnabled calls', () => {
         logLevel: LogLevel.error,
     });
 
-    config.disableMetrics = true;
-
     const { client } = createFakeClient(config);
 
     const fakeUnleash = client.unleash as FakeUnleash;
@@ -44,8 +42,6 @@ test('should override environment to isEnabled calls', () => {
         logLevel: LogLevel.error,
     });
 
-    config.disableMetrics = true;
-
     const { client } = createFakeClient(config);
 
     const fakeUnleash = client.unleash as FakeUnleash;
@@ -75,8 +71,6 @@ test('should return all toggles', () => {
         environment: 'never-change-me',
         logLevel: LogLevel.error,
     });
-
-    config.disableMetrics = true;
 
     const { client } = createFakeClient(config);
 
@@ -129,8 +123,6 @@ test('should return default variant for disabled toggles', () => {
         environment: 'never-change-me',
         logLevel: LogLevel.error,
     });
-
-    config.disableMetrics = true;
 
     const { client } = createFakeClient(config);
 
