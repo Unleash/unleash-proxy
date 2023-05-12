@@ -12,9 +12,7 @@ test('should add environment to isEnabled calls', () => {
         logLevel: LogLevel.error,
     });
 
-    config.disableMetrics = true;
-
-    const client = createFakeClient(config);
+    const { client } = createFakeClient(config);
 
     const fakeUnleash = client.unleash as FakeUnleash;
 
@@ -44,9 +42,7 @@ test('should override environment to isEnabled calls', () => {
         logLevel: LogLevel.error,
     });
 
-    config.disableMetrics = true;
-
-    const client = createFakeClient(config);
+    const { client } = createFakeClient(config);
 
     const fakeUnleash = client.unleash as FakeUnleash;
 
@@ -76,9 +72,7 @@ test('should return all toggles', () => {
         logLevel: LogLevel.error,
     });
 
-    config.disableMetrics = true;
-
-    const client = createFakeClient(config);
+    const { client } = createFakeClient(config);
 
     const fakeUnleash = client.unleash as FakeUnleash;
 
@@ -130,9 +124,7 @@ test('should return default variant for disabled toggles', () => {
         logLevel: LogLevel.error,
     });
 
-    config.disableMetrics = true;
-
-    const client = createFakeClient(config);
+    const { client } = createFakeClient(config);
 
     const fakeUnleash = client.unleash as FakeUnleash;
 
@@ -179,4 +171,41 @@ test('should return default variant for disabled toggles', () => {
     expect(result[2].variant?.name).toBe('disabled');
     expect(result[2].variant?.enabled).toBe(false);
     client.destroy();
+});
+
+test('should register metrics', () => {
+    const config = createProxyConfig({
+        unleashApiToken: '123',
+        unleashUrl: 'http://localhost:4242/api',
+        proxySecrets: ['s1'],
+        environment: 'never-change-me',
+        logLevel: LogLevel.error,
+    });
+
+    const { client, metrics } = createFakeClient(config);
+
+    client.registerMetrics({
+        bucket: {
+            toggles: {
+                toggle: {
+                    yes: 3,
+                    no: 1,
+                    variants: { variantA: 2, variantB: 1, disabled: 1 },
+                },
+            },
+        },
+    });
+
+    expect(metrics.recordedCount).toStrictEqual([
+        ['toggle', true],
+        ['toggle', true],
+        ['toggle', true],
+        ['toggle', false],
+    ]);
+    expect(metrics.recordedCountVariant).toStrictEqual([
+        ['toggle', 'variantA'],
+        ['toggle', 'variantA'],
+        ['toggle', 'variantB'],
+        ['toggle', 'disabled'],
+    ]);
 });

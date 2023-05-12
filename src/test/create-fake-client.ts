@@ -4,7 +4,9 @@ import { defaultStrategies } from 'unleash-client/lib/strategy';
 import FakeUnleash from './unleash.mock';
 import FakeMetrics from './metrics.mock';
 
-export const createFakeClient = (config: IProxyConfig): Client => {
+export const createFakeClient = (
+    config: IProxyConfig,
+): { client: Client; metrics: FakeMetrics } => {
     const unleash = new FakeUnleash({
         ...config,
         url: config.unleashUrl,
@@ -19,5 +21,7 @@ export const createFakeClient = (config: IProxyConfig): Client => {
         strategies: defaultStrategies.map((s) => s.name),
     });
 
-    return new Client(config, unleash, metrics);
+    const client = new Client(config, unleash, metrics);
+
+    return { client, metrics };
 };
