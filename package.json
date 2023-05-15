@@ -38,7 +38,7 @@
   },
   "homepage": "https://github.com/Unleash/unleash-proxy#readme",
   "dependencies": {
-    "@unleash/express-openapi": "^0.2.1-beta.0",
+    "@unleash/express-openapi": "^0.3.0",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
     "express": "^4.18.2",
