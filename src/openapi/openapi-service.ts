@@ -14,7 +14,10 @@ export class OpenApiService {
         this.config = config;
         this.api = openapi(
             this.docsPath(),
-            createOpenApiSchema(config.clientKeysHeaderName),
+            createOpenApiSchema(
+                config.proxyBasePath,
+                config.clientKeysHeaderName,
+            ),
             { coerce: true },
         );
     }

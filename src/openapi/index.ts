@@ -9,11 +9,13 @@ import { unleashContextSchema } from './spec/unleash-context-schema';
 import { variantSchema } from './spec/variant-schema';
 
 // Create the base OpenAPI schema, with everything except paths.
+
 export const createOpenApiSchema = (
+    serverUrl?: string,
     clientKeysHeaderName: string = 'Authorization',
 ): Omit<OpenAPIV3.Document, 'paths'> => ({
     openapi: '3.0.3',
-    servers: [],
+    servers: serverUrl ? [{ url: serverUrl }] : [],
     info: {
         title: 'Unleash Proxy API',
         version: process.env.npm_package_version || '',
