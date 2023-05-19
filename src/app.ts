@@ -7,7 +7,7 @@ import { createProxyConfig, IProxyOption } from './config';
 import UnleashProxy from './unleash-proxy';
 import { OpenApiService } from './openapi/openapi-service';
 import requireContentType from './content-type-checker';
-import { createClient } from './create-client';
+import { createSingletonClient, createNewClient } from './create-client';
 
 export function createApp(
     options: IProxyOption,
@@ -17,7 +17,11 @@ export function createApp(
     const config = createProxyConfig(options);
     const { logger } = config;
     logger.debug('Configuration:', config);
-    const client = unleashClient || createClient(config);
+    const client =
+        unleashClient ||
+        (options.clientMode === 'new'
+            ? createNewClient(config)
+            : createSingletonClient(config));
 
     const openApiService = new OpenApiService(config);
 

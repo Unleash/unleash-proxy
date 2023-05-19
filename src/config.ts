@@ -42,6 +42,7 @@ export interface IProxyOption {
     expServerSideSdkConfig?: ServerSideSdkConfig;
     httpOptions?: HttpOptions;
     expCustomEnrichers?: ContextEnricher[];
+    clientMode?: 'singleton' | 'new';
 }
 
 export interface IProxyConfig {
