@@ -623,6 +623,62 @@ test('Should return all feature toggles', () => {
         });
 });
 
+test('/client/features should return toggle definitions', () => {
+    const client = new MockClient([
+        { name: 'a', enabled: true, impressionData: false },
+        { name: 'b', enabled: false, impressionData: false },
+        { name: 'c', enabled: true, impressionData: true },
+    ]);
+
+    const proxySecrets = ['sdf'];
+    const app = createApp(
+        {
+            unleashUrl,
+            unleashApiToken,
+            proxySecrets,
+            enableAllEndpoint: true,
+            expServerSideSdkConfig: { tokens: ['server-side'] },
+        },
+        client,
+    );
+    client.emit('ready');
+
+    return request(app)
+        .get('/proxy/client/features')
+        .set('Authorization', 'server-side')
+        .expect(200)
+        .expect((res) => {
+            expect(res.body.features.length).toBe(3);
+            expect(res.body.features[0].strategies.length).toBe(1);
+        });
+});
+
+test('/client/features should not accept proxy secret', () => {
+    const client = new MockClient([
+        { name: 'a', enabled: true, impressionData: false },
+        { name: 'b', enabled: false, impressionData: false },
+        { name: 'c', enabled: true, impressionData: true },
+    ]);
+
+    const proxySecrets = ['sdf'];
+    const app = createApp(
+        {
+            unleashUrl,
+            unleashApiToken,
+            proxySecrets,
+            enableAllEndpoint: true,
+            expServerSideSdkConfig: { tokens: ['server-side'] },
+        },
+        client,
+    );
+    client.emit('ready');
+
+    return request(app)
+        .get('/proxy/client/features')
+        .set('Authorization', 'sdf')
+        .expect(401);
+});
+
 test('Should return all feature toggles via POST', () => {
     const client = new MockClient([
         { name: 'a', enabled: true, impressionData: false },

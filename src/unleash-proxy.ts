@@ -206,7 +206,7 @@ If you don't provide the \`toggles\` property, then this operation functions exa
                 tags: ['Server-side client'],
             }),
             this.readyMiddleware.bind(this),
-            this.clientTokenMiddleware.bind(this),
+            this.expServerSideTokenMiddleware.bind(this),
             this.unleashApi.bind(this),
         );
 
@@ -302,6 +302,19 @@ If you don't provide the \`toggles\` property, then this operation functions exa
     ) {
         const apiToken = req.header(this.clientKeysHeaderName);
         if (!apiToken || !this.clientKeys.includes(apiToken)) {
+            res.sendStatus(401);
+        } else {
+            next();
+        }
+    }
+
+    private expServerSideTokenMiddleware(
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ) {
+        const apiToken = req.header(this.clientKeysHeaderName);
+        if (!apiToken || !this.serverSideTokens.includes(apiToken)) {
             res.sendStatus(401);
         } else {
             next();

@@ -19,7 +19,16 @@ class MockClient extends EventEmitter implements IClient {
     }
 
     getFeatureToggleDefinitions(): FeatureInterface[] {
-        throw new Error('Method not implemented.');
+        return this.toggles.map((t) => ({
+            name: t.name,
+            strategies: [{ name: 'default', parameters: {}, constraints: [] }],
+            enabled: t.enabled,
+            project: 'default',
+            stale: false,
+            type: 'release',
+            variants: [],
+            impressionData: false,
+        }));
     }
 
     isReady(): boolean {
