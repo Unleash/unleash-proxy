@@ -20,7 +20,7 @@
     "url": "git+https://github.com/Unleash/unleash-proxy.git"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=16"
   },
   "keywords": [
     "Unleash",
