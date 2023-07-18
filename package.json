@@ -45,7 +45,7 @@
     "json-schema-to-ts": "^2.3.0",
     "openapi-types": "^11.0.0",
     "type-is": "^1.6.18",
-    "unleash-client": "^4.1.0-beta.1"
+    "unleash-client": "^4.1.0-beta.2"
   },
   "devDependencies": {
     "@apidevtools/swagger-parser": "10.1.0",
