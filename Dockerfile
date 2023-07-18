@@ -1,4 +1,4 @@
-FROM node:14-alpine as builder
+FROM node:18-alpine as builder
 
 WORKDIR /unleash-proxy
 
@@ -10,7 +10,7 @@ RUN yarn build
 
 RUN yarn install --production  --frozen-lockfile --ignore-scripts --prefer-offline
 
-FROM node:14-alpine
+FROM node:18-alpine
 
 ENV NODE_ENV production
 
