@@ -70,6 +70,34 @@ const schema = {
                                 parameters: {
                                     type: 'object',
                                 },
+                                variants: {
+                                    type: 'array',
+                                    items: {
+                                        type: 'object',
+                                        required: ['name', 'weight'],
+                                        additionalProperties: false,
+                                        properties: {
+                                            name: {
+                                                type: 'string',
+                                            },
+                                            weight: {
+                                                type: 'number',
+                                            },
+                                            stickiness: {
+                                                type: 'string',
+                                            },
+                                            payload: {
+                                                type: 'object',
+                                                additionalProperties: false,
+                                                required: ['type', 'value'],
+                                                properties: {
+                                                    type: { type: 'string' },
+                                                    value: { type: 'string' },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
                             },
                         },
                     },
@@ -77,7 +105,7 @@ const schema = {
                         type: 'array',
                         items: {
                             type: 'object',
-                            required: ['name', 'weight', 'overrides'],
+                            required: ['name', 'weight'],
                             additionalProperties: false,
                             properties: {
                                 name: {

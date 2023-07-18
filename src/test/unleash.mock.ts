@@ -3,6 +3,7 @@
 import { Context, Unleash, Variant } from 'unleash-client';
 import { FeatureInterface } from 'unleash-client/lib/feature';
 import { FallbackFunction } from 'unleash-client/lib/helpers';
+// @ts-ignore
 import { UnleashConfig } from 'unleash-client/lib/unleash';
 
 class FakeUnleash extends Unleash {

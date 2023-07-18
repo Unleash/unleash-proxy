@@ -102,6 +102,44 @@ Object {
                       "parameters": Object {
                         "type": "object",
                       },
+                      "variants": Object {
+                        "items": Object {
+                          "additionalProperties": false,
+                          "properties": Object {
+                            "name": Object {
+                              "type": "string",
+                            },
+                            "payload": Object {
+                              "additionalProperties": false,
+                              "properties": Object {
+                                "type": Object {
+                                  "type": "string",
+                                },
+                                "value": Object {
+                                  "type": "string",
+                                },
+                              },
+                              "required": Array [
+                                "type",
+                                "value",
+                              ],
+                              "type": "object",
+                            },
+                            "stickiness": Object {
+                              "type": "string",
+                            },
+                            "weight": Object {
+                              "type": "number",
+                            },
+                          },
+                          "required": Array [
+                            "name",
+                            "weight",
+                          ],
+                          "type": "object",
+                        },
+                        "type": "array",
+                      },
                     },
                     "required": Array [
                       "name",
@@ -167,7 +205,6 @@ Object {
                     "required": Array [
                       "name",
                       "weight",
-                      "overrides",
                     ],
                     "type": "object",
                   },
@@ -221,6 +258,8 @@ Object {
                   "type": Object {
                     "enum": Array [
                       "string",
+                      "json",
+                      "csv",
                     ],
                     "type": "string",
                   },
@@ -280,6 +319,8 @@ Object {
                         "type": Object {
                           "enum": Array [
                             "string",
+                            "json",
+                            "csv",
                           ],
                           "type": "string",
                         },
@@ -531,6 +572,8 @@ Object {
               "type": Object {
                 "enum": Array [
                   "string",
+                  "json",
+                  "csv",
                 ],
                 "type": "string",
               },
