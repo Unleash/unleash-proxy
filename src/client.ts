@@ -102,7 +102,7 @@ class Client extends EventEmitter implements IClient {
         return definitions.map((d) => {
             const enabled = this.unleash.isEnabled(d.name, context);
             const variant = enabled
-                ? this.unleash.getVariant(d.name, context)
+                ? this.unleash.forceGetVariant(d.name, context)
                 : getDefaultVariant();
 
             return {
@@ -127,7 +127,7 @@ class Client extends EventEmitter implements IClient {
             .map((d) => ({
                 name: d.name,
                 enabled: true,
-                variant: this.unleash.getVariant(d.name, context),
+                variant: this.unleash.forceGetVariant(d.name, context),
                 impressionData: d.impressionData,
             }));
     }
