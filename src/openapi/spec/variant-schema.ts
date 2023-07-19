@@ -16,7 +16,7 @@ export const schema = {
             additionalProperties: false,
             required: ['type', 'value'],
             properties: {
-                type: { type: 'string', enum: ['string'] },
+                type: { type: 'string', enum: ['string', 'json', 'csv'] },
                 value: { type: 'string' },
             },
         },
