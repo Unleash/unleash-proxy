@@ -132,7 +132,7 @@ export default class UnleashProxy {
                     ...standardResponses(401, 500, 501, 503),
                     200: featuresResponse,
                 },
-                description: `This endpoint returns all feature toggles known to the proxy, along with whether they are enabled or disabled for the provided context. This endpoint always returns **all** feature toggles the proxy retrieves from Unleash, in contrast to the \`/proxy\` endpoints that only return enabled toggles.
+                description: `This endpoint returns all feature toggles known to the proxy, along with whether they are enabled or disabled for the provided context. This endpoint always returns **all** feature toggles the proxy retrieves from Unleash, in contrast to the \`/frontend\` endpoints that only return enabled toggles.
 
 Useful if you are migrating to unleash and need to know if the feature flag exists on the Unleash server.
 
@@ -327,7 +327,7 @@ If you don't provide the \`toggles\` property, then this operation functions exa
     ): Promise<void> {
         if (!this.enableAllEndpoint) {
             res.status(501).send(
-                'The /proxy/all endpoint is disabled. Please check your server configuration. To enable it, set the `enableAllEndpoint` configuration option or `ENABLE_ALL_ENDPOINT` environment variable to `true`.',
+                'The /frontend/all endpoint is disabled. Please check your server configuration. To enable it, set the `enableAllEndpoint` configuration option or `ENABLE_ALL_ENDPOINT` environment variable to `true`.',
             );
             return;
         }
@@ -344,7 +344,7 @@ If you don't provide the \`toggles\` property, then this operation functions exa
     ): Promise<void> {
         if (!this.enableAllEndpoint) {
             res.status(501).send(
-                'The /proxy/all endpoint is disabled. Please check your server configuration. To enable it, set the `enableAllEndpoint` configuration option or `ENABLE_ALL_ENDPOINT` environment variable to `true`.',
+                'The /frontend/all endpoint is disabled. Please check your server configuration. To enable it, set the `enableAllEndpoint` configuration option or `ENABLE_ALL_ENDPOINT` environment variable to `true`.',
             );
             return;
         }

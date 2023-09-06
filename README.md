@@ -31,7 +31,7 @@ Single page apps work in the context of a specific user. The proxy allows you to
 
 ## API
 
-The Unleash proxy exposes a simple API for consumption by client-side SDKs.
+The Unleash proxy exposes a simple API for consumption by client-side SDKs. As of `v0.17.1`, you can use `/frontend` and `/proxy` interchangeably.
 
 ### OpenAPI integration
 
@@ -51,18 +51,18 @@ The spec and UI can then be found at `<base url>/docs/openapi.json` and `<base u
 
 You can refer to the [how to enable the OpenAPI spec](https://docs.getunleash.io/how-to/how-to-enable-openapi) guide for more detailed information on how to configure it.
 
-### `GET /proxy`
+### `GET /frontend`
 
 The primary proxy API operation. This endpoint accepts an Unleash context encoded as query parameters, and will return all toggles that are evaluated as true for the provided context.
 
 <figure>
     <img src="./.github/img/get-request.png" />
-    <figcaption>When sending GET requests to the Unleash proxy's /proxy endpoint, the request should contain the current Unleash context as query parameters. The proxy will return all enabled toggles for the provided context.</figcaption>
+    <figcaption>When sending GET requests to the Unleash proxy's /frontend endpoint, the request should contain the current Unleash context as query parameters. The proxy will return all enabled toggles for the provided context.</figcaption>
 </figure>
 
 ### Payload
 
-The `GET /proxy` operation returns information about toggles enabled for the current user. The payload is a JSON object with a `toggles` property, which contains a list of toggles.
+The `GET /frontend` operation returns information about toggles enabled for the current user. The payload is a JSON object with a `toggles` property, which contains a list of toggles.
 
 ```json
 {
@@ -174,7 +174,7 @@ The `value` will always be the payload's content as a string, escaped as necessa
 }
 ```
 
-### `POST /proxy`
+### `POST /frontend`
 
 The proxy also offers a POST API used to evaluate toggles This can be used to evaluate a list of know toggle names or to retrieve all _enabled_ toggles for a given context.
 
@@ -182,7 +182,7 @@ The proxy also offers a POST API used to evaluate toggles This can be used to ev
 
 This method will allow you to send a list of toggle names together with an Unleash Context and evaluate them accordingly. It will return enablement of all provided toggles.
 
-**URL**: `POST https://proxy-host.server/proxy`
+**URL**: `POST https://proxy-host.server/frontend`
 
 **Content Type**: `application/json`
 
@@ -233,7 +233,7 @@ Vary: Accept-Encoding
 
 This method will allow you to get all enabled toggles for a given context.
 
-**URL**: `POST https://proxy-host.server/proxy`
+**URL**: `POST https://proxy-host.server/frontend`
 
 **Content Type**: `application/json`
 
@@ -310,20 +310,20 @@ Vary: Accept-Encoding
 
 ```
 
-### `GET /proxy/all` Return enabled **and** disabled toggles:
+### `GET /frontend/all` Return enabled **and** disabled toggles:
 
-By default, the proxy only returns enabled toggles. However, in certain use cases, you might want it to return **all** toggles, regardless of whether they're enabled or disabled. The `/proxy/all` endpoint does this.
+By default, the proxy only returns enabled toggles. However, in certain use cases, you might want it to return **all** toggles, regardless of whether they're enabled or disabled. The `/frontend/all` endpoint does this.
 
 Because returning all toggles regardless of their state is a potential security vulnerability, the endpoint has to be explicitly enabled. To enable it, set the `enableAllEndpoint` configuration option or the `ENABLE_ALL_ENDPOINT` environment variable to `true`.
 
-The response payload follows the same format as the [`GET /proxy` response payload](#payload).
+The response payload follows the same format as the [`GET /frontend` response payload](#payload).
 
-### `GET /proxy/health`: Health endpoint
+### `GET /frontend/health`: Health endpoint
 
 The proxy will try to synchronize with the Unleash API at startup, until it has successfully done that the proxy will return `HTTP 503 - Not Ready` for all request. You can use the health endpoint to validate that the proxy is ready to receive requests:
 
 ```bash
-curl http://localhost:3000/proxy/health -I
+curl http://localhost:3000/frontend/health -I
 ```
 
 If the proxy is ready, the response should look a little something like this:
@@ -365,7 +365,7 @@ You **must configure** these three variables for the proxy to start successfully
 | clientKeys | `UNLEASH_PROXY_CLIENT_KEYS` | n/a | yes | List of client keys that the proxy should accept. When querying the proxy, Proxy SDKs must set the request's _client keys header_ to one of these values. The default client keys header is `Authorization`. |
 | proxySecrets | `UNLEASH_PROXY_SECRETS` | n/a | no | Deprecated alias for `clientKeys`. Please use `clientKeys` instead. |
 | n/a | `PORT` or `PROXY_PORT` | 3000 | no | The port where the proxy should listen. |
-| proxyBasePath | `PROXY_BASE_PATH` | "" | no | The base path to run the proxy from. "/proxy" will be added at the end. For instance, if `proxyBasePath` is `"base/path"`, the proxy will run at `/base/path/proxy`. |
+| proxyBasePath | `PROXY_BASE_PATH` | "" | no | The base path to run the proxy from. "/frontend" will be added at the end. For instance, if `proxyBasePath` is `"base/path"`, the proxy will run at `/base/path/frontend`. |
 | unleashAppName | `UNLEASH_APP_NAME` | "unleash-proxy" | no | App name to used when registering with Unleash |
 | unleashInstanceId | `UNLEASH_INSTANCE_ID` | `generated` | no | Unleash instance id to used when registering with Unleash |
 | refreshInterval | `UNLEASH_FETCH_INTERVAL` | 5000 | no | How often the proxy should query Unleash for updates, defined in ms. |
@@ -383,7 +383,7 @@ You **must configure** these three variables for the proxy to start successfully
 | clientKeysHeaderName | `CLIENT_KEY_HEADER_NAME` | "authorization" | no | The name of the HTTP header to use for client keys. Incoming requests must set the value of this header to one of the Proxy's `clientKeys` to be authorized successfully. |
 | storageProvider | n/a | `undefined` | no | Register a custom storage provider. Refer to the [section on custom storage providers in the Node.js SDK's readme](https://github.com/Unleash/unleash-client-node/#custom-store-provider) for more information. |
 | enableOAS | `ENABLE_OAS` | `false` | no | Set to `true` to expose the proxy's OpenAPI spec at `/docs/openapi.json` and an interactive OpenAPI UI at `/docs/openapi`. Read more in the [OpenAPI section](#openapi). |
-| enableAllEndpoint | `ENABLE_ALL_ENDPOINT` | `false` | no | Set to `true` to expose the `/proxy/all` endpoint. Refer to the [section on returning all toggles](#return-enabled-and-disabled-toggles) for more info. |
+| enableAllEndpoint | `ENABLE_ALL_ENDPOINT` | `false` | no | Set to `true` to expose the `/frontend/all` endpoint. Refer to the [section on returning all toggles](#return-enabled-and-disabled-toggles) for more info. |
 | cors | n/a | n/a | no | Pass custom options for [CORS module](https://www.npmjs.com/package/cors#configuration-options) |
 | cors.allowedHeaders | `CORS_ALLOWED_HEADERS` | n/a | no | Headers to allow for CORS |
 | cors.credentials | `CORS_CREDENTIALS` | `false` | no | Allow credentials in CORS requests |
@@ -456,7 +456,7 @@ Unleash-proxy is listening on port 3000!
 In order to verify the proxy you can use curl and see that you get a few evaluated feature toggles back:
 
 ```bash
-curl http://localhost:3000/proxy -H "Authorization: some-secret"
+curl http://localhost:3000/frontend -H "Authorization: some-secret"
 ```
 
 Expected output would be something like:
@@ -489,7 +489,7 @@ Expected output would be something like:
 The proxy will try to synchronize with the Unleash API at startup, until it has successfully done that the proxy will return `HTTP 503 - Not Read?` for all request. You can use the health endpoint to validate that the proxy is ready to recieve requests:
 
 ```bash
-curl http://localhost:3000/proxy/health -I
+curl http://localhost:3000/frontend/health -I
 ```
 
 ```bash
@@ -531,7 +531,7 @@ const app = createApp({
 
 app.listen(port, () =>
   // eslint-disable-next-line no-console
-  console.log(`Unleash Proxy listening on http://localhost:${port}/proxy`),
+  console.log(`Unleash Proxy listening on http://localhost:${port}/frontend`),
 );
 ```
 
