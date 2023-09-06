@@ -50,13 +50,16 @@ export function createApp(
 
     app.use(compression());
 
-    app.use(
-        [`${config.proxyBasePath}/proxy`, `${config.proxyBasePath}/frontend`],
+    const proxyMiddleware = [
         requireContentType(),
         cors(corsOptions),
         express.json(),
         proxy.middleware,
-    );
+    ];
+
+    app.use(`${config.proxyBasePath}/proxy`, proxyMiddleware);
+    app.use(`${config.proxyBasePath}/frontend`, proxyMiddleware);
+
     openApiService.useErrorHandler(app);
     return app;
 }
