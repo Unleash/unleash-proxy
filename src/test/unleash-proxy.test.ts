@@ -58,6 +58,38 @@ test('Should return list of toggles', () => {
         });
 });
 
+test('Should treat /frontend as a valid alias of /proxy', () => {
+    const toggles = [
+        {
+            name: 'test',
+            enabled: true,
+            impressionData: true,
+        },
+        {
+            name: 'test2',
+            enabled: true,
+            impressionData: true,
+        },
+    ];
+    const client = new MockClient(toggles);
+
+    const proxySecrets = ['sdf'];
+    const app = createApp(
+        { proxySecrets, unleashUrl, unleashApiToken },
+        client,
+    );
+    client.emit('ready');
+
+    return request(app)
+        .get('/frontend')
+        .set('Authorization', 'sdf')
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .then((response) => {
+            expect(response.body.toggles.length).toEqual(2);
+        });
+});
+
 test('Should handle POST with empty/nonsensical body', async () => {
     const toggles = [
         {

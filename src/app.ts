@@ -51,7 +51,7 @@ export function createApp(
     app.use(compression());
 
     app.use(
-        `${config.proxyBasePath}/proxy`,
+        [`${config.proxyBasePath}/proxy`, `${config.proxyBasePath}/frontend`],
         requireContentType(),
         cors(corsOptions),
         express.json(),
