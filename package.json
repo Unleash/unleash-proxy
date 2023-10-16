@@ -1,6 +1,6 @@
 {
   "name": "@unleash/proxy",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "description": "The Unleash Proxy (Open-Source)",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -45,7 +45,7 @@
     "json-schema-to-ts": "^2.3.0",
     "openapi-types": "^11.0.0",
     "type-is": "^1.6.18",
-    "unleash-client": "^4.1.0"
+    "unleash-client": "^4.2.0"
   },
   "devDependencies": {
     "@apidevtools/swagger-parser": "10.1.0",
