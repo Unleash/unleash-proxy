@@ -98,9 +98,9 @@ class Client extends EventEmitter implements IClient {
         );
         const context = this.fixContext(inContext);
 
+        const sessionId = context.sessionId || String(Math.random());
         const definitions = this.unleash.getFeatureToggleDefinitions() || [];
         return definitions.map((d) => {
-            const sessionId = context.sessionId || String(Math.random());
             const enabled = this.unleash.isEnabled(d.name, {
                 ...context,
                 sessionId,
