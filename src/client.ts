@@ -98,11 +98,15 @@ class Client extends EventEmitter implements IClient {
         );
         const context = this.fixContext(inContext);
 
+        const sessionId = context.sessionId || String(Math.random());
         const definitions = this.unleash.getFeatureToggleDefinitions() || [];
         return definitions.map((d) => {
-            const enabled = this.unleash.isEnabled(d.name, context);
+            const enabled = this.unleash.isEnabled(d.name, {
+                ...context,
+                sessionId,
+            });
             const variant = enabled
-                ? this.unleash.forceGetVariant(d.name, context)
+                ? this.unleash.getVariant(d.name, { ...context, sessionId })
                 : getDefaultVariant();
 
             return {
@@ -121,13 +125,19 @@ class Client extends EventEmitter implements IClient {
         );
         const context = this.fixContext(inContext);
 
+        const sessionId = context.sessionId || String(Math.random());
         const definitions = this.unleash.getFeatureToggleDefinitions() || [];
         return definitions
-            .filter((d) => this.unleash.isEnabled(d.name, context))
+            .filter((d) =>
+                this.unleash.isEnabled(d.name, { ...context, sessionId }),
+            )
             .map((d) => ({
                 name: d.name,
                 enabled: true,
-                variant: this.unleash.forceGetVariant(d.name, context),
+                variant: this.unleash.getVariant(d.name, {
+                    ...context,
+                    sessionId,
+                }),
                 impressionData: d.impressionData,
             }));
     }
