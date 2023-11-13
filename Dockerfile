@@ -12,6 +12,9 @@ RUN yarn install --production  --frozen-lockfile --ignore-scripts --prefer-offli
 
 FROM node:20-alpine
 
+#TODO HACK to avoid CVE-2023-5363. Remove after the vulnerability is fixed
+RUN apk update && apk upgrade --no-cache libcrypto3 libssl3
+
 ENV NODE_ENV production
 
 WORKDIR /unleash-proxy
