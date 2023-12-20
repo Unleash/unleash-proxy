@@ -8,7 +8,7 @@ const GET = 'GET';
 export const createContexMiddleware: Function =
     (contextEnrichers: ContextEnricher[]) =>
     async (req: Request, res: Response, next: NextFunction) => {
-        let context;
+        let context: any = {};
         if (req.method === GET) {
             context = req.query || {};
         } else if (req.method === POST) {
