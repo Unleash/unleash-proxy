@@ -15,7 +15,7 @@ FROM node:18-alpine
 # Update OpenSSL to address CVE-2023-6237
 RUN apk update && \
     apk upgrade openssl && \
-    apk add --no-cache tini && \
+    apk add tini && \
     rm -rf /var/cache/apk/*
 
 ENV NODE_ENV production
