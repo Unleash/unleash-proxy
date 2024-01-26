@@ -645,6 +645,14 @@ Object {
             },
           },
           Object {
+            "description": "The current time in ISO 8601 format, representing the time at which the feature toggle is being resolved",
+            "in": "query",
+            "name": "currentTime",
+            "schema": Object {
+              "type": "string",
+            },
+          },
+          Object {
             "description": "Additional (custom) context fields",
             "example": Object {
               "betaTester": "true",
@@ -864,6 +872,14 @@ However, using this endpoint will increase the payload size transmitted to your 
             "description": "Your application's IP address",
             "in": "query",
             "name": "remoteAddress",
+            "schema": Object {
+              "type": "string",
+            },
+          },
+          Object {
+            "description": "The current time in ISO 8601 format, representing the time at which the feature toggle is being resolved",
+            "in": "query",
+            "name": "currentTime",
             "schema": Object {
               "type": "string",
             },
