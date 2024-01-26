@@ -12,6 +12,9 @@ RUN yarn install --production --frozen-lockfile --ignore-scripts --prefer-offlin
 
 FROM node:18-alpine
 
+#TODO HACK to avoid CVE-2023-6129. Remove after the vulnerability is fixed
+RUN apk update && apk upgrade --no-cache libcrypto3 libssl3
+
 # Update OpenSSL to address CVE-2023-6237
 RUN apk update && \
     apk upgrade openssl && \
