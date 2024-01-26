@@ -81,6 +81,8 @@ export default class UnleashProxy {
                         userId: "The current user's ID",
                         sessionId: "The current session's ID",
                         remoteAddress: "Your application's IP address",
+                        currentTime:
+                            'The current time in ISO 8601 format, representing the time at which the feature toggle is being resolved',
                     }),
                     ...createDeepObjectRequestParameters({
                         properties: {
@@ -117,6 +119,8 @@ export default class UnleashProxy {
                         userId: "The current user's ID",
                         sessionId: "The current session's ID",
                         remoteAddress: "Your application's IP address",
+                        currentTime:
+                            'The current time in ISO 8601 format, representing the time at which the feature toggle is being resolved',
                     }),
                     ...createDeepObjectRequestParameters({
                         properties: {
