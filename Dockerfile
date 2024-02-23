@@ -15,12 +15,6 @@ FROM node:18-alpine
 #HACK fix for CVE-2023-42282 
 RUN yarn global add npm@10.5.0
 
-# Update OpenSSL to address CVE-2023-6237
-RUN apk update && \
-    apk upgrade openssl && \
-    apk add tini && \
-    rm -rf /var/cache/apk/*
-
 ENV NODE_ENV production
 
 WORKDIR /unleash-proxy
