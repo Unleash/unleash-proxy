@@ -13,6 +13,7 @@ RUN yarn install --production --frozen-lockfile --ignore-scripts --prefer-offlin
 #HACK fix for CVE-2023-42282 
 FROM node:18-alpine as server
 RUN npm install -g npm@10.5.0
+RUN apk add --no-cache tini
 
 ##### Prod Image
 FROM alpine:latest
