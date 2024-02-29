@@ -10,10 +10,13 @@ RUN yarn build
 
 RUN yarn install --production --frozen-lockfile --ignore-scripts --prefer-offline
 
-FROM node:18-alpine
-
 #HACK fix for CVE-2023-42282 
+FROM node:18-alpine as server
 RUN yarn global add npm@10.5.0
+
+##### Prod Image
+FROM alpine:latest
+COPY --from=server / /
 
 ENV NODE_ENV production
 
