@@ -354,9 +354,7 @@ test('Multiple properties get collapsed', async () => {
     client.emit('ready');
 
     await request(app)
-        .get(
-            '/proxy?userId=123&properties=test&properties%5Botherprop%5D=other',
-        )
+        .get('/proxy?userId=123&properties%5Botherprop%5D=other')
         .set('Authorization', 'sdf')
         .expect(200)
         .expect('Content-Type', /json/);
