@@ -339,7 +339,14 @@ test('Should remove "undefined" environment field from context', async () => {
 });
 
 test('Multiple properties get collapsed', async () => {
-    const client = new MockClient([]);
+    const toggles = [
+        {
+            name: 'test',
+            enabled: true,
+            impressionData: true,
+        },
+    ];
+    const client = new MockClient(toggles);
 
     const proxySecrets = ['sdf'];
     const app = createApp(
