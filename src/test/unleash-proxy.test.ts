@@ -359,10 +359,10 @@ test('Multiple properties get collapsed', async () => {
         .expect(200)
         .expect('Content-Type', /json/);
 
-  console.log(JSON.stringify(client.queriedContexts[0], null, 2))
-  const queriedProperties = client.queriedContexts[0].properties;
-  expect(queriedProperties?.properties).toBe('test')
-  expect(queriedProperties?.otherProp).toBe('other')
+    console.log(JSON.stringify(client.queriedContexts[0], null, 2));
+    const queriedProperties = client.queriedContexts[0].properties;
+    expect(queriedProperties?.properties).toBe('test');
+    expect(queriedProperties?.otherProp).toBe('other');
 });
 
 test('Should register metrics', () => {

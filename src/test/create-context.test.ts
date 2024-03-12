@@ -27,25 +27,25 @@ test('should move rest props to properties', () => {
 
 test('when an extra property is both on the top-level and under properties, the properties-level wins', () => {
     const context = createContext({
-      customProperty: 'top-level',
-      properties: {
-        customProperty: 'properties-level',
-      }
+        customProperty: 'top-level',
+        properties: {
+            customProperty: 'properties-level',
+        },
     });
 
     expect(context).not.toHaveProperty('customProperty');
-  expect(context.properties?.customProperty).toBe('properties-level');
+    expect(context.properties?.customProperty).toBe('properties-level');
 });
 
 test('If you specify top-level properties under properties, they do not get moved up', () => {
     const context = createContext({
-      properties: {
-        appName: 'name'
-      }
+        properties: {
+            appName: 'name',
+        },
     });
 
-  expect(context.properties?.appName).toBe('name');
-  expect(context.appName).toBe(undefined);
+    expect(context.properties?.appName).toBe('name');
+    expect(context.appName).toBe(undefined);
 });
 
 test('should keep properties', () => {
