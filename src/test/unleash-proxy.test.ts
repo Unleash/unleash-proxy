@@ -338,7 +338,7 @@ test('Should remove "undefined" environment field from context', async () => {
     expect(client.queriedContexts[0]).not.toHaveProperty('environment');
 });
 
-test('Multiple properties get collapsed', async () => {
+test('Providing a string for `properties` yields a 400', async () => {
     const toggles = [
         {
             name: 'test',
@@ -363,13 +363,7 @@ test('Multiple properties get collapsed', async () => {
     await request(app)
         .get('/proxy?userId=123&properties=string')
         .set('Authorization', 'sdf')
-        .expect(200)
-        .expect('Content-Type', /json/);
-
-    console.log(JSON.stringify(client.queriedContexts[0], null, 2));
-    const queriedProperties = client.queriedContexts[0].properties;
-    expect(queriedProperties?.properties).toBe('test');
-    expect(queriedProperties?.otherProp).toBe('other');
+        .expect(400);
 });
 
 test('Should register metrics', () => {
