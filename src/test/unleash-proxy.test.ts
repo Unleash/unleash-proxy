@@ -338,6 +338,33 @@ test('Should remove "undefined" environment field from context', async () => {
     expect(client.queriedContexts[0]).not.toHaveProperty('environment');
 });
 
+test('Multiple properties get collapsed', async () => {
+    const client = new MockClient([]);
+
+    const proxySecrets = ['sdf'];
+    const app = createApp(
+        {
+            unleashUrl,
+            unleashApiToken,
+            proxySecrets,
+            environment: 'test',
+        },
+        client,
+    );
+    client.emit('ready');
+
+    await request(app)
+        .get('/proxy?userId=123&properties=test&properties[otherprop]=other')
+        .set('Authorization', 'sdf')
+        .expect(200)
+        .expect('Content-Type', /json/);
+
+  console.log(JSON.stringify(client.queriedContexts[0], null, 2))
+  const queriedProperties = client.queriedContexts[0].properties;
+  expect(queriedProperties?.properties).toBe('test')
+  expect(queriedProperties?.otherProp).toBe('other')
+});
+
 test('Should register metrics', () => {
     const toggles = [
         {
