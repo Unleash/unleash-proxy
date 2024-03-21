@@ -3,7 +3,7 @@ import { variantSchema } from './variant-schema';
 
 export const schema = {
     type: 'object',
-    required: ['name', 'enabled', 'impressionData'],
+    required: ['name', 'enabled'],
     additionalProperties: false,
     properties: {
         name: {
