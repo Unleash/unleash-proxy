@@ -249,6 +249,12 @@ Object {
               "enabled": Object {
                 "type": "boolean",
               },
+              "featureEnabled": Object {
+                "type": "boolean",
+              },
+              "feature_enabled": Object {
+                "type": "boolean",
+              },
               "name": Object {
                 "type": "string",
               },
@@ -260,6 +266,7 @@ Object {
                       "string",
                       "json",
                       "csv",
+                      "number",
                     ],
                     "type": "string",
                   },
@@ -284,7 +291,6 @@ Object {
         "required": Array [
           "name",
           "enabled",
-          "impressionData",
         ],
         "type": "object",
       },
@@ -310,6 +316,12 @@ Object {
                     "enabled": Object {
                       "type": "boolean",
                     },
+                    "featureEnabled": Object {
+                      "type": "boolean",
+                    },
+                    "feature_enabled": Object {
+                      "type": "boolean",
+                    },
                     "name": Object {
                       "type": "string",
                     },
@@ -321,6 +333,7 @@ Object {
                             "string",
                             "json",
                             "csv",
+                            "number",
                           ],
                           "type": "string",
                         },
@@ -345,7 +358,6 @@ Object {
               "required": Array [
                 "name",
                 "enabled",
-                "impressionData",
               ],
               "type": "object",
             },
@@ -563,6 +575,12 @@ Object {
           "enabled": Object {
             "type": "boolean",
           },
+          "featureEnabled": Object {
+            "type": "boolean",
+          },
+          "feature_enabled": Object {
+            "type": "boolean",
+          },
           "name": Object {
             "type": "string",
           },
@@ -574,6 +592,7 @@ Object {
                   "string",
                   "json",
                   "csv",
+                  "number",
                 ],
                 "type": "string",
               },
