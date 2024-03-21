@@ -89,6 +89,8 @@
     ]
   },
   "resolutions": {
+    "wrap-ansi": "7.0.0",
+    "string-width": "4.1.0",
     "qs": "^6.9.7",
     "json5": "^2.2.2",
     "cookiejar": "^2.1.4"
