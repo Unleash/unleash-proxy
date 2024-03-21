@@ -4,6 +4,7 @@ import { Context, Unleash, Variant } from 'unleash-client';
 import { FeatureInterface } from 'unleash-client/lib/feature';
 import { FallbackFunction } from 'unleash-client/lib/helpers';
 import { UnleashConfig } from 'unleash-client/lib/unleash';
+import { VariantWithFeatureStatus } from 'unleash-client/lib/variant';
 
 class FakeUnleash extends Unleash {
     public toggleDefinitions: FeatureInterface[] = [];
@@ -39,9 +40,9 @@ class FakeUnleash extends Unleash {
         name: string,
         context?: Context,
         fallbackVariant?: Variant,
-    ): Variant {
+    ): VariantWithFeatureStatus {
         // console.log(name, context, fallbackVariant);
-        return { name: 'disabled', enabled: false };
+        return { name: 'disabled', enabled: false, featureEnabled: false };
     }
 
     forceGetVariant(

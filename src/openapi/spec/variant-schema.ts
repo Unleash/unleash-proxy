@@ -11,12 +11,21 @@ export const schema = {
         enabled: {
             type: 'boolean',
         },
+        feature_enabled: {
+            type: 'boolean',
+        },
+        featureEnabled: {
+            type: 'boolean',
+        },
         payload: {
             type: 'object',
             additionalProperties: false,
             required: ['type', 'value'],
             properties: {
-                type: { type: 'string', enum: ['string', 'json', 'csv'] },
+                type: {
+                    type: 'string',
+                    enum: ['string', 'json', 'csv', 'number'],
+                },
                 value: { type: 'string' },
             },
         },
