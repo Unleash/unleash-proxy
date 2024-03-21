@@ -9,7 +9,7 @@ import { Logger } from './logger';
 export type FeatureToggleStatus = {
     name: string;
     enabled: boolean;
-    impressionData: boolean;
+    impressionData?: boolean;
     variant?: Variant;
 };
 

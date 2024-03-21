@@ -338,6 +338,34 @@ test('Should remove "undefined" environment field from context', async () => {
     expect(client.queriedContexts[0]).not.toHaveProperty('environment');
 });
 
+test('Providing a string for `properties` yields a 400', async () => {
+    const toggles = [
+        {
+            name: 'test',
+            enabled: true,
+            impressionData: true,
+        },
+    ];
+    const client = new MockClient(toggles);
+
+    const proxySecrets = ['sdf'];
+    const app = createApp(
+        {
+            unleashUrl,
+            unleashApiToken,
+            proxySecrets,
+            environment: 'test',
+        },
+        client,
+    );
+    client.emit('ready');
+
+    await request(app)
+        .get('/proxy?userId=123&properties=string')
+        .set('Authorization', 'sdf')
+        .expect(400);
+});
+
 test('Should register metrics', () => {
     const toggles = [
         {
