@@ -10,14 +10,17 @@ RUN yarn build
 
 RUN yarn install --production --frozen-lockfile --ignore-scripts --prefer-offline
 
-#HACK fix for CVE-2023-42282 
+#HACK fix for CVE-2024-28863
 FROM node:18-alpine as server
-RUN npm install -g npm@10.5.0
+RUN npm install -g npm@10.5.2
 RUN apk add --no-cache tini
 
 ##### Prod Image
 FROM alpine:latest
 COPY --from=server / /
+
+#TODO HACK to avoid CVE-2024-2511. Remove after the vulnerability is fixed
+RUN apk update && apk upgrade --no-cache libssl3 libcrypto3
 
 ENV NODE_ENV production
 
