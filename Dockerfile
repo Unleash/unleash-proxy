@@ -1,6 +1,4 @@
 FROM node:18-alpine as builder
-#HACK fix for CVE-2024-28863
-RUN npm install -g npm@10.5.2
 
 WORKDIR /unleash-proxy
 
@@ -12,14 +10,14 @@ RUN yarn build
 
 RUN yarn install --production --frozen-lockfile --ignore-scripts --prefer-offline
 
-#HACK fix for CVE-2024-28863
 FROM node:18-alpine as server
-RUN npm install -g npm@10.5.2
 RUN apk add --no-cache tini
 
 ##### Prod Image
 FROM alpine:latest
 COPY --from=server / /
+#HACK fix for CVE-2024-28863
+RUN npm install -g npm@10.5.2
 
 #TODO HACK to avoid CVE-2024-2511. Remove after the vulnerability is fixed
 RUN apk update && apk upgrade --no-cache libssl3 libcrypto3
