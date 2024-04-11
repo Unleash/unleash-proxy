@@ -1,4 +1,6 @@
 FROM node:18-alpine as builder
+#HACK fix for CVE-2024-28863
+RUN npm install -g npm@10.5.2
 
 WORKDIR /unleash-proxy
 
