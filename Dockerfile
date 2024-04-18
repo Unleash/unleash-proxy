@@ -12,9 +12,9 @@ RUN yarn install --production --frozen-lockfile --ignore-scripts --prefer-offlin
 
 FROM node:18-alpine
 
-# Update OpenSSL to address CVE-2023-6237
+# Upgrade (addresses OpenSSL CVE-2023-6237 && CVE-2024-2511)
 RUN apk update && \
-    apk upgrade openssl && \
+    apk upgrade && \
     apk add tini && \
     rm -rf /var/cache/apk/*
 
