@@ -1,5 +1,4 @@
-import type { FromSchema } from 'json-schema-to-ts';
-import type { JSONSchema7 } from 'json-schema-to-ts/lib/types/definitions';
+import type { FromSchema, JSONSchema7 } from 'json-schema-to-ts';
 
 // Recursively remove readonly modifiers from properties.
 type DeepMutable<T> = {
