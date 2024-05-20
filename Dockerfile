@@ -20,7 +20,8 @@ COPY --from=server / /
 RUN npm install -g npm@10.5.2
 
 #TODO HACK to avoid CVE-2024-2511. Remove after the vulnerability is fixed
-RUN apk update && apk upgrade --no-cache libssl3 libcrypto3
+#TODO HACK to avoid CVE-2023-42366. Remove after the vulnerability is fixed
+RUN apk update && apk upgrade --no-cache libssl3 libcrypto3 busybox
 
 ENV NODE_ENV production
 
