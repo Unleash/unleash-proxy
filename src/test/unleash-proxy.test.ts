@@ -390,6 +390,30 @@ test('Should register metrics', () => {
         .expect(200);
 });
 
+test('Should register metrics an /all path as well', () => {
+    const toggles = [
+        {
+            name: 'test',
+            enabled: true,
+            impressionData: true,
+        },
+    ];
+    const client = new MockClient(toggles);
+
+    const proxySecrets = ['sdf'];
+    const app = createApp(
+        { unleashUrl, unleashApiToken, proxySecrets },
+        client,
+    );
+    client.emit('ready');
+
+    return request(app)
+        .post('/proxy/all/client/metrics')
+        .send(metrics)
+        .set('Authorization', 'sdf')
+        .expect(200);
+});
+
 test('Should require metrics to have correct format', () => {
     const client = new MockClient();
 
