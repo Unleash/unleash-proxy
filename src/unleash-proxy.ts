@@ -174,6 +174,19 @@ If you don't provide the \`toggles\` property, then this operation functions exa
         );
 
         router.post(
+            '/all/client/metrics',
+            openApiService.validPath({
+                requestBody: registerMetricsRequest,
+                responses: standardResponses(200, 400, 401),
+                description:
+                    "This endpoint lets you register usage metrics with Unleash. Accepts either one of the proxy's configured `serverSideTokens` or one of its `clientKeys` for authorization.",
+                summary: 'Send usage metrics to Unleash.',
+                tags: ['Operational', 'Server-side client'],
+            }),
+            this.registerMetrics.bind(this),
+        );
+
+        router.post(
             '',
             openApiService.validPath({
                 requestBody: lookupTogglesRequest,
