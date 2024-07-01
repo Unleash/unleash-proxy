@@ -16,12 +16,9 @@ RUN apk add --no-cache tini
 ##### Prod Image
 FROM alpine:latest
 COPY --from=server / /
-#HACK fix for CVE-2024-28863
-RUN npm install -g npm@10.5.2
 
-#TODO HACK to avoid CVE-2024-2511. Remove after the vulnerability is fixed
-#TODO HACK to avoid CVE-2023-42366. Remove after the vulnerability is fixed
-RUN apk update && apk upgrade --no-cache libssl3 libcrypto3 busybox
+#TODO HACK to avoid CVE-2024-5535. Remove after the vulnerability is fixed
+RUN apk update && apk upgrade --no-cache libssl3 libcrypto3
 
 ENV NODE_ENV production
 
