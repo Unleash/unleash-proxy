@@ -49,6 +49,10 @@ export interface IProxyConfig {
     unleashUrl: string;
     unleashApiToken: string;
     unleashAppName: string;
+    /**
+     * @deprecated This property is deprecated and will be removed in a future version.
+     * Note: This property is currently a no-op (no operation) and does not affect the automatically generated instanceId.
+     */
     unleashInstanceId: string;
     customStrategies?: Strategy[];
     clientKeys: string[];
