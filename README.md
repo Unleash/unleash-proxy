@@ -367,7 +367,7 @@ You **must configure** these three variables for the proxy to start successfully
 | n/a | `PORT` or `PROXY_PORT` | 3000 | no | The port where the proxy should listen. |
 | proxyBasePath | `PROXY_BASE_PATH` | "" | no | The base path to run the proxy from. "/proxy" will be added at the end. For instance, if `proxyBasePath` is `"base/path"`, the proxy will run at `/base/path/proxy`. |
 | unleashAppName | `UNLEASH_APP_NAME` | "unleash-proxy" | no | App name to used when registering with Unleash |
-| unleashInstanceId | `UNLEASH_INSTANCE_ID` | `generated` | no | Unleash instance id to used when registering with Unleash |
+| unleashInstanceId | `UNLEASH_INSTANCE_ID` | `generated` | deprecated | Unleash instance id to used when registering with Unleash |
 | refreshInterval | `UNLEASH_FETCH_INTERVAL` | 5000 | no | How often the proxy should query Unleash for updates, defined in ms. |
 | metricsInterval | `UNLEASH_METRICS_INTERVAL` | 30000 | no | How often the proxy should send usage metrics back to Unleash, defined in ms. |
 | metricsJitter | `UNLEASH_METRICS_JITTER` | 0 | no | Adds jitter to the metrics interval to avoid multiple instances sending metrics at the same time, defined in ms. |
