@@ -394,6 +394,8 @@ You **must configure** these three variables for the proxy to start successfully
 | cors.origin | `CORS_ORIGIN` | \* | no | Origin URL or list of comma separated list of URLs to whitelist for CORS |
 | cors.preflightContinue | `CORS_PREFLIGHT_CONTINUE` | `false` | no |  |
 | httpOptions.rejectUnauthorized | `HTTP_OPTIONS_REJECT_UNAUTHORIZED` | `true` | no | If true, unleash-proxy will automatically reject connections to unleash server with invalid certificates |
+|  | `HTTP_PROXY` | n/a | no | Proxy server for HTTP requests |
+|  | `HTTPS_PROXY` | n/a | no | Proxy server for HTTPS requests |
 
 ### Experimental configuration options
 
