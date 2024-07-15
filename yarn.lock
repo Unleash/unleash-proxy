@@ -4962,10 +4962,10 @@ unique-slug@^4.0.0:
   dependencies:
     imurmurhash "^0.1.4"
 
-unleash-client@^5.6.1:
-  version "5.6.1"
-  resolved "https://registry.yarnpkg.com/unleash-client/-/unleash-client-5.6.1.tgz#a730da7cced1fa2ccdf3d41d0d8f93f8bb0e8976"
-  integrity sha512-ZmFDhnq0c3Y4CEp+S3ureS9jZFMG/mtyafv4zxW4pmG0vc7xgxE9zBX296lrrrINsc2G0/2uJeoO+9b0bks+mg==
+unleash-client@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/unleash-client/-/unleash-client-6.1.0.tgz#b8863bb049b61d702b7c45328d6225a0c9f9b67a"
+  integrity sha512-dXTnWorA5NfddqZfMPcTe6xl+uu9CxkpR5wLuKKLLpvHuNzMrTlwDOfaQqFHlfPx+8xudQQ0fZx4raNxL3GLOg==
   dependencies:
     http-proxy-agent "^7.0.2"
     https-proxy-agent "^7.0.5"
