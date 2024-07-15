@@ -12,6 +12,7 @@ export const createSingletonClient = (config: IProxyConfig): Client => {
     const unleash = initialize({
         url: config.unleashUrl,
         appName: config.unleashAppName,
+        instanceId: config.unleashInstanceId,
         environment: config.environment,
         refreshInterval: config.refreshInterval,
         projectName: config.projectName,
@@ -48,6 +49,7 @@ export const createNewClient = (config: IProxyConfig): Client => {
     const unleash = new Unleash({
         url: config.unleashUrl,
         appName: config.unleashAppName,
+        instanceId: config.unleashInstanceId,
         environment: config.environment,
         refreshInterval: config.refreshInterval,
         projectName: config.projectName,

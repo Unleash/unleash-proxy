@@ -46,7 +46,7 @@
     "openapi-types": "^11.0.0",
     "qs": "^6.9.7",
     "type-is": "^1.6.18",
-    "unleash-client": "^6.0.0"
+    "unleash-client": "^5.6.1"
   },
   "devDependencies": {
     "@apidevtools/swagger-parser": "10.1.0",
