@@ -1,16 +1,20 @@
-FROM node:18-alpine as builder
+FROM node:20-alpine as builder
 
 WORKDIR /unleash-proxy
 
 COPY . .
 
-RUN yarn install --frozen-lockfile --ignore-scripts
+RUN corepack enable
+
+ENV YARN_ENABLE_SCRIPTS=false
+
+RUN yarn install --immutable
 
 RUN yarn build
 
-RUN yarn install --production --frozen-lockfile --ignore-scripts --prefer-offline
+RUN yarn workspaces focus -A --production
 
-FROM node:18-alpine
+FROM node:20-alpine
 
 # Upgrade (addresses OpenSSL CVE-2023-6237 && CVE-2024-2511)
 RUN apk update && \
@@ -30,7 +34,7 @@ RUN chown -R node:node /unleash-proxy
 
 ENTRYPOINT ["/sbin/tini", "--"]
 
-EXPOSE 4242
+EXPOSE 3000
 
 USER node
 

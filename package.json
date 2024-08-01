@@ -6,7 +6,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc --pretty",
-    "example": "npm run build && node example",
+    "example": "yarn run build && node example",
     "lint": "eslint ./src",
     "test": "jest",
     "updateSnapshots": "jest -u",
@@ -20,7 +20,7 @@
     "url": "git+https://github.com/Unleash/unleash-proxy.git"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=20"
   },
   "keywords": [
     "Unleash",
@@ -96,5 +96,6 @@
     "qs": "^6.9.7",
     "json5": "^2.2.2",
     "cookiejar": "^2.1.4"
-  }
+  },
+  "packageManager": "yarn@4.3.1"
 }
