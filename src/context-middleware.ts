@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import { createContext } from './create-context';
-import { ContextEnricher, enrichContext } from './enrich-context';
+import { type ContextEnricher, enrichContext } from './enrich-context';
 
 const POST = 'POST';
 const GET = 'GET';

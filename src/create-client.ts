@@ -1,4 +1,4 @@
-import { IProxyConfig } from './config';
+import type { IProxyConfig } from './config';
 import Client from './client';
 import { initialize, Unleash } from 'unleash-client';
 import Metrics from 'unleash-client/lib/metrics';
@@ -23,7 +23,7 @@ export const createSingletonClient = (config: IProxyConfig): Client => {
         customHeadersFunction,
         bootstrap: config.bootstrap,
         storageProvider: config.storageProvider,
-        ...(!!config.httpOptions ? { httpOptions: config.httpOptions } : {}),
+        ...(config.httpOptions ? { httpOptions: config.httpOptions } : {}),
     });
 
     const metrics = new Metrics({
@@ -35,7 +35,7 @@ export const createSingletonClient = (config: IProxyConfig): Client => {
         metricsJitter: config.metricsJitter,
         url: config.unleashUrl,
         customHeadersFunction,
-        ...(!!config.httpOptions ? { httpOptions: config.httpOptions } : {}),
+        ...(config.httpOptions ? { httpOptions: config.httpOptions } : {}),
     });
 
     return new Client(config, unleash, metrics);
@@ -60,7 +60,7 @@ export const createNewClient = (config: IProxyConfig): Client => {
         customHeadersFunction,
         bootstrap: config.bootstrap,
         storageProvider: config.storageProvider,
-        ...(!!config.httpOptions ? { httpOptions: config.httpOptions } : {}),
+        ...(config.httpOptions ? { httpOptions: config.httpOptions } : {}),
     });
 
     const metrics = new Metrics({
@@ -72,7 +72,7 @@ export const createNewClient = (config: IProxyConfig): Client => {
         metricsJitter: config.metricsJitter,
         url: config.unleashUrl,
         customHeadersFunction,
-        ...(!!config.httpOptions ? { httpOptions: config.httpOptions } : {}),
+        ...(config.httpOptions ? { httpOptions: config.httpOptions } : {}),
     });
 
     return new Client(config, unleash, metrics);

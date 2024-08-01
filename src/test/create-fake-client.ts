@@ -1,4 +1,4 @@
-import { IProxyConfig } from '../config';
+import type { IProxyConfig } from '../config';
 import Client from '../client';
 import { defaultStrategies } from 'unleash-client/lib/strategy';
 import FakeUnleash from './unleash.mock';

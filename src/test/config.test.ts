@@ -1,8 +1,8 @@
 import * as path from 'path';
-import { ClientFeaturesResponse, Strategy } from 'unleash-client';
+import { type ClientFeaturesResponse, Strategy } from 'unleash-client';
 import { createProxyConfig } from '../config';
 import * as https from 'https';
-import { StorageProvider } from 'unleash-client/lib/repository/storage-provider';
+import type { StorageProvider } from 'unleash-client/lib/repository/storage-provider';
 
 test('should require "unleashUrl', () => {
     const t = () => createProxyConfig({});

@@ -1,4 +1,4 @@
-import { createSchemaObject, CreateSchemaType } from '../openapi-types';
+import { createSchemaObject, type CreateSchemaType } from '../openapi-types';
 import { variantSchema } from './variant-schema';
 
 export const schema = {

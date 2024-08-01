@@ -1,12 +1,16 @@
-import { CorsOptions } from 'cors';
-import { Application } from 'express';
-import { ClientFeaturesResponse, Strategy, TagFilter } from 'unleash-client';
-import { BootstrapOptions } from 'unleash-client/lib/repository/bootstrap-provider';
-import { Logger, LogLevel, SimpleLogger } from './logger';
+import type { CorsOptions } from 'cors';
+import type { Application } from 'express';
+import type {
+    ClientFeaturesResponse,
+    Strategy,
+    TagFilter,
+} from 'unleash-client';
+import type { BootstrapOptions } from 'unleash-client/lib/repository/bootstrap-provider';
+import { type Logger, type LogLevel, SimpleLogger } from './logger';
 import { generateInstanceId } from './util';
-import { HttpOptions } from 'unleash-client/lib/http-options';
-import { StorageProvider } from 'unleash-client/lib/repository/storage-provider';
-import { ContextEnricher } from './enrich-context';
+import type { HttpOptions } from 'unleash-client/lib/http-options';
+import type { StorageProvider } from 'unleash-client/lib/repository/storage-provider';
+import type { ContextEnricher } from './enrich-context';
 
 export interface ServerSideSdkConfig {
     tokens: string[];
@@ -310,7 +314,7 @@ export function createProxyConfig(option: IProxyOption): IProxyConfig {
         process.env.UNLEASH_INSTANCE_ID ||
         generateInstanceId();
 
-    let proxyBasePath = sanitizeBasePath(
+    const proxyBasePath = sanitizeBasePath(
         option.proxyBasePath || process.env.PROXY_BASE_PATH,
     );
     return {

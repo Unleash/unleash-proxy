@@ -1,6 +1,6 @@
 import { createProxyConfig } from '../config';
 import { LogLevel } from '../logger';
-import FakeUnleash from './unleash.mock';
+import type FakeUnleash from './unleash.mock';
 import { createFakeClient } from './create-fake-client';
 
 test('should add environment to isEnabled calls', () => {

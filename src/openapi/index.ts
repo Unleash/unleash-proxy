@@ -1,4 +1,4 @@
-import { OpenAPIV3 } from 'openapi-types';
+import type { OpenAPIV3 } from 'openapi-types';
 import { apiRequestSchema } from './spec/api-request-schema';
 import { featureSchema } from './spec/feature-schema';
 import { featuresSchema } from './spec/features-schema';

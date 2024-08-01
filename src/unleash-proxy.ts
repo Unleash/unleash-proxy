@@ -1,15 +1,20 @@
-import { NextFunction, Request, Response, Router } from 'express';
-import { IProxyConfig } from './config';
-import { IClient } from './client';
-import { ContextEnricher } from './enrich-context';
-import { Logger } from './logger';
-import { OpenApiService } from './openapi/openapi-service';
+import {
+    type NextFunction,
+    type Request,
+    type Response,
+    Router,
+} from 'express';
+import type { IProxyConfig } from './config';
+import type { IClient } from './client';
+import type { ContextEnricher } from './enrich-context';
+import type { Logger } from './logger';
+import type { OpenApiService } from './openapi/openapi-service';
 import { featuresResponse } from './openapi/spec/features-response';
 import { NOT_READY_MSG, standardResponses } from './openapi/common-responses';
 import { apiRequestResponse } from './openapi/spec/api-request-response';
 import { prometheusRequestResponse } from './openapi/spec/prometheus-request-response';
-import { ApiRequestSchema } from './openapi/spec/api-request-schema';
-import { FeaturesSchema } from './openapi/spec/features-schema';
+import type { ApiRequestSchema } from './openapi/spec/api-request-schema';
+import type { FeaturesSchema } from './openapi/spec/features-schema';
 import { lookupTogglesRequest } from './openapi/spec/lookup-toggles-request';
 import { registerMetricsRequest } from './openapi/spec/register-metrics-request';
 import { registerClientRequest } from './openapi/spec/register-client-request';
@@ -17,10 +22,13 @@ import {
     createDeepObjectRequestParameters,
     createRequestParameters,
 } from './openapi/openapi-helpers';
-import { RegisterMetricsSchema } from './openapi/spec/register-metrics-schema';
-import { LookupTogglesSchema } from './openapi/spec/lookup-toggles-schema';
-import { RegisterClientSchema } from './openapi/spec/register-client-schema';
+import { register as prometheusRegistry } from 'prom-client';
+import type { RegisterMetricsSchema } from './openapi/spec/register-metrics-schema';
+import type { LookupTogglesSchema } from './openapi/spec/lookup-toggles-schema';
+import type { RegisterClientSchema } from './openapi/spec/register-client-schema';
 import { createContexMiddleware } from './context-middleware';
+import { lastMetricsFetch, lastMetricsUpdate } from './prometheus';
+import { UnleashEvents } from 'unleash-client';
 
 export default class UnleashProxy {
     private logger: Logger;
@@ -57,7 +65,6 @@ export default class UnleashProxy {
         this.contextEnrichers = config.expCustomEnrichers
             ? config.expCustomEnrichers
             : [];
-
         const contextMiddleware = createContexMiddleware(this.contextEnrichers);
 
         if (client.isReady()) {
@@ -410,13 +417,9 @@ If you don't provide the \`toggles\` property, then this operation functions exa
         res.send('ok');
     }
 
-    prometheus(_: Request, res: Response<string>): void {
-        const prometheusResponse =
-            '# HELP unleash_proxy_up Indication that the service is up. \n' +
-            '# TYPE unleash_proxy_up counter\n' +
-            'unleash_proxy_up 1\n';
-        res.set('Content-type', 'text/plain');
-        res.send(prometheusResponse);
+    async prometheus(_: Request, res: Response<string>): Promise<void> {
+        res.set('Content-Type', prometheusRegistry.contentType);
+        res.send(await prometheusRegistry.metrics());
     }
 
     registerMetrics(

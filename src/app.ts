@@ -1,8 +1,8 @@
 import compression from 'compression';
-import express, { Application } from 'express';
+import express, { type Application } from 'express';
 import cors from 'cors';
-import { IClient } from './client';
-import { createProxyConfig, IProxyOption } from './config';
+import type { IClient } from './client';
+import { createProxyConfig, type IProxyOption } from './config';
 
 import UnleashProxy from './unleash-proxy';
 import { OpenApiService } from './openapi/openapi-service';
@@ -48,6 +48,7 @@ export function createApp(
     const corsOptions = config.cors;
     app.use(cors(corsOptions));
 
+    // @ts-expect-error - Seems to be an incompatibility with express's own middleware here
     app.use(compression());
 
     app.use(

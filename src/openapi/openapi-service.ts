@@ -1,7 +1,7 @@
-import { RequestHandler, Application } from 'express';
-import { OpenAPIV3 } from 'openapi-types';
-import openapi, { IExpressOpenApi } from '@unleash/express-openapi';
-import { IProxyConfig } from '../config';
+import type { RequestHandler, Application } from 'express';
+import type { OpenAPIV3 } from 'openapi-types';
+import openapi, { type IExpressOpenApi } from '@unleash/express-openapi';
+import type { IProxyConfig } from '../config';
 import { createOpenApiSchema } from '.';
 import { format500ErrorMessage } from './common-responses';
 
@@ -41,7 +41,7 @@ export class OpenApiService {
     // Catch and format Open API validation errors.
     useErrorHandler(app: Application): void {
         app.use((err: any, _: any, res: any, next: any) => {
-            if (err && err.status && err.validationErrors) {
+            if (err?.status && err.validationErrors) {
                 res.status(err.statusCode).json({
                     error: err.message,
                     validation: err.validationErrors,

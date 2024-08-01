@@ -1,4 +1,4 @@
-import request, { Response } from 'supertest';
+import request, { type Response } from 'supertest';
 import { createApp } from '../app';
 import MockClient from './client.mock';
 import metrics from '../examples/metrics.json';

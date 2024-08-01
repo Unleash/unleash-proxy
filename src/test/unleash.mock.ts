@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Context, Unleash, Variant } from 'unleash-client';
-import { FeatureInterface } from 'unleash-client/lib/feature';
-import { FallbackFunction } from 'unleash-client/lib/helpers';
-import { UnleashConfig } from 'unleash-client/lib/unleash';
-import { VariantWithFeatureStatus } from 'unleash-client/lib/variant';
+import { type Context, Unleash, type Variant } from 'unleash-client';
+import type {
+    EnhancedFeatureInterface,
+    FeatureInterface,
+} from 'unleash-client/lib/feature';
+import type { FallbackFunction } from 'unleash-client/lib/helpers';
+import type { UnleashConfig } from 'unleash-client/lib/unleash';
+import type { VariantWithFeatureStatus } from 'unleash-client/lib/variant';
 
 class FakeUnleash extends Unleash {
     public toggleDefinitions: FeatureInterface[] = [];
@@ -64,8 +67,29 @@ class FakeUnleash extends Unleash {
         return toggle;
     }
 
-    getFeatureToggleDefinitions(): FeatureInterface[] {
-        return this.toggleDefinitions;
+    getFeatureToggleDefinitions(): FeatureInterface[];
+    getFeatureToggleDefinitions(
+        withFullSegments: true,
+    ): EnhancedFeatureInterface[];
+    getFeatureToggleDefinitions(
+        withFullSegments?: true,
+    ): FeatureInterface[] | EnhancedFeatureInterface[] {
+        if (withFullSegments) {
+            throw new Error('Not implemented yet');
+        } else {
+            return this.toggleDefinitions.map((t) => ({
+                name: t.name,
+                strategies: [
+                    { name: 'default', parameters: {}, constraints: [] },
+                ],
+                enabled: t.enabled,
+                project: 'default',
+                stale: false,
+                type: 'release',
+                variants: [],
+                impressionData: false,
+            })); // Your implementation for returning FeatureInterface[]
+        }
     }
 
     count(toggleName: string, enabled: boolean): void {
