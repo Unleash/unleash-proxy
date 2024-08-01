@@ -1,4 +1,4 @@
-import { RequestHandler } from 'express';
+import type { RequestHandler } from 'express';
 import { hasBody, is } from 'type-is';
 
 const DEFAULT_ACCEPTED_CONTENT_TYPE = 'application/json';

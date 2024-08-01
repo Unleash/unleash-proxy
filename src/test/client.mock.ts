@@ -1,7 +1,7 @@
 import EventEmitter from 'events';
-import { Context } from 'unleash-client';
-import { FeatureInterface } from 'unleash-client/lib/feature';
-import { FeatureToggleStatus, IClient, IMetrics } from '../client';
+import type { Context } from 'unleash-client';
+import type { FeatureInterface } from 'unleash-client/lib/feature';
+import type { FeatureToggleStatus, IClient, IMetrics } from '../client';
 
 class MockClient extends EventEmitter implements IClient {
     public apiToken: String;

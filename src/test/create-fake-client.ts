@@ -1,8 +1,8 @@
-import { IProxyConfig } from '../config';
-import Client from '../client';
 import { defaultStrategies } from 'unleash-client/lib/strategy';
-import FakeUnleash from './unleash.mock';
+import Client from '../client';
+import type { IProxyConfig } from '../config';
 import FakeMetrics from './metrics.mock';
+import FakeUnleash from './unleash.mock';
 
 export const createFakeClient = (
     config: IProxyConfig,

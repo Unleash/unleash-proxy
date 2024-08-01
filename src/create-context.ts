@@ -1,12 +1,12 @@
 /* eslint-disable prefer-object-spread */
-import { Context } from 'unleash-client';
+import type { Context } from 'unleash-client';
 
 function tryParseDate(dateString: string | undefined): Date | undefined {
     if (!dateString) {
         return undefined;
     }
     const parsedDate = new Date(dateString);
-    if (!isNaN(parsedDate.getTime())) {
+    if (!Number.isNaN(parsedDate.getTime())) {
         return parsedDate;
     } else {
         return undefined;

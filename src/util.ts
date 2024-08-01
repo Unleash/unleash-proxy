@@ -1,7 +1,8 @@
-import { userInfo, hostname } from 'os';
+import { hostname, userInfo } from 'node:os';
+import type { UserInfo } from 'node:os';
 
 export function generateInstanceId(): string {
-    let info;
+    let info: UserInfo<string> | undefined;
     try {
         info = userInfo();
     } catch (e) {

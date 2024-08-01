@@ -1,4 +1,4 @@
-import type { FromSchema, JSONSchema7 } from 'json-schema-to-ts';
+import type { FromSchema, JSONSchema } from 'json-schema-to-ts';
 
 // Recursively remove readonly modifiers from properties.
 type DeepMutable<T> = {
@@ -6,7 +6,7 @@ type DeepMutable<T> = {
 };
 
 // Create a type from a const schema object.
-export type CreateSchemaType<T extends JSONSchema7> = FromSchema<T>;
+export type CreateSchemaType<T extends JSONSchema> = FromSchema<T>;
 
 // Create an OpenAPIV3.SchemaObject from a const schema object.
 export const createSchemaObject = <T>(schema: T): DeepMutable<T> => schema;
