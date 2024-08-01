@@ -506,6 +506,15 @@ Connection: keep-alive
 Keep-Alive: timeout=5
 ```
 
+**Prometheus endpoint**
+
+The proxy has a prometheus metrics endpoint available at http://localhost:3000/proxy/internal-backstage/prometheus
+With the following metrics 
+* `unleash_proxy_up` a [counter](https://prometheus.io/docs/concepts/metric_types/#counter) which is set to 1 when proxy is running
+* `last_metrics_update_epoch_timestamp_ms` a [gauge](https://prometheus.io/docs/concepts/metric_types/#gauge) set to the epoch timestamp in ms when the proxy last received a feature update
+* `last_metrics_fetch_epoch_timestamp_ms` a [gauge](https://prometheus.io/docs/concepts/metric_types/#gauge) set to the epoch timestamp in ms when the proxy last checked for updates
+
+
 ### Run with Node.js:
 
 **STEP 1: Install dependency**
