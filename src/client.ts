@@ -1,11 +1,16 @@
 import EventEmitter from 'events';
-import { Context, Unleash, UnleashEvents, Variant } from "unleash-client";
+import {
+    type Context,
+    type Unleash,
+    UnleashEvents,
+    type Variant,
+} from 'unleash-client';
 import type { FeatureInterface } from 'unleash-client/lib/feature';
 import type Metrics from 'unleash-client/lib/metrics';
 import { getDefaultVariant } from 'unleash-client/lib/variant';
 import type { IProxyConfig } from './config';
 import type { Logger } from './logger';
-import { lastMetricsFetch, lastMetricsUpdate } from "./prometheus";
+import { lastMetricsFetch, lastMetricsUpdate } from './prometheus';
 
 export type FeatureToggleStatus = {
     name: string;

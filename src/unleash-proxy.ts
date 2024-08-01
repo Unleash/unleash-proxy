@@ -27,8 +27,6 @@ import type { RegisterMetricsSchema } from './openapi/spec/register-metrics-sche
 import type { LookupTogglesSchema } from './openapi/spec/lookup-toggles-schema';
 import type { RegisterClientSchema } from './openapi/spec/register-client-schema';
 import { createContexMiddleware } from './context-middleware';
-import { lastMetricsFetch, lastMetricsUpdate } from './prometheus';
-import { UnleashEvents } from 'unleash-client';
 
 export default class UnleashProxy {
     private logger: Logger;
