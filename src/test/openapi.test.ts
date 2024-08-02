@@ -1,6 +1,6 @@
-import request from 'supertest';
-import { Application } from 'express';
 import SwaggerParser from '@apidevtools/swagger-parser';
+import type { Application } from 'express';
+import request from 'supertest';
 import { createApp } from '../app';
 import MockClient from './client.mock';
 

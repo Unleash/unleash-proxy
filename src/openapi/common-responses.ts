@@ -1,4 +1,4 @@
-import { OpenAPIV3 } from 'openapi-types';
+import type { OpenAPIV3 } from 'openapi-types';
 
 export const format500ErrorMessage = (errorMessage: string): string =>
     `Whoops! We dropped the ball on this one (an unexpected error occurred): ${errorMessage}`;

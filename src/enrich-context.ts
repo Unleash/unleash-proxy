@@ -1,4 +1,4 @@
-import { Context } from 'unleash-client';
+import type { Context } from 'unleash-client';
 
 export type ContextEnricher = (context: Context) => Promise<Context>;
 

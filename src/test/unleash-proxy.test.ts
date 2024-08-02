@@ -1,7 +1,7 @@
-import request, { Response } from 'supertest';
+import request, { type Response } from 'supertest';
 import { createApp } from '../app';
-import MockClient from './client.mock';
 import metrics from '../examples/metrics.json';
+import MockClient from './client.mock';
 
 const unleashUrl = 'http://localhost:4242/test';
 const unleashApiToken = 's1';

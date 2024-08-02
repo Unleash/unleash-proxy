@@ -8,7 +8,7 @@ const app = createApp({
         'demo-app:default.1d0fd3109556631d8e9469c75090f46f2ec269d094543890c9a81c4a',
     clientKeys: ['proxy-secret', 'another-proxy-secret', 's1'],
     refreshInterval: 1000,
-    logLevel: 'trace',
+    //logLevel: 'trace',
     enableOAS: true,
     expServerSideSdkConfig: {
         tokens: ['server'],

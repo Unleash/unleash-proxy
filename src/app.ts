@@ -1,13 +1,13 @@
 import compression from 'compression';
-import express, { Application } from 'express';
 import cors from 'cors';
-import { IClient } from './client';
-import { createProxyConfig, IProxyOption } from './config';
+import express, { type Application } from 'express';
+import type { IClient } from './client';
+import { type IProxyOption, createProxyConfig } from './config';
 
-import UnleashProxy from './unleash-proxy';
-import { OpenApiService } from './openapi/openapi-service';
 import requireContentType from './content-type-checker';
-import { createSingletonClient, createNewClient } from './create-client';
+import { createNewClient, createSingletonClient } from './create-client';
+import { OpenApiService } from './openapi/openapi-service';
+import UnleashProxy from './unleash-proxy';
 
 export function createApp(
     options: IProxyOption,
@@ -48,6 +48,7 @@ export function createApp(
     const corsOptions = config.cors;
     app.use(cors(corsOptions));
 
+    // @ts-expect-error Express struggles with its types here, compression seems to be too old
     app.use(compression());
 
     app.use(

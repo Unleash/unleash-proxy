@@ -1,10 +1,10 @@
-import { OpenAPIV3 } from 'openapi-types';
+import type { OpenAPIV3 } from 'openapi-types';
 import { apiRequestSchema } from './spec/api-request-schema';
 import { featureSchema } from './spec/feature-schema';
 import { featuresSchema } from './spec/features-schema';
 import { lookupTogglesSchema } from './spec/lookup-toggles-schema';
-import { registerMetricsSchema } from './spec/register-metrics-schema';
 import { registerClientSchema } from './spec/register-client-schema';
+import { registerMetricsSchema } from './spec/register-metrics-schema';
 import { unleashContextSchema } from './spec/unleash-context-schema';
 import { variantSchema } from './spec/variant-schema';
 
