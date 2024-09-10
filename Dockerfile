@@ -1,4 +1,4 @@
-FROM node:18-alpine as builder
+FROM node:18-alpine AS builder
 
 WORKDIR /unleash-proxy
 
@@ -10,7 +10,7 @@ RUN yarn build
 
 RUN yarn install --production --frozen-lockfile --ignore-scripts --prefer-offline
 
-FROM node:18-alpine as server
+FROM node:18-alpine AS server
 RUN apk add --no-cache tini
 
 ##### Prod Image
@@ -18,9 +18,9 @@ FROM alpine:latest
 COPY --from=server / /
 
 #TODO HACK to avoid CVE-2024-5535. Remove after the vulnerability is fixed
-RUN apk update && apk upgrade --no-cache libssl3 libcrypto3
+RUN apk update && apk upgrade --no-cache libssl3 libcrypto3 openssl
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 WORKDIR /unleash-proxy
 
@@ -36,4 +36,4 @@ EXPOSE 4242
 
 USER node
 
-CMD ./server.sh
+CMD ["./server.sh"]
