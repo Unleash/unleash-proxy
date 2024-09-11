@@ -1,4 +1,4 @@
-FROM node:20-alpine as builder
+FROM node:20-alpine AS builder
 
 WORKDIR /unleash-proxy
 
@@ -14,7 +14,8 @@ RUN yarn build
 
 RUN yarn workspaces focus -A --production
 
-FROM node:20-alpine
+FROM node:20-alpine AS server
+RUN apk add --no-cache tini
 
 ##### Prod Image
 FROM alpine:latest
