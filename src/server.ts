@@ -1,6 +1,6 @@
-import { Application } from 'express';
+import type { Application } from 'express';
 import { createApp } from './app';
-import { IProxyOption } from './config';
+import type { IProxyOption } from './config';
 
 export function start(opt: IProxyOption = {}): Application {
     const port = process.env.PORT || process.env.PROXY_PORT || 3000;

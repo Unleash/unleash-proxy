@@ -1,17 +1,20 @@
-FROM node:18-alpine AS builder
+FROM node:20-alpine as builder
 
 WORKDIR /unleash-proxy
 
 COPY . .
 
-RUN yarn install --frozen-lockfile --ignore-scripts
+RUN corepack enable
+
+ENV YARN_ENABLE_SCRIPTS=false
+
+RUN yarn install --immutable
 
 RUN yarn build
 
-RUN yarn install --production --frozen-lockfile --ignore-scripts --prefer-offline
+RUN yarn workspaces focus -A --production
 
-FROM node:18-alpine AS server
-RUN apk add --no-cache tini
+FROM node:20-alpine
 
 ##### Prod Image
 FROM alpine:latest
@@ -32,7 +35,7 @@ RUN chown -R node:node /unleash-proxy
 
 ENTRYPOINT ["/sbin/tini", "--"]
 
-EXPOSE 4242
+EXPOSE 3000
 
 USER node
 

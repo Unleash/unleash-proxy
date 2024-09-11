@@ -1,0 +1,87 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "correctness": {
+        "noUnsafeOptionalChaining": "off",
+        "useExhaustiveDependencies": "off",
+        "noUnusedImports": "warn",
+        "useJsxKeyInIterable": "off"
+      },
+      "complexity": {
+        "noBannedTypes": "off",
+        "noUselessConstructor": "off",
+        "useOptionalChain": "warn",
+        "noStaticOnlyClass": "off",
+        "noForEach": "off"
+      },
+      "style": {
+        "noNonNullAssertion": "off",
+        "noInferrableTypes": "off",
+        "noUnusedTemplateLiteral": "off",
+        "useSingleVarDeclarator": "off",
+        "noUselessElse": "off",
+        "useNodejsImportProtocol": "off"
+      },
+      "suspicious": {
+        "noExplicitAny": "off",
+        "noExtraNonNullAssertion": "off",
+        "noRedeclare": "off",
+        "noPrototypeBuiltins": "off",
+        "noConfusingVoidType": "off",
+        "noArrayIndexKey": "off",
+        "noThenProperty": "off",
+        "noExportsInTest": "off"
+      },
+      "performance": {
+        "noAccumulatingSpread": "off",
+        "noDelete": "off"
+      }
+    },
+    "ignore": [
+      "node_modules",
+      "jest.config.js",
+      "dist",
+      "build",
+      "CHANGELOG.md",
+      "package.json",
+      "tsconfig.json"
+    ]
+  },
+  "organizeImports": {
+    "enabled": true
+  },
+  "formatter": {
+    "indentStyle": "space",
+    "ignore": [
+      "node_modules",
+      "jest.config.js",
+      "dist",
+      "build",
+      "CHANGELOG.md",
+      "package.json",
+      "tsconfig.json"
+    ],
+    "indentWidth": 4
+  },
+  "javascript": {
+    "formatter": {
+      "semicolons": "always",
+      "quoteStyle": "single",
+      "jsxQuoteStyle": "single",
+      "indentWidth": 4
+    }
+  },
+  "json": {
+    "formatter": {
+      "indentWidth": 2
+    }
+  },
+  "vcs": {
+    "enabled": true,
+    "defaultBranch": "main",
+    "clientKind": "git"
+  }
+}

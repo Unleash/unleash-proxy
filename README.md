@@ -394,6 +394,8 @@ You **must configure** these three variables for the proxy to start successfully
 | cors.origin | `CORS_ORIGIN` | \* | no | Origin URL or list of comma separated list of URLs to whitelist for CORS |
 | cors.preflightContinue | `CORS_PREFLIGHT_CONTINUE` | `false` | no |  |
 | httpOptions.rejectUnauthorized | `HTTP_OPTIONS_REJECT_UNAUTHORIZED` | `true` | no | If true, unleash-proxy will automatically reject connections to unleash server with invalid certificates |
+|  | `HTTP_PROXY` | n/a | no | Proxy server for HTTP requests |
+|  | `HTTPS_PROXY` | n/a | no | Proxy server for HTTPS requests |
 
 ### Experimental configuration options
 
@@ -503,6 +505,15 @@ Date: Fri, 04 Jun 2021 10:38:27 GMT
 Connection: keep-alive
 Keep-Alive: timeout=5
 ```
+
+**Prometheus endpoint**
+
+The proxy has a prometheus metrics endpoint available at http://localhost:3000/proxy/internal-backstage/prometheus
+With the following metrics 
+* `unleash_proxy_up` a [counter](https://prometheus.io/docs/concepts/metric_types/#counter) which is set to 1 when proxy is running
+* `last_metrics_update_epoch_timestamp_ms` a [gauge](https://prometheus.io/docs/concepts/metric_types/#gauge) set to the epoch timestamp in ms when the proxy last received a feature update
+* `last_metrics_fetch_epoch_timestamp_ms` a [gauge](https://prometheus.io/docs/concepts/metric_types/#gauge) set to the epoch timestamp in ms when the proxy last checked for updates
+
 
 ### Run with Node.js:
 

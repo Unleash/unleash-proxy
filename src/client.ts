@@ -1,10 +1,16 @@
 import EventEmitter from 'events';
-import { Context, Unleash, Variant } from 'unleash-client';
-import { FeatureInterface } from 'unleash-client/lib/feature';
-import Metrics from 'unleash-client/lib/metrics';
+import {
+    type Context,
+    type Unleash,
+    UnleashEvents,
+    type Variant,
+} from 'unleash-client';
+import type { FeatureInterface } from 'unleash-client/lib/feature';
+import type Metrics from 'unleash-client/lib/metrics';
 import { getDefaultVariant } from 'unleash-client/lib/variant';
-import { IProxyConfig } from './config';
-import { Logger } from './logger';
+import type { IProxyConfig } from './config';
+import type { Logger } from './logger';
+import { lastMetricsFetch, lastMetricsUpdate } from './prom-metrics';
 
 export type FeatureToggleStatus = {
     name: string;
@@ -76,6 +82,14 @@ class Client extends EventEmitter implements IClient {
             this.emit('ready');
             this.ready = true;
             this.metrics.start();
+        });
+        this.unleash.on(UnleashEvents.Unchanged, () => {
+            lastMetricsFetch.set(new Date().getTime());
+        });
+        this.unleash.on(UnleashEvents.Changed, () => {
+            const updatedAt = new Date().getTime();
+            lastMetricsFetch.set(updatedAt);
+            lastMetricsUpdate.set(updatedAt);
         });
     }
 

@@ -1,5 +1,5 @@
 import { Operator } from 'unleash-client/lib/strategy/strategy';
-import { createSchemaObject, CreateSchemaType } from '../openapi-types';
+import { type CreateSchemaType, createSchemaObject } from '../openapi-types';
 
 const schema = {
     type: 'object',
