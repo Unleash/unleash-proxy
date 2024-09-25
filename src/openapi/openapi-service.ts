@@ -30,7 +30,7 @@ export class OpenApiService {
     // and the OpenAPI SwaggerUI at `${this.docsPathPath}`.
     useDocs(app: Application): void {
         app.use(this.api);
-        app.use(this.docsPath(), this.api.swaggerui);
+        app.use(this.docsPath(), this.api.swaggerui());
     }
 
     // Create request validation middleware
