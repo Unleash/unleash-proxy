@@ -12,7 +12,6 @@ const mockRequest =
         // @ts-expect-error (It's not a real request)
         return {
             header: (name: string) =>
-                //@ts-expect-error (yes, this may fail)
                 headers[name.toLowerCase()],
             headers,
         };

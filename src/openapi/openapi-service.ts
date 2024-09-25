@@ -1,4 +1,4 @@
-import openapi, { type IExpressOpenApi } from '@unleash/express-openapi';
+import openapi, { type IExpressOpenApi } from '@wesleytodd/openapi';
 import type { Application, RequestHandler } from 'express';
 import type { OpenAPIV3 } from 'openapi-types';
 import { createOpenApiSchema } from '.';
