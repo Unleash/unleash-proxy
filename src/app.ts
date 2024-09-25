@@ -48,7 +48,6 @@ export function createApp(
     const corsOptions = config.cors;
     app.use(cors(corsOptions));
 
-
     app.use(compression());
 
     app.use(
