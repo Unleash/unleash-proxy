@@ -48,7 +48,6 @@ export function createApp(
     const corsOptions = config.cors;
     app.use(cors(corsOptions));
 
-    // @ts-expect-error Express struggles with its types here, compression seems to be too old
     app.use(compression());
 
     app.use(
