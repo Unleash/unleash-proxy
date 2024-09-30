@@ -1,4 +1,4 @@
-// Partial types for "@wesleytodd/openapi". 
+// Partial types for "@wesleytodd/openapi".
 declare module '@wesleytodd/openapi' {
     import type { RequestHandler } from 'express';
 
