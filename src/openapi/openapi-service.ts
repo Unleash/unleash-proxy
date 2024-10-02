@@ -1,4 +1,4 @@
-import openapi, { type IExpressOpenApi } from '@unleash/express-openapi';
+import openapi, { type IExpressOpenApi } from '@wesleytodd/openapi';
 import type { Application, RequestHandler } from 'express';
 import type { OpenAPIV3 } from 'openapi-types';
 import { createOpenApiSchema } from '.';
@@ -30,7 +30,7 @@ export class OpenApiService {
     // and the OpenAPI SwaggerUI at `${this.docsPathPath}`.
     useDocs(app: Application): void {
         app.use(this.api);
-        app.use(this.docsPath(), this.api.swaggerui);
+        app.use(this.docsPath(), this.api.swaggerui());
     }
 
     // Create request validation middleware

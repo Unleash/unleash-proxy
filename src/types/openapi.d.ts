@@ -1,11 +1,11 @@
 // Partial types for "@unleash/express-openapi".
-declare module '@unleash/express-openapi' {
+declare module '@wesleytodd/openapi' {
     import type { RequestHandler } from 'express';
 
     export interface IExpressOpenApi extends RequestHandler {
         validPath: (operation: OpenAPIV3.OperationObject) => RequestHandler;
         schema: (name: string, schema: OpenAPIV3.SchemaObject) => void;
-        swaggerui: RequestHandler;
+        swaggerui: () => RequestHandler;
     }
 
     export default function openapi(
