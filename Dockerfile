@@ -16,6 +16,19 @@ RUN yarn workspaces focus -A --production
 
 FROM node:20-alpine AS server
 RUN apk add --no-cache tini
+# Install npm and force cross-spawn version
+# Remove old version and install new one
+RUN npm install -g npm@10.9.0 && \
+    # Remove old version
+    npm uninstall -g cross-spawn && \
+    npm cache clean --force && \
+    # Find and remove any remaining old versions
+    find /usr/local/lib/node_modules -name "cross-spawn" -type d -exec rm -rf {} + && \
+    # Install new version
+    npm install -g cross-spawn@7.0.5 --force && \
+    # Configure npm
+    npm config set save-exact=true && \
+    npm config set legacy-peer-deps=true
 
 ##### Prod Image
 FROM alpine:latest
