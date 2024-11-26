@@ -1,3 +1,7 @@
+![Maintenance Mode](https://img.shields.io/badge/status-maintenance-orange)
+
+**This project is currently in maintenance mode. No new features will be added and we will only do security patches in this repository going forward. Use [unleash-edge](https://github.com/unleash/unleash-edge) instead.**
+
 [![Build & Tests](https://github.com/Unleash/unleash-proxy/workflows/Node.js%20CI/badge.svg?branch=main)](https://github.com/Unleash/unleash-proxy/actions/workflows/node.js.yml) [![npm](https://img.shields.io/npm/v/@unleash/proxy)](https://www.npmjs.com/package/@unleash/proxy) [![Docker Pulls](https://img.shields.io/docker/pulls/unleashorg/unleash-proxy)](https://hub.docker.com/r/unleashorg/unleash-proxy)
 
 # The Unleash Proxy
