@@ -49,7 +49,7 @@ RUN npm install -g npm@10.9.0 && \
 
 ##### Prod Image
 FROM alpine:latest
-COPY --from=server / /
+# COPY --from=server / /
 
 #TODO HACK to avoid CVE-2024-5535. Remove after the vulnerability is fixed
 RUN apk update && apk upgrade --no-cache libssl3 libcrypto3 openssl

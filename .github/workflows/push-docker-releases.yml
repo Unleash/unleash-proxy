@@ -30,8 +30,8 @@ jobs:
           platforms: linux/amd64
       - name: Set up Docker buildx
         uses: docker/setup-buildx-action@v3
-        with:
-          version: v0.18.0
+      - name: runc version
+        run: runc --version
       # - name: Login to docker hub
       #   uses: docker/login-action@v1
       #   with:
