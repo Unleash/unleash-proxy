@@ -31,7 +31,7 @@ jobs:
       - name: Set up Docker buildx
         uses: docker/setup-buildx-action@v3
       - name: runc version
-        run: runc --version
+        run: apt-get update && apt-cache policy runc
       # - name: Login to docker hub
       #   uses: docker/login-action@v1
       #   with:
