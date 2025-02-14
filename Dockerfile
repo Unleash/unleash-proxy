@@ -34,7 +34,7 @@ FROM node:20-alpine
 RUN apk add --no-cache tini
 
 #TODO HACK to avoid CVE-2024-5535. Remove after the vulnerability is fixed
-RUN apk update && apk upgrade --no-cache libssl3 libcrypto3 openssl musl
+RUN apk update && apk upgrade --no-cache libssl3 libcrypto3 openssl musl musl musl-utils
 
 ENV NODE_ENV=production
 
