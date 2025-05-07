@@ -75,7 +75,9 @@
     "string-width": "4.1.0",
     "json5": "^2.2.2",
     "cookiejar": "^2.1.4",
-    "router/path-to-regexp": "0.1.10"
+    "router/path-to-regexp": "0.1.10",
+    "path-to-regexp": "0.1.12",
+    "formidable": "3.5.3"
   },
   "packageManager": "yarn@4.5.0"
 }
