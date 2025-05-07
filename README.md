@@ -1,12 +1,12 @@
+![Maintenance Mode](https://img.shields.io/badge/status-maintenance-orange)
+
+**This project is in maintenance mode. No new features will be added and we will only do security patches in this repository going forward. Use [Unleash Edge](https://github.com/unleash/unleash-edge) instead.**
+
 [![Build & Tests](https://github.com/Unleash/unleash-proxy/workflows/Node.js%20CI/badge.svg?branch=main)](https://github.com/Unleash/unleash-proxy/actions/workflows/node.js.yml) [![npm](https://img.shields.io/npm/v/@unleash/proxy)](https://www.npmjs.com/package/@unleash/proxy) [![Docker Pulls](https://img.shields.io/docker/pulls/unleashorg/unleash-proxy)](https://hub.docker.com/r/unleashorg/unleash-proxy)
 
 # The Unleash Proxy
 
-The Unleash proxy offers a way to use Unleash in client-side applications, such as single-page and native apps.
-
-> **Note:** You might want to consider using [Unleash Edge](https://www.unleash-hosted.com/edge) instead.
-
-The Unleash proxy sits between the Unleash API and your client-side SDK and does the evaluation of feature toggles for your client-side SDK. This way, you can keep your configuration private and secure, while still allowing your client-side apps to use Unleash's features.
+The Unleash proxy offers a way to use Unleash in client-side applications, such as single-page and native apps. The Unleash proxy sits between the Unleash API and your client-side SDK and does the evaluation of feature toggles for your client-side SDK. This way, you can keep your configuration private and secure, while still allowing your client-side apps to use Unleash's features.
 
 The proxy offers three important features:
 
