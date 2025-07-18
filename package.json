@@ -78,7 +78,8 @@
     "router/path-to-regexp": "0.1.12",
     "path-to-regexp": "0.1.12",
     "formidable": "3.5.3",
-    "brace-expansion": "1.1.12 || 2.0.2"
+    "brace-expansion": "1.1.12 || 2.0.2",
+    "on-headers": "1.1.0"
   },
   "packageManager": "yarn@4.5.0"
 }
