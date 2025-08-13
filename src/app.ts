@@ -16,7 +16,9 @@ export function createApp(
 ): Application {
     const config = createProxyConfig(options);
     const { logger } = config;
-    logger.debug('Configuration:', config);
+    // Sanitize config before logging to avoid leaking sensitive information
+    const sanitizedConfig = { ...config, unleashApiToken: '[REDACTED]' };
+    logger.debug('Configuration:', sanitizedConfig);
     const client =
         unleashClient ||
         (options.clientMode === 'new'
