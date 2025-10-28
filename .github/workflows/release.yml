@@ -23,8 +23,8 @@ jobs:
         cache: 'yarn'
     - name: Enable corepack
       run: corepack enable
-    - name: Activate npm 11.5.1
-      run: corepack prepare npm@11.5.1 --activate
+    - name: Install npm 11.5.1
+      run: npm install -g npm@11.5.1
     - run: |
         yarn install --immutable
     - run: |
