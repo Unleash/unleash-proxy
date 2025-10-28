@@ -21,13 +21,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Enable corepack
-      run: corepack enable
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v6
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
+    - name: Enable corepack
+      run: corepack enable
+    - name: Activate npm 11.5.1
+      run: corepack prepare npm@11.5.1 --activate
     - run: npm --version
     - run: yarn install --immutable
       env:
