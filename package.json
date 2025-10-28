@@ -78,5 +78,5 @@
     "cookiejar": "^2.1.4",
     "router/path-to-regexp": "0.1.12"
   },
-  "packageManager": "yarn@4.5.0"
+  "packageManager": "yarn@4.10.3"
 }

@@ -35,6 +35,7 @@ export const createSingletonClient = (config: IProxyConfig): Client => {
         metricsJitter: config.metricsJitter,
         url: config.unleashUrl,
         customHeadersFunction,
+        connectionId: `${config.unleashInstanceId}-${Date.now()}`,
         ...(config.httpOptions ? { httpOptions: config.httpOptions } : {}),
     });
 
@@ -72,6 +73,7 @@ export const createNewClient = (config: IProxyConfig): Client => {
         metricsJitter: config.metricsJitter,
         url: config.unleashUrl,
         customHeadersFunction,
+        connectionId: `${config.unleashInstanceId}-${Date.now()}`,
         ...(config.httpOptions ? { httpOptions: config.httpOptions } : {}),
     });
 

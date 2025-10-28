@@ -19,6 +19,7 @@ export const createFakeClient = (
         metricsInterval: config.metricsInterval,
         url: config.unleashUrl,
         strategies: defaultStrategies.map((s) => s.name),
+        connectionId: 'connection-id',
     });
 
     const client = new Client(config, unleash, metrics);
