@@ -1779,7 +1779,7 @@ __metadata:
     ts-node-dev: "npm:^2.0.0"
     type-is: "npm:^1.6.18"
     typescript: "npm:^5.5.4"
-    unleash-client: "npm:^6.1.1"
+    unleash-client: "npm:^6.7.0"
   languageName: unknown
   linkType: soft
 
@@ -4367,6 +4367,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"launchdarkly-eventsource@npm:2.2.0":
+  version: 2.2.0
+  resolution: "launchdarkly-eventsource@npm:2.2.0"
+  checksum: 10c0/fce94e58ef5eb560349b2f5405276c01b86d83afc3f7149c6e58ce4fcdf69f1ef8c97c9800bedf0986b41fa7a1f14740aee804d8c74f9fc81b6cf22f4bd5a7f1
+  languageName: node
+  linkType: hard
+
 "lazy-cache@npm:^0.2.3":
   version: 0.2.7
   resolution: "lazy-cache@npm:0.2.7"
@@ -5154,6 +5161,13 @@ __metadata:
     forwarded: "npm:0.2.0"
     ipaddr.js: "npm:1.9.1"
   checksum: 10c0/c3eed999781a35f7fd935f398b6d8920b6fb00bbc14287bc6de78128ccc1a02c89b95b56742bf7cf0362cc333c61d138532049c7dedc7a328ef13343eff81210
+  languageName: node
+  linkType: hard
+
+"proxy-from-env@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "proxy-from-env@npm:1.1.0"
+  checksum: 10c0/fe7dd8b1bdbbbea18d1459107729c3e4a2243ca870d26d34c2c1bcd3e4425b7bcc5112362df2d93cc7fb9746f6142b5e272fd1cc5c86ddf8580175186f6ad42b
   languageName: node
   linkType: hard
 
@@ -6012,17 +6026,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unleash-client@npm:^6.1.1":
-  version: 6.1.1
-  resolution: "unleash-client@npm:6.1.1"
+"unleash-client@npm:^6.7.0":
+  version: 6.7.0
+  resolution: "unleash-client@npm:6.7.0"
   dependencies:
     http-proxy-agent: "npm:^7.0.2"
     https-proxy-agent: "npm:^7.0.5"
     ip-address: "npm:^9.0.5"
+    launchdarkly-eventsource: "npm:2.2.0"
     make-fetch-happen: "npm:^13.0.1"
     murmurhash3js: "npm:^3.0.1"
+    proxy-from-env: "npm:^1.1.0"
     semver: "npm:^7.6.2"
-  checksum: 10c0/ff1a5d5d047f05de3581320fbe3af2c796a9bd1578ea5546730883217f35f1462bd89ebf558038b69fdb6a1594031d08c720f7a4c29bf985532bd035f334d989
+  checksum: 10c0/ad7abccf855974f5af8eb40b81ae2d02f92d844e057ee9a91edc1f9ae2fd2b441e6ccbec5692274abbf5148f666432e88d33a0ddc5c4fd71a1834ae0133c0d01
   languageName: node
   linkType: hard
 
