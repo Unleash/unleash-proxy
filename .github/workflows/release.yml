@@ -11,18 +11,20 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [22.x]
 
     steps:
     - uses: actions/checkout@v4
-    - name: Enable corepack
-      run: corepack enable
     - name: Publish to npm
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version: ${{ matrix.node-version }}
         registry-url: 'https://registry.npmjs.org'
         cache: 'yarn'
+    - name: Enable corepack
+      run: corepack enable
+    - name: Install npm 11.5.1
+      run: npm install -g npm@11.5.1
     - run: |
         yarn install --immutable
     - run: |
