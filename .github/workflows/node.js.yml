@@ -37,4 +37,4 @@ jobs:
     - run: yarn fmt:check
     - run: yarn lint
     - run: yarn build
-    - run: yarn test --coverage
+    - run: yarn test
