@@ -84,10 +84,10 @@ class Client extends EventEmitter implements IClient {
             this.metrics.start();
         });
         this.unleash.on(UnleashEvents.Unchanged, () => {
-            lastMetricsFetch.set(new Date().getTime());
+            lastMetricsFetch.set(Date.now());
         });
         this.unleash.on(UnleashEvents.Changed, () => {
-            const updatedAt = new Date().getTime();
+            const updatedAt = Date.now();
             lastMetricsFetch.set(updatedAt);
             lastMetricsUpdate.set(updatedAt);
         });
@@ -190,19 +190,19 @@ class Client extends EventEmitter implements IClient {
             const toggle = toggles[toggleName];
             const yesCount: number = toggle.yes ?? 0;
             const noCount: number = toggle.no ?? 0;
-            [...Array(yesCount)].forEach(() =>
-                this.metrics.count(toggleName, true),
-            );
-            [...Array(noCount)].forEach(() =>
-                this.metrics.count(toggleName, false),
-            );
+            [...Array(yesCount)].forEach(() => {
+                this.metrics.count(toggleName, true);
+            });
+            [...Array(noCount)].forEach(() => {
+                this.metrics.count(toggleName, false);
+            });
             const variants = toggle.variants;
             if (variants) {
                 Object.entries(variants).forEach(
                     ([variantName, variantCount]) => {
-                        [...Array(variantCount)].forEach(() =>
-                            this.metrics.countVariant(toggleName, variantName),
-                        );
+                        [...Array(variantCount)].forEach(() => {
+                            this.metrics.countVariant(toggleName, variantName);
+                        });
                     },
                 );
             }

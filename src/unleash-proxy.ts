@@ -4,29 +4,29 @@ import {
     type Response,
     Router,
 } from 'express';
-import type { IProxyConfig } from './config';
+import { register as promRegistry } from 'prom-client';
 import type { IClient } from './client';
+import type { IProxyConfig } from './config';
+import { createContexMiddleware } from './context-middleware';
 import type { ContextEnricher } from './enrich-context';
 import type { Logger } from './logger';
-import type { OpenApiService } from './openapi/openapi-service';
-import { featuresResponse } from './openapi/spec/features-response';
 import { NOT_READY_MSG, standardResponses } from './openapi/common-responses';
-import { apiRequestResponse } from './openapi/spec/api-request-response';
-import { prometheusRequestResponse } from './openapi/spec/prometheus-request-response';
-import type { ApiRequestSchema } from './openapi/spec/api-request-schema';
-import type { FeaturesSchema } from './openapi/spec/features-schema';
-import { lookupTogglesRequest } from './openapi/spec/lookup-toggles-request';
-import { registerMetricsRequest } from './openapi/spec/register-metrics-request';
-import { registerClientRequest } from './openapi/spec/register-client-request';
-import { register as promRegistry } from 'prom-client';
 import {
     createDeepObjectRequestParameters,
     createRequestParameters,
 } from './openapi/openapi-helpers';
-import type { RegisterMetricsSchema } from './openapi/spec/register-metrics-schema';
+import type { OpenApiService } from './openapi/openapi-service';
+import { apiRequestResponse } from './openapi/spec/api-request-response';
+import type { ApiRequestSchema } from './openapi/spec/api-request-schema';
+import { featuresResponse } from './openapi/spec/features-response';
+import type { FeaturesSchema } from './openapi/spec/features-schema';
+import { lookupTogglesRequest } from './openapi/spec/lookup-toggles-request';
 import type { LookupTogglesSchema } from './openapi/spec/lookup-toggles-schema';
+import { prometheusRequestResponse } from './openapi/spec/prometheus-request-response';
+import { registerClientRequest } from './openapi/spec/register-client-request';
 import type { RegisterClientSchema } from './openapi/spec/register-client-schema';
-import { createContexMiddleware } from './context-middleware';
+import { registerMetricsRequest } from './openapi/spec/register-metrics-request';
+import type { RegisterMetricsSchema } from './openapi/spec/register-metrics-schema';
 
 export default class UnleashProxy {
     private logger: Logger;
@@ -310,7 +310,7 @@ If you don't provide the \`toggles\` property, then this operation functions exa
         this.clientKeys = clientKeys;
     }
 
-    private readyMiddleware(req: Request, res: Response, next: NextFunction) {
+    private readyMiddleware(_req: Request, res: Response, next: NextFunction) {
         if (!this.ready) {
             res.status(503).send(NOT_READY_MSG);
         } else {
@@ -345,7 +345,7 @@ If you don't provide the \`toggles\` property, then this operation functions exa
     }
 
     async getAllToggles(
-        req: Request,
+        _req: Request,
         res: Response<FeaturesSchema | string>,
     ): Promise<void> {
         if (!this.enableAllEndpoint) {
@@ -386,7 +386,7 @@ If you don't provide the \`toggles\` property, then this operation functions exa
     }
 
     async getEnabledToggles(
-        req: Request,
+        _req: Request,
         res: Response<FeaturesSchema | string>,
     ): Promise<void> {
         const { context } = res.locals;
@@ -451,7 +451,7 @@ If you don't provide the \`toggles\` property, then this operation functions exa
         }
     }
 
-    unleashApi(req: Request, res: Response<string | ApiRequestSchema>): void {
+    unleashApi(_req: Request, res: Response<string | ApiRequestSchema>): void {
         const features = this.client.getFeatureToggleDefinitions();
         res.set('Cache-control', 'public, max-age=2');
         res.send({ version: 2, features });

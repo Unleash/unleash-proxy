@@ -23,7 +23,7 @@ const mockRequestWithBody = mockRequest('chunked');
 const mockRequestWithoutBody = mockRequest(undefined);
 
 const returns415: (t: jest.Mock) => Response = (t) => ({
-    // @ts-ignore
+    // @ts-expect-error
     status: (code) => {
         expect(415).toBe(code);
         return {
@@ -33,9 +33,8 @@ const returns415: (t: jest.Mock) => Response = (t) => ({
 });
 
 const expectNoCall: (t: jest.Mock) => Response = (t) => ({
-    // @ts-ignore
     status: () => ({
-        // @ts-ignore
+        // @ts-expect-error
         end: () => expect(t).toHaveBeenCalledTimes(0),
     }),
 });

@@ -2,7 +2,7 @@ import compression from 'compression';
 import cors from 'cors';
 import express, { type Application } from 'express';
 import type { IClient } from './client';
-import { type IProxyOption, createProxyConfig } from './config';
+import { createProxyConfig, type IProxyOption } from './config';
 
 import requireContentType from './content-type-checker';
 import { createNewClient, createSingletonClient } from './create-client';
