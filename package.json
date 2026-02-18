@@ -1,6 +1,6 @@
 {
   "name": "@unleash/proxy",
-  "version": "1.4.14",
+  "version": "1.4.16",
   "description": "The Unleash Proxy (Open-Source)",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

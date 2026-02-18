@@ -45,6 +45,8 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
             type=sha
+          labels: |
+            org.opencontainers.image.description='DEPRECATED: unleashorg/unleash-proxy is deprecated. Support ends on 2026-11-26. Migrate to Unleash Edge: https://github.com/Unleash/unleash-edge'
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
         with:
