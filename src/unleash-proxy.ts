@@ -310,7 +310,7 @@ If you don't provide the \`toggles\` property, then this operation functions exa
         this.clientKeys = clientKeys;
     }
 
-    private readyMiddleware(req: Request, res: Response, next: NextFunction) {
+    private readyMiddleware(_req: Request, res: Response, next: NextFunction) {
         if (!this.ready) {
             res.status(503).send(NOT_READY_MSG);
         } else {
@@ -345,7 +345,7 @@ If you don't provide the \`toggles\` property, then this operation functions exa
     }
 
     async getAllToggles(
-        req: Request,
+        _req: Request,
         res: Response<FeaturesSchema | string>,
     ): Promise<void> {
         if (!this.enableAllEndpoint) {
@@ -386,7 +386,7 @@ If you don't provide the \`toggles\` property, then this operation functions exa
     }
 
     async getEnabledToggles(
-        req: Request,
+        _req: Request,
         res: Response<FeaturesSchema | string>,
     ): Promise<void> {
         const { context } = res.locals;
@@ -451,7 +451,7 @@ If you don't provide the \`toggles\` property, then this operation functions exa
         }
     }
 
-    unleashApi(req: Request, res: Response<string | ApiRequestSchema>): void {
+    unleashApi(_req: Request, res: Response<string | ApiRequestSchema>): void {
         const features = this.client.getFeatureToggleDefinitions();
         res.set('Cache-control', 'public, max-age=2');
         res.send({ version: 2, features });

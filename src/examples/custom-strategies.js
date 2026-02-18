@@ -6,7 +6,7 @@ class TestStrat extends Strategy {
         super('FromFile');
     }
 
-    isEnabled(parameters, context) {
+    isEnabled(_parameters, _context) {
         // do something cool with params and context.
         return true;
     }

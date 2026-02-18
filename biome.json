@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.3/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.4.2/schema.json",
   "linter": {
     "enabled": true,
     "rules": {
@@ -40,29 +40,29 @@
         "noDelete": "off"
       }
     },
-    "ignore": [
-      "node_modules",
-      "jest.config.js",
-      "dist",
-      "build",
-      "CHANGELOG.md",
-      "package.json",
-      "tsconfig.json"
+    "includes": [
+      "**",
+      "!**/node_modules",
+      "!**/jest.config.js",
+      "!**/dist",
+      "!**/build",
+      "!**/CHANGELOG.md",
+      "!**/package.json",
+      "!**/tsconfig.json"
     ]
   },
-  "organizeImports": {
-    "enabled": true
-  },
+  "assist": { "actions": { "source": { "organizeImports": "on" } } },
   "formatter": {
     "indentStyle": "space",
-    "ignore": [
-      "node_modules",
-      "jest.config.js",
-      "dist",
-      "build",
-      "CHANGELOG.md",
-      "package.json",
-      "tsconfig.json"
+    "includes": [
+      "**",
+      "!**/node_modules",
+      "!**/jest.config.js",
+      "!**/dist",
+      "!**/build",
+      "!**/CHANGELOG.md",
+      "!**/package.json",
+      "!**/tsconfig.json"
     ],
     "indentWidth": 4
   },

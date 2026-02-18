@@ -129,7 +129,7 @@ test('should load custom activation strategy', () => {
         }
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        isEnabled(parameters: any, context: any) {
+        isEnabled(_parameters: any, _context: any) {
             return true;
         }
     }

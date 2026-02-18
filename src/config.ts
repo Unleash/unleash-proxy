@@ -89,7 +89,7 @@ function safeNumber(envVar: string | undefined, defaultVal: number): number {
     if (envVar) {
         try {
             return Number.parseInt(envVar, 10);
-        } catch (err) {
+        } catch (_err) {
             return defaultVal;
         }
     } else {

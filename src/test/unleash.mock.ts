@@ -30,25 +30,25 @@ class FakeUnleash extends Unleash {
         context?: Context,
         fallbackValue?: boolean,
     ): boolean;
-    isEnabled(name: any, context?: any, fallbackValue?: any): boolean {
+    isEnabled(_name: any, context?: any, _fallbackValue?: any): boolean {
         this.contexts.push(context);
         // console.log(name, context, fallbackValue);
         return true;
     }
 
     getVariant(
-        name: string,
-        context?: Context,
-        fallbackVariant?: Variant,
+        _name: string,
+        _context?: Context,
+        _fallbackVariant?: Variant,
     ): VariantWithFeatureStatus {
         // console.log(name, context, fallbackVariant);
         return { name: 'disabled', enabled: false, featureEnabled: false };
     }
 
     forceGetVariant(
-        name: string,
-        context?: Context,
-        fallbackVariant?: Variant,
+        _name: string,
+        _context?: Context,
+        _fallbackVariant?: Variant,
     ): Variant {
         // console.log(name, context, fallbackVariant);
         return { name: 'disabled', enabled: false };
@@ -68,11 +68,11 @@ class FakeUnleash extends Unleash {
         return this.toggleDefinitions;
     }
 
-    count(toggleName: string, enabled: boolean): void {
+    count(_toggleName: string, _enabled: boolean): void {
         throw new Error('Method not implemented.');
     }
 
-    countVariant(toggleName: string, variantName: string): void {
+    countVariant(_toggleName: string, _variantName: string): void {
         throw new Error('Method not implemented.');
     }
 }
