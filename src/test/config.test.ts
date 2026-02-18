@@ -450,16 +450,18 @@ test.each([
     expect(config.proxyBasePath).toBe(`/base/path`);
 });
 
-test.each(['', '     ', '   ', undefined])(
-    `%s as base path should be treated the same as empty string`,
-    (p) => {
-        const config = createProxyConfig({
-            unleashUrl: 'some',
-            unleashApiToken: 'some',
-            clientKeys: ['s1'],
-            proxyBasePath: p,
-        });
+test.each([
+    '',
+    '     ',
+    '   ',
+    undefined,
+])(`%s as base path should be treated the same as empty string`, (p) => {
+    const config = createProxyConfig({
+        unleashUrl: 'some',
+        unleashApiToken: 'some',
+        clientKeys: ['s1'],
+        proxyBasePath: p,
+    });
 
-        expect(config.proxyBasePath).toBe(``);
-    },
-);
+    expect(config.proxyBasePath).toBe(``);
+});

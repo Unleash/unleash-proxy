@@ -9,7 +9,7 @@ import type { HttpOptions } from 'unleash-client/lib/http-options';
 import type { BootstrapOptions } from 'unleash-client/lib/repository/bootstrap-provider';
 import type { StorageProvider } from 'unleash-client/lib/repository/storage-provider';
 import type { ContextEnricher } from './enrich-context';
-import { type LogLevel, type Logger, SimpleLogger } from './logger';
+import { type Logger, type LogLevel, SimpleLogger } from './logger';
 import { generateInstanceId } from './util';
 
 export interface ServerSideSdkConfig {

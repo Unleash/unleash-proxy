@@ -1,8 +1,8 @@
 import openapi, { type IExpressOpenApi } from '@wesleytodd/openapi';
 import type { Application, RequestHandler } from 'express';
 import type { OpenAPIV3 } from 'openapi-types';
-import { createOpenApiSchema } from '.';
 import type { IProxyConfig } from '../config';
+import { createOpenApiSchema } from '.';
 import { format500ErrorMessage } from './common-responses';
 
 export class OpenApiService {

@@ -7,13 +7,13 @@
   "scripts": {
     "build": "tsc --pretty",
     "example": "yarn run build && node example",
-    "lint": "biome lint --write ./src",
+    "lint": "biome check --write ./src",
     "test": "jest",
     "updateSnapshots": "jest -u",
     "prepare": "npm run build",
     "dev": "ENABLE_OAS=true ts-node-dev src/start.ts",
-    "fmt": "biome format ./src --write",
-    "fmt:check": "biome format ./src",
+    "fmt": "biome check ./src --write",
+    "fmt:check": "biome check ./src",
     "biome:ci": "biome ci ./src"
   },
   "repository": {

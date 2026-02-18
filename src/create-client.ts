@@ -1,4 +1,4 @@
-import { Unleash, initialize } from 'unleash-client';
+import { initialize, Unleash } from 'unleash-client';
 import Metrics from 'unleash-client/lib/metrics';
 import { defaultStrategies } from 'unleash-client/lib/strategy';
 import Client from './client';

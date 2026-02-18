@@ -469,39 +469,40 @@ describe.each([
     });
 });
 
-describe.each(['', '/all', '/client/features'])(
-    'Requires valid token',
-    (url) => {
-        test(`Should return 401 if invalid api token for ${url}`, () => {
-            const client = new MockClient();
+describe.each([
+    '',
+    '/all',
+    '/client/features',
+])('Requires valid token', (url) => {
+    test(`Should return 401 if invalid api token for ${url}`, () => {
+        const client = new MockClient();
 
-            const proxySecrets = ['secret'];
-            const app = createApp(
-                { proxySecrets, unleashUrl, unleashApiToken },
-                client,
-            );
-            client.emit('ready');
+        const proxySecrets = ['secret'];
+        const app = createApp(
+            { proxySecrets, unleashUrl, unleashApiToken },
+            client,
+        );
+        client.emit('ready');
 
-            return request(app)
-                .get(`/proxy${url}`)
-                .set('Authorization', 'I do not know your secret')
-                .expect(401);
-        });
+        return request(app)
+            .get(`/proxy${url}`)
+            .set('Authorization', 'I do not know your secret')
+            .expect(401);
+    });
 
-        test(`Should return 401 if no api token for ${url}`, () => {
-            const client = new MockClient();
+    test(`Should return 401 if no api token for ${url}`, () => {
+        const client = new MockClient();
 
-            const proxySecrets = ['secret'];
-            const app = createApp(
-                { proxySecrets, unleashUrl, unleashApiToken },
-                client,
-            );
-            client.emit('ready');
+        const proxySecrets = ['secret'];
+        const app = createApp(
+            { proxySecrets, unleashUrl, unleashApiToken },
+            client,
+        );
+        client.emit('ready');
 
-            return request(app).get(`/proxy${url}`).expect(401);
-        });
-    },
-);
+        return request(app).get(`/proxy${url}`).expect(401);
+    });
+});
 
 describe.each([
     { url: '/health', responseBody: 'ok' },
@@ -832,63 +833,63 @@ test('Should return 501 when all feature toggles is not enabled', () => {
 });
 
 describe('Request content-types', () => {
-    test.each(['/proxy', '/proxy/all'])(
-        'Should assign default content-type if the request has a body but no content-type (%s)',
-        async (endpoint) => {
-            const client = new MockClient();
-            const payload = {
-                context: { appName: 'my-app' },
-            };
+    test.each([
+        '/proxy',
+        '/proxy/all',
+    ])('Should assign default content-type if the request has a body but no content-type (%s)', async (endpoint) => {
+        const client = new MockClient();
+        const payload = {
+            context: { appName: 'my-app' },
+        };
 
-            const proxySecrets = ['sdf'];
-            const app = createApp(
-                {
-                    unleashUrl,
-                    unleashApiToken,
-                    proxySecrets,
-                    enableAllEndpoint: true,
-                },
-                client,
-            );
-            client.emit('ready');
+        const proxySecrets = ['sdf'];
+        const app = createApp(
+            {
+                unleashUrl,
+                unleashApiToken,
+                proxySecrets,
+                enableAllEndpoint: true,
+            },
+            client,
+        );
+        client.emit('ready');
 
-            await request(app)
-                .post(endpoint)
-                .set('Authorization', 'sdf')
-                .set('Content-Type', '')
-                .send(payload)
-                .expect(200)
-                .then(() => {
-                    expect(client.queriedContexts[0].appName).toEqual(
-                        payload.context.appName,
-                    );
-                });
-        },
-    );
+        await request(app)
+            .post(endpoint)
+            .set('Authorization', 'sdf')
+            .set('Content-Type', '')
+            .send(payload)
+            .expect(200)
+            .then(() => {
+                expect(client.queriedContexts[0].appName).toEqual(
+                    payload.context.appName,
+                );
+            });
+    });
 
-    test.each(['/proxy', '/proxy/all'])(
-        'Should reject non-"content-type: application/json" for POST requests to %s',
-        (endpoint) => {
-            const client = new MockClient();
+    test.each([
+        '/proxy',
+        '/proxy/all',
+    ])('Should reject non-"content-type: application/json" for POST requests to %s', (endpoint) => {
+        const client = new MockClient();
 
-            const proxySecrets = ['sdf'];
-            const app = createApp(
-                {
-                    unleashUrl,
-                    unleashApiToken,
-                    proxySecrets,
-                    enableAllEndpoint: true,
-                },
-                client,
-            );
-            client.emit('ready');
+        const proxySecrets = ['sdf'];
+        const app = createApp(
+            {
+                unleashUrl,
+                unleashApiToken,
+                proxySecrets,
+                enableAllEndpoint: true,
+            },
+            client,
+        );
+        client.emit('ready');
 
-            return request(app)
-                .post(endpoint)
-                .set('Authorization', 'sdf')
-                .set('Content-Type', 'application/html')
-                .send('<em>reject me!</em>')
-                .expect(415);
-        },
-    );
+        return request(app)
+            .post(endpoint)
+            .set('Authorization', 'sdf')
+            .set('Content-Type', 'application/html')
+            .send('<em>reject me!</em>')
+            .expect(415);
+    });
 });
