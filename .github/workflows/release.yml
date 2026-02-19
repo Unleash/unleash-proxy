@@ -33,3 +33,9 @@ jobs:
         npm publish --tag ${TAG:-latest}
       env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    - name: Mark package as deprecated on npm
+      run: |
+        VERSION="${GITHUB_REF_NAME#v}"
+        npm deprecate "@unleash/proxy@<=${VERSION}" "DEPRECATED: unleashorg/unleash-proxy is deprecated. Support ends on 2026-11-26. Migrate to Unleash Edge: https://github.com/Unleash/unleash-edge"
+      env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

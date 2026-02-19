@@ -1,8 +1,18 @@
-![Maintenance Mode](https://img.shields.io/badge/status-maintenance-orange)
+![Deprecated](https://img.shields.io/badge/status-deprecated-red)
 
-**This project is in maintenance mode. No new features will be added and we will only do security patches in this repository going forward. Use [Unleash Edge](https://github.com/unleash/unleash-edge) instead.**
+**This project is deprecated. Use [Unleash Edge](https://github.com/unleash/unleash-edge) instead.**
 
 [![Build & Tests](https://github.com/Unleash/unleash-proxy/workflows/Node.js%20CI/badge.svg?branch=main)](https://github.com/Unleash/unleash-proxy/actions/workflows/node.js.yml) [![npm](https://img.shields.io/npm/v/@unleash/proxy)](https://www.npmjs.com/package/@unleash/proxy) [![Docker Pulls](https://img.shields.io/docker/pulls/unleashorg/unleash-proxy)](https://hub.docker.com/r/unleashorg/unleash-proxy)
+
+## Lifecycle status
+
+| Date | Status | Details |
+| --- | --- | --- |
+| 2023-09-06 | Soft deprecation | README updated to recommend Unleash Edge (`docs: add note to consider Edge instead`, commit `2e73af5`). |
+| 2024-11-26 | Maintenance mode | README updated to security fixes only (`docs: add maintenance mode`, commit `2883a83`). |
+| 2026-11-26 | End of life (planned) | Support ends for this package and published Docker images. No additional releases are planned after this date. |
+
+Until EOL, this repository only accepts security and critical bug fixes.
 
 # The Unleash Proxy
 
