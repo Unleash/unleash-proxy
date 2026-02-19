@@ -1,4 +1,4 @@
-FROM node:20-alpine as builder
+FROM node:22.22-alpine3.23 AS builder
 
 WORKDIR /unleash-proxy
 
@@ -6,7 +6,7 @@ COPY . .
 
 RUN corepack enable
 
-ENV YARN_ENABLE_SCRIPTS=false
+ENV YARN_ENABLE_SCRIPTS false
 
 RUN yarn install --immutable
 
@@ -14,7 +14,7 @@ RUN yarn build
 
 RUN yarn workspaces focus -A --production
 
-FROM node:20-alpine
+FROM node:22.22-alpine3.23
 
 # Upgrade (addresses OpenSSL CVE-2023-6237 && CVE-2024-2511)
 RUN apk update && \
