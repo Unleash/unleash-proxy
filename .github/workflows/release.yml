@@ -4,6 +4,10 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   build:
 
@@ -30,9 +34,7 @@ jobs:
     - run: |
         LATEST=$(npm show @unleash/proxy version)
         TAG=$(node scripts/npm-tag.js $LATEST)
-        npm publish --tag ${TAG:-latest}
-      env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        npm publish --provenance --tag ${TAG:-latest}
     - name: Mark package as deprecated on npm
       run: |
         VERSION="${GITHUB_REF_NAME#v}"
