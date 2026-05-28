@@ -78,7 +78,7 @@ exports[`should serve the OpenAPI spec 1`] = `
                               "type": "string",
                             },
                             "operator": {
-                              "description": "One of IN,NOT_IN,STR_ENDS_WITH,STR_STARTS_WITH,STR_CONTAINS,NUM_EQ,NUM_GT,NUM_GTE,NUM_LT,NUM_LTE,DATE_AFTER,DATE_BEFORE,SEMVER_EQ,SEMVER_GT,SEMVER_LT",
+                              "description": "One of IN,NOT_IN,STR_ENDS_WITH,STR_STARTS_WITH,STR_CONTAINS,NUM_EQ,NUM_GT,NUM_GTE,NUM_LT,NUM_LTE,DATE_AFTER,DATE_BEFORE,SEMVER_EQ,SEMVER_GT,SEMVER_LT,SEMVER_GTE,SEMVER_LTE,REGEX,IN_CIDR",
                               "type": "string",
                             },
                             "values": {
