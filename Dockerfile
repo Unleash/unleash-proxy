@@ -16,7 +16,7 @@ RUN yarn workspaces focus -A --production
 
 FROM node:22.22.3-alpine3.23
 
-# Upgrade (addresses OpenSSL CVE-2023-6237 && CVE-2024-2511)
+# Upgrade Alpine packages to pick up latest security fixes
 RUN apk update && \
     apk upgrade && \
     apk add tini && \
