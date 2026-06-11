@@ -76,9 +76,16 @@
     "qs": "^6.9.7",
     "json5": "^2.2.2",
     "cookiejar": "^2.1.4",
-    "router/path-to-regexp": "0.1.12",
+    "router/path-to-regexp": "0.1.13",
+    "path-to-regexp@~0.1.12": "0.1.13",
     "picomatch": "4.0.4",
-    "js-yaml": "^4.1.1"
+    "js-yaml": "^4.1.1",
+    "node-gyp": "12.4.0",
+    "socks": "^2.8.9",
+    "glob@^10.3.10": "10.5.0",
+    "minimatch@^9.0.1": "9.0.7",
+    "minimatch@^9.0.4": "9.0.7",
+    "minimatch@^10.2.1": "10.2.5"
   },
   "packageManager": "yarn@4.12.0"
 }
