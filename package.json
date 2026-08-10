@@ -79,7 +79,7 @@
     "router/path-to-regexp": "0.1.13",
     "path-to-regexp@~0.1.12": "0.1.13",
     "picomatch": "4.0.4",
-    "js-yaml": "^4.1.1",
+    "js-yaml": "^4.3.1",
     "node-gyp": "12.4.0",
     "socks": "^2.8.9",
     "glob@^10.3.10": "10.5.0",
