@@ -1,4 +1,4 @@
-FROM node:22.22.3-alpine3.23 AS builder
+FROM node:22.23.4-alpine3.23 AS builder
 
 WORKDIR /unleash-proxy
 
@@ -14,7 +14,7 @@ RUN yarn build
 
 RUN yarn workspaces focus -A --production
 
-FROM node:22.22.3-alpine3.23
+FROM node:22.23.4-alpine3.23
 
 # Upgrade Alpine packages to pick up latest security fixes
 RUN apk update && \
